@@ -2,3 +2,9 @@
 {"level":"fatal","msg":"Failed to connect to Postgres: failed to connect to `user=postgres database=postgres`: [::1]:5432 (localhost): failed SASL auth: \ufffd\ufffd\ufffd\ufffd\ufffd: \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd \"postgres\" \ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd (\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\ufffd\ufffd) (SQLSTATE 28P01)","time":"2026-03-11T01:17:47+03:00"}
 {"level":"info","msg":"Миграция моделей в базу данных","time":"2026-03-11T02:06:39+03:00"}
 {"level":"info","msg":"Успешная миграция моделей","time":"2026-03-11T02:06:39+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-03-11T02:10:21+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-03-11T02:10:21+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-03-11T03:27:44+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-03-11T03:27:44+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-03-11T03:29:26+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-03-11T03:29:26+03:00"}
