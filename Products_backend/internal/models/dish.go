@@ -3,6 +3,10 @@ package models
 type Dish struct {
 	ID   int64  `gorm:"primaryKey;autoIncrement" json:"id"`
 	Name string `gorm:"type:text;not null" json:"name"`
+
+	// Связи
+	Products   []DishProduct   `gorm:"foreignKey:DishID" json:"products,omitempty"`
+	Favourites []FavouriteDish `gorm:"foreignKey:DishID" json:"favourites,omitempty"`
 }
 
 type CreateDish struct {

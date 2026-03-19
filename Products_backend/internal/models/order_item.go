@@ -11,6 +11,10 @@ type OrderItem struct {
 	PricePerUnit float64 `gorm:"type:numeric(12,2);not null" json:"price_per_unit"`
 
 	Discount int `gorm:"default:0" json:"discount"`
+
+	// Связи
+	Order   *Order   `gorm:"foreignKey:OrderID" json:"order,omitempty"`
+	Product *Product `gorm:"foreignKey:ProductID" json:"product,omitempty"`
 }
 
 type CreateOrderItem struct {

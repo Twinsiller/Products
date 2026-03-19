@@ -10,6 +10,10 @@ type Order struct {
 	CreatedAt time.Time `gorm:"type:timestamptz;default:now()" json:"created_at"`
 
 	TotalAmount float64 `gorm:"type:numeric(14,2);default:0" json:"total_amount"`
+
+	// Связи
+	Cashier *User       `gorm:"foreignKey:CashierID" json:"cashier,omitempty"`
+	Items   []OrderItem `gorm:"foreignKey:OrderID" json:"items,omitempty"`
 }
 
 type CreateOrder struct {

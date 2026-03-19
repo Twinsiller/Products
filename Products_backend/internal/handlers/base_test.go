@@ -20,7 +20,9 @@ import (
 
 // testDB создаёт in-memory БД и мигрирует модель Category для тестов.
 func testDB(t *testing.T) *gorm.DB {
-	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true,
+	})
 	if err != nil {
 		t.Fatalf("open sqlite: %v", err)
 	}

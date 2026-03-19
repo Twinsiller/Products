@@ -13,6 +13,9 @@ import (
 // DbMongo — глобальный клиент MongoDB.
 var DbMongo *mongo.Client
 
+// MongoDatabaseName — имя базы MongoDB (задаётся при подключении).
+var MongoDatabaseName string
+
 // MongoConfig описывает настройки подключения к MongoDB.
 type MongoConfig struct {
 	URI      string
@@ -31,7 +34,7 @@ func LoadMongoConfigFromEnv() MongoConfig {
 
 	dbName := os.Getenv("MONGO_DB")
 	if dbName == "" {
-		dbName = "products_mongo"
+		dbName = "products_db"
 	}
 
 	return MongoConfig{
@@ -57,6 +60,7 @@ func ConnectMongoDB(cfg MongoConfig) error {
 	}
 
 	DbMongo = client
+	MongoDatabaseName = cfg.Database
 	return nil
 }
 

@@ -4,14 +4,19 @@ import (
 	"Products_backend/internal/database"
 	"Products_backend/internal/handlers"
 	"Products_backend/internal/models"
+	"Products_backend/internal/repository"
+	"Products_backend/internal/services"
 	"Products_backend/utils"
 	"context"
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
+	"strings"
 	"syscall"
 	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,7 +25,7 @@ func enableCORS() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, X-User-Id")
 
 		if c.Request.Method == http.MethodOptions {
 			c.AbortWithStatus(http.StatusNoContent)
@@ -31,10 +36,53 @@ func enableCORS() gin.HandlerFunc {
 	}
 }
 
-// authMiddleware — заглушка авторизации: сейчас пропускает всех.
 func authMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// Здесь можно добавить проверку JWT/токена.
+		authHeader := c.GetHeader("Authorization")
+		if !strings.HasPrefix(authHeader, "Bearer ") {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "missing or invalid token"})
+			return
+		}
+
+		tokenStr := strings.TrimSpace(strings.TrimPrefix(authHeader, "Bearer"))
+		token, err := jwt.ParseWithClaims(tokenStr, &handlers.Claims{}, func(token *jwt.Token) (interface{}, error) {
+			return handlers.GetJWTSecret(), nil
+		})
+		if err != nil || !token.Valid {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid token"})
+			return
+		}
+
+		if claims, ok := token.Claims.(*handlers.Claims); ok {
+			c.Set("user_id", claims.UserID)
+			c.Set("user_name", claims.Name)
+			c.Set("user_role", claims.Role)
+		}
+
+		c.Next()
+	}
+}
+
+// deleteProductAndImage удаляет изображение товара из MongoDB, затем вызывает удаление товара в Postgres.
+func deleteProductAndImage(h *handlers.BaseHandler[models.Product]) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		idStr := c.Param("id")
+		if id, err := strconv.ParseInt(idStr, 10, 64); err == nil {
+			_ = repository.DeleteProductImage(c.Request.Context(), id)
+		}
+		h.Delete(c)
+	}
+}
+
+// adminOnly — middleware, разрешающий доступ только пользователю с ролью admin.
+func adminOnly() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		roleVal, exists := c.Get("user_role")
+		role, ok := roleVal.(string)
+		if !exists || !ok || role != "admin" {
+			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "admin access required"})
+			return
+		}
 		c.Next()
 	}
 }
@@ -44,6 +92,11 @@ func login(c *gin.Context) {
 	h.Login(c)
 }
 
+func register(c *gin.Context) {
+	h := &handlers.AuthHandler{}
+	h.Register(c)
+}
+
 func Apies() {
 	router := gin.Default()
 
@@ -51,9 +104,11 @@ func Apies() {
 
 	// 🔓 Публичные маршруты
 	router.POST("/login", login)
+	router.POST("/register", register)
 
-	routerv1 := router.Group("/v1")
-	routerv1.Use(authMiddleware())
+	routerv1Public := router.Group("/v1")
+	routerv1Protected := router.Group("/v1")
+	routerv1Protected.Use(authMiddleware())
 
 	userHandler := handlers.BaseHandler[models.User]{DB: database.DbPostgres}
 	productHandler := handlers.BaseHandler[models.Product]{DB: database.DbPostgres}
@@ -62,49 +117,76 @@ func Apies() {
 	orderHandler := handlers.BaseHandler[models.Order]{DB: database.DbPostgres}
 	orderItemHandler := handlers.BaseHandler[models.OrderItem]{DB: database.DbPostgres}
 	favouriteHandler := handlers.NewFavouriteHandler(database.DbPostgres)
+	recommendationHandler := &handlers.RecommendationHandler{
+		Service: &services.RecommendationService{DB: database.DbPostgres},
+	}
 
 	// 👤 USERS
-	users := routerv1.Group("/users")
+	// Просмотр и рекомендации — для любых авторизованных.
+	users := routerv1Protected.Group("/users")
 	{
 		users.GET("", userHandler.GetAll)
 		users.GET("/:id", userHandler.GetByID)
-		users.POST("", userHandler.Create)
-		users.PUT("/:id", userHandler.Update)
-		users.DELETE("/:id", userHandler.Delete)
+
+		// Рекомендации для пользователя
+		users.GET("/:id/recommendations/products", recommendationHandler.GetProductRecommendations)
+		users.GET("/:id/recommendations/dishes", recommendationHandler.GetDishRecommendations)
+	}
+	// Изменение и удаление пользователей — только админ.
+	usersAdmin := routerv1Protected.Group("/users")
+	usersAdmin.Use(adminOnly())
+	{
+		usersAdmin.POST("", userHandler.Create)
+		usersAdmin.PUT("/:id", userHandler.Update)
+		usersAdmin.DELETE("/:id", userHandler.Delete)
 	}
 
-	// 📂 CATEGORIES
-	categories := routerv1.Group("/categories")
+	// 📂 CATEGORIES (чтение — гостям, изменения — только админ)
+	categories := routerv1Public.Group("/categories")
 	{
 		categories.GET("", categoryHandler.GetAll)
 		categories.GET("/:id", categoryHandler.GetByID)
-		categories.POST("", categoryHandler.Create)
-		categories.PUT("/:id", categoryHandler.Update)
-		categories.DELETE("/:id", categoryHandler.Delete)
+	}
+	categoriesAdmin := routerv1Protected.Group("/categories")
+	categoriesAdmin.Use(adminOnly())
+	{
+		categoriesAdmin.POST("", handlers.CreateCategory)
+		categoriesAdmin.PUT("/:id", categoryHandler.Update)
+		categoriesAdmin.DELETE("/:id", categoryHandler.Delete)
 	}
 
-	// 🏭 MANUFACTURERS
-	manufacturers := routerv1.Group("/manufacturers")
+	// 🏭 MANUFACTURERS (чтение — гостям, изменения — только админ)
+	manufacturers := routerv1Public.Group("/manufacturers")
 	{
 		manufacturers.GET("", manufacturerHandler.GetAll)
 		manufacturers.GET("/:id", manufacturerHandler.GetByID)
-		manufacturers.POST("", manufacturerHandler.Create)
-		manufacturers.PUT("/:id", manufacturerHandler.Update)
-		manufacturers.DELETE("/:id", manufacturerHandler.Delete)
+	}
+	manufacturersAdmin := routerv1Protected.Group("/manufacturers")
+	manufacturersAdmin.Use(adminOnly())
+	{
+		manufacturersAdmin.POST("", handlers.CreateManufacturer)
+		manufacturersAdmin.PUT("/:id", manufacturerHandler.Update)
+		manufacturersAdmin.DELETE("/:id", manufacturerHandler.Delete)
 	}
 
-	// 🏷 PRODUCTS
-	products := routerv1.Group("/products")
+	// 🏷 PRODUCTS (чтение — гостям, изменения — только админ)
+	products := routerv1Public.Group("/products")
 	{
 		products.GET("", productHandler.GetAll)
+		products.GET("/:id/image", handlers.GetProductImage)
 		products.GET("/:id", productHandler.GetByID)
-		products.POST("", productHandler.Create)
-		products.PUT("/:id", productHandler.Update)
-		products.DELETE("/:id", productHandler.Delete)
+	}
+	productsAdmin := routerv1Protected.Group("/products")
+	productsAdmin.Use(adminOnly())
+	{
+		productsAdmin.POST("", productHandler.Create)
+		productsAdmin.POST("/:id/image", handlers.UploadProductImage)
+		productsAdmin.PUT("/:id", productHandler.Update)
+		productsAdmin.DELETE("/:id", deleteProductAndImage(&productHandler))
 	}
 
-	// 🧾 ORDERS
-	orders := routerv1.Group("/orders")
+	// 🧾 ORDERS (требует авторизации)
+	orders := routerv1Protected.Group("/orders")
 	{
 		orders.GET("", orderHandler.GetAll)
 		orders.GET("/:id", orderHandler.GetByID)
@@ -113,8 +195,8 @@ func Apies() {
 		orders.DELETE("/:id", orderHandler.Delete)
 	}
 
-	// 🛒 ORDER ITEMS
-	orderItems := routerv1.Group("/order-items")
+	// 🛒 ORDER ITEMS (требует авторизации)
+	orderItems := routerv1Protected.Group("/order-items")
 	{
 		orderItems.GET("", orderItemHandler.GetAll)
 		orderItems.GET("/:id", orderItemHandler.GetByID)
@@ -123,8 +205,8 @@ func Apies() {
 		orderItems.DELETE("/:id", orderItemHandler.Delete)
 	}
 
-	// ❤️ FAVOURITES (пока только продукты)
-	favourites := routerv1.Group("/favourites")
+	// ❤️ FAVOURITES (только авторизованные пользователи)
+	favourites := routerv1Protected.Group("/favourites")
 	{
 		favourites.POST("/product", favouriteHandler.AddProduct)
 	}

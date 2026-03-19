@@ -16,12 +16,26 @@ import (
 	"gorm.io/gorm"
 )
 
+// favouriteProductSchema — упрощённая схема таблицы избранных товаров для SQLite-тестов,
+// без связей, чтобы миграция не тянула за собой другие модели.
+type favouriteProductSchema struct {
+	ID        int64 `gorm:"primaryKey;autoIncrement"`
+	UserID    int64 `gorm:"index;not null"`
+	ProductID int64 `gorm:"index;not null"`
+}
+
+func (favouriteProductSchema) TableName() string {
+	return "favourite_products"
+}
+
 func favouriteTestDB(t *testing.T) *gorm.DB {
-	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true,
+	})
 	if err != nil {
 		t.Fatalf("open sqlite: %v", err)
 	}
-	if err := db.AutoMigrate(&models.FavouriteProduct{}); err != nil {
+	if err := db.AutoMigrate(&favouriteProductSchema{}); err != nil {
 		t.Fatalf("migrate: %v", err)
 	}
 	return db

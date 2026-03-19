@@ -8,6 +8,9 @@ type Manufacturer struct {
 	Country string `gorm:"type:text" json:"country"`
 
 	ContactInfo string `gorm:"type:jsonb" json:"contact_info"`
+
+	// Связи
+	Products []Product `gorm:"foreignKey:ManufacturerID" json:"products,omitempty"`
 }
 
 type CreateManufacturer struct {

@@ -8,3 +8,69 @@
 {"level":"info","msg":"Успешная миграция моделей","time":"2026-03-11T03:27:44+03:00"}
 {"level":"warning","msg":"Shutting down server...","time":"2026-03-11T03:29:26+03:00"}
 {"level":"info","msg":"Server exiting","time":"2026-03-11T03:29:26+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-03-11T13:07:28+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-03-11T13:07:28+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-03-11T14:18:05+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-03-11T14:18:05+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-03-12T19:54:47+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-03-12T19:54:48+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-03-13T02:43:04+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-03-13T02:43:04+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-03-13T15:20:21+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-03-13T15:20:21+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-03-13T18:54:32+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-03-13T18:54:32+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-03-13T19:22:48+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-03-13T19:22:49+03:00"}
+{"level":"info","msg":"Admin user \"admin\" created","time":"2026-03-13T19:22:49+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-03-13T19:26:14+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-03-13T19:26:14+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-03-13T19:26:16+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-03-13T19:26:16+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-03-13T19:30:39+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-03-13T19:30:39+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-03-13T19:30:50+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-03-13T19:30:50+03:00"}
+{"level":"info","msg":"Admin user \"admin\" created","time":"2026-03-13T19:30:50+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-03-13T20:36:45+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-03-13T20:36:45+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-03-13T20:36:47+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-03-13T20:36:48+03:00"}
+{"level":"info","msg":"Admin user \"admin\" created","time":"2026-03-13T20:36:48+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-03-13T22:55:02+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-03-13T22:55:02+03:00"}
+{"level":"fatal","msg":"ListenAndServe error: listen tcp :8080: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.","time":"2026-03-13T22:55:02+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-03-13T23:36:22+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-03-13T23:36:22+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-03-15T13:26:23+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-03-15T13:26:23+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-03-15T13:39:28+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-03-15T13:39:28+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-03-15T13:39:41+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-03-15T13:39:41+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-03-15T14:04:15+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-03-15T14:04:15+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-03-15T14:04:18+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-03-15T14:04:18+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-03-15T20:07:25+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-03-15T20:07:25+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-03-16T01:33:42+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-03-16T01:33:42+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-03-16T02:43:27+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-03-16T02:43:27+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-03-16T02:43:30+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-03-16T02:43:30+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-03-16T03:14:59+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-03-16T03:14:59+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-03-16T03:15:01+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-03-16T03:15:01+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-03-16T03:25:39+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-03-16T03:25:39+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-03-16T03:25:42+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-03-16T03:25:42+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-03-16T03:31:32+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-03-16T03:31:32+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-03-16T13:07:48+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-03-16T13:07:48+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-03-16T21:45:23+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-03-16T21:45:23+03:00"}

@@ -15,6 +15,13 @@ type Product struct {
 	DefaultPrice float64 `gorm:"type:numeric(12,2);not null" json:"default_price"`
 
 	CreatedAt time.Time `gorm:"type:timestamptz;default:now()" json:"created_at"`
+
+	// Связи
+	Category     *Category     `gorm:"foreignKey:CategoryID" json:"category,omitempty"`
+	Manufacturer *Manufacturer `gorm:"foreignKey:ManufacturerID" json:"manufacturer,omitempty"`
+	OrderItems   []OrderItem   `gorm:"foreignKey:ProductID" json:"order_items,omitempty"`
+	DishProducts []DishProduct `gorm:"foreignKey:ProductID" json:"dish_products,omitempty"`
+	Favourites   []FavouriteProduct `gorm:"foreignKey:ProductID" json:"favourites,omitempty"`
 }
 
 type CreateProduct struct {
