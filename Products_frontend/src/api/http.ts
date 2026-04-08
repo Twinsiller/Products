@@ -27,10 +27,12 @@ export interface User {
   id: number
   name: string
   role: string
+  gender?: string
 }
 
 export interface CreateUserDto {
   name: string
+  gender?: string
 }
 
 export interface AuthResponse {
@@ -59,6 +61,10 @@ export interface Product {
   manufacturer_id?: number | null
   barcode?: string | null
   default_price: number
+  calories_kcal?: number
+  protein_g?: number
+  fat_g?: number
+  carbs_g?: number
 }
 
 export interface CreateProductDto {
@@ -67,6 +73,69 @@ export interface CreateProductDto {
   manufacturer_id?: number | null
   barcode?: string | null
   default_price: number
+  calories_kcal?: number
+  protein_g?: number
+  fat_g?: number
+  carbs_g?: number
+}
+
+export interface MissingIngredient {
+  needed_ingredient?: string
+  needed_category_id: number
+  needed_category_name: string
+  qty_short: number
+  suggestions: Product[]
+}
+
+export interface DishCategoryRequirement {
+  id: number
+  dish_id: number
+  category_id?: number | null
+  ingredient_name: string
+  quantity: number
+  note?: string
+  category?: Category
+}
+
+export interface DishProduct {
+  id: number
+  dish_id: number
+  product_id: number
+  quantity: number
+  price_per_unit?: number
+  discount?: number
+  product?: Product
+}
+
+export interface Dish {
+  id: number
+  name: string
+  products?: DishProduct[]
+  category_requirements?: DishCategoryRequirement[]
+}
+
+export interface OrderMealRecommendation {
+  dish: {
+    id: number
+    name: string
+    category_requirements?: DishCategoryRequirement[]
+    products?: Array<{
+      product_id: number
+      quantity: number
+      product?: Product
+    }>
+  }
+  score: number
+  makeable: boolean
+  matched_items: number
+  required_items: number
+  match_ratio: number
+  total_calories_kcal: number
+  total_protein_g: number
+  total_fat_g: number
+  total_carbs_g: number
+  missing?: MissingIngredient[]
+  meal_target_kcal: number
 }
 
 export interface Order {
@@ -74,5 +143,20 @@ export interface Order {
   cashier_id: number
   created_at: string
   total_amount: number
+}
+
+export interface FinalRecommendationItem {
+  recipe_id: number
+  recipe_name: string
+  score: number
+  kcal?: number
+  protein_g?: number
+  fat_g?: number
+  carbs_g?: number
+}
+
+export interface FinalRecommendationsResponse {
+  precision_at_5: number
+  recommendations: FinalRecommendationItem[]
 }
 

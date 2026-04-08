@@ -22,66 +22,53 @@
       </div>
     </header>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Название</th>
-          <th v-if="isAdmin" class="col-actions">Действия</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="c in categories" :key="c.id">
-          <td>{{ c.id }}</td>
-          <td>
-            <input
-              v-if="editingId === c.id"
-              v-model="editName"
-              type="text"
-              class="inline-edit-input"
-              @keydown.enter.prevent="saveEditCategory"
-              @keydown.esc="cancelEdit"
-            />
-            <span v-else>{{ c.name }}</span>
-          </td>
-          <td v-if="isAdmin" class="col-actions">
-            <template v-if="editingId === c.id">
-              <button type="button" class="btn-save small" :disabled="updateLoading" @click="saveEditCategory">
-                {{ updateLoading ? '…' : 'Сохранить' }}
-              </button>
-              <button type="button" class="secondary small" :disabled="updateLoading" @click="cancelEdit">
-                Отмена
-              </button>
-            </template>
-            <template v-else>
-              <button
-                type="button"
-                class="btn-edit"
-                :disabled="deleteId === c.id"
-                title="Изменить"
-                @click="startEditCategory(c)"
-              >
-                Изменить
-              </button>
-              <button
-                type="button"
-                class="btn-delete"
-                :disabled="deleteId === c.id"
-                title="Удалить"
-                @click="confirmDeleteCategory(c)"
-              >
-                {{ deleteId === c.id ? '…' : 'Удалить' }}
-              </button>
-            </template>
-          </td>
-        </tr>
-        <tr v-if="!loading && !categories.length">
-          <td :colspan="isAdmin ? 3 : 2" class="empty">
-            Категорий пока нет.
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="tiles-grid">
+      <article v-for="c in categories" :key="c.id" class="tile">
+        <p class="tile-meta">ID {{ c.id }}</p>
+        <input
+          v-if="editingId === c.id"
+          v-model="editName"
+          type="text"
+          class="inline-edit-input"
+          @keydown.enter.prevent="saveEditCategory"
+          @keydown.esc="cancelEdit"
+        />
+        <h3 v-else class="tile-title">{{ c.name }}</h3>
+        <div v-if="isAdmin" class="tile-actions">
+          <template v-if="editingId === c.id">
+            <button type="button" class="btn-save small" :disabled="updateLoading" @click="saveEditCategory">
+              {{ updateLoading ? '…' : 'Сохранить' }}
+            </button>
+            <button type="button" class="secondary small" :disabled="updateLoading" @click="cancelEdit">
+              Отмена
+            </button>
+          </template>
+          <template v-else>
+            <button
+              type="button"
+              class="btn-edit"
+              :disabled="deleteId === c.id"
+              title="Изменить"
+              @click="startEditCategory(c)"
+            >
+              Изменить
+            </button>
+            <button
+              type="button"
+              class="btn-delete"
+              :disabled="deleteId === c.id"
+              title="Удалить"
+              @click="confirmDeleteCategory(c)"
+            >
+              {{ deleteId === c.id ? '…' : 'Удалить' }}
+            </button>
+          </template>
+        </div>
+      </article>
+      <p v-if="!loading && !categories.length" class="empty">
+        Категорий пока нет.
+      </p>
+    </div>
 
     <section v-if="isAdmin" class="create-block create-block-top">
       <h3>Новая категория</h3>
@@ -268,32 +255,39 @@ h2 {
   cursor: default;
 }
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
+.tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
 }
 
-th,
-td {
-  padding: 6px 8px;
-  text-align: left;
+.tile {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #f9fafb;
 }
 
-thead {
-  background: rgba(15, 23, 42, 0.9);
+.tile-meta {
+  margin: 0 0 6px;
+  font-size: 11px;
+  color: #6b7280;
 }
 
-tbody tr:nth-child(even) {
-  background: rgba(15, 23, 42, 0.9);
+.tile-title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 500;
 }
 
-tbody tr:nth-child(odd) {
-  background: rgba(15, 23, 42, 0.8);
+.tile-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 
 .empty {
-  text-align: center;
   color: #9ca3af;
 }
 

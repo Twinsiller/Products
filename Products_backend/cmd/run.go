@@ -54,6 +54,7 @@ func Run() error {
 		&models.Country{},
 		&models.Dish{},
 		&models.DishProduct{},
+		&models.DishCategoryRequirement{},
 		&models.FavouriteProduct{},
 		&models.FavouriteDish{},
 	); err != nil {

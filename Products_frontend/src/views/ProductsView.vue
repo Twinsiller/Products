@@ -29,76 +29,119 @@
         class="search"
         placeholder="Поиск по названию или штрихкоду..."
       />
+      <select v-model="selectedSort" class="sort-select">
+        <option value="name_asc">Сортировка: название А-Я</option>
+        <option value="name_desc">Сортировка: название Я-А</option>
+        <option value="price_asc">Сортировка: цена по возрастанию</option>
+        <option value="price_desc">Сортировка: цена по убыванию</option>
+      </select>
     </div>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th class="col-photo">Фото</th>
-          <th>ID</th>
-          <th>Название</th>
-          <th>Цена</th>
-          <th>Штрихкод</th>
-          <th v-if="isAdmin" class="col-actions">Действия</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="p in filteredProducts" :key="p.id">
-          <td class="col-photo">
-            <div class="product-photo">
-              <img
-                v-if="!photoErrorIds.has(p.id)"
-                :src="productImageUrl(p.id) + (imageVersion[p.id] ? '?v=' + imageVersion[p.id] : '')"
-                :alt="p.name"
-                @error="addPhotoError(p.id)"
-              />
-              <span v-else class="photo-placeholder">нет фото</span>
-            </div>
-          </td>
-          <td>{{ p.id }}</td>
-          <td>{{ p.name }}</td>
-          <td>{{ p.default_price.toFixed(2) }}</td>
-          <td>{{ p.barcode || '—' }}</td>
-          <td v-if="isAdmin" class="col-actions">
-            <button
-              type="button"
-              class="btn-edit"
-              :disabled="deleteId === p.id"
-              title="Изменить"
-              @click="startEditProduct(p)"
-            >
-              Изменить
-            </button>
-            <label class="btn-upload">
-              <input
-                type="file"
-                accept="image/*"
-                class="hidden-input"
-                @change="(e: Event) => uploadProductImage(p.id, e)"
-              />
-              {{ uploadId === p.id ? '…' : 'Фото' }}
-            </label>
-            <button
-              type="button"
-              class="btn-delete"
-              :disabled="deleteId === p.id"
-              title="Удалить"
-              @click="confirmDeleteProduct(p)"
-            >
-              {{ deleteId === p.id ? '…' : 'Удалить' }}
-            </button>
-          </td>
-        </tr>
-        <tr v-if="!loading && !filteredProducts.length">
-          <td :colspan="isAdmin ? 6 : 5" class="empty">
-            Нет товаров по заданным условиям.
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="categories-filter">
+      <button
+        type="button"
+        class="chip"
+        :class="{ active: selectedCategoryId === null }"
+        @click="selectedCategoryId = null"
+      >
+        Все категории
+      </button>
+      <button
+        v-for="c in categoriesAlphabetical"
+        :key="c.id"
+        type="button"
+        class="chip"
+        :class="{ active: selectedCategoryId === c.id }"
+        @click="selectedCategoryId = c.id"
+      >
+        {{ c.name }}
+      </button>
+    </div>
+
+    <div class="tiles-grid">
+      <article v-for="p in filteredProducts" :key="p.id" class="tile">
+        <button
+          v-if="currentUserId"
+          type="button"
+          class="fav-btn"
+          :class="{ active: isFavourite(p.id) }"
+          @click="toggleFavourite(p)"
+        >
+          <span class="heart">♥</span>
+          <span>Selected</span>
+        </button>
+        <div class="product-photo tile-photo">
+          <img
+            v-if="!photoErrorIds.has(p.id)"
+            :src="productImageUrl(p.id) + (imageVersion[p.id] ? '?v=' + imageVersion[p.id] : '')"
+            :alt="p.name"
+            @error="addPhotoError(p.id)"
+          />
+          <span v-else class="photo-placeholder">нет фото</span>
+        </div>
+        <p class="tile-meta">ID {{ p.id }} · {{ p.barcode || 'без штрихкода' }}</p>
+        <h3 class="tile-title">{{ p.name }}</h3>
+        <p class="tile-sub">
+          Цена: {{ p.default_price.toFixed(2) }} ₽
+        </p>
+        <p class="tile-sub">
+          Категория: {{ categoryName(p.category_id) }}
+        </p>
+        <p class="tile-sub kbzh-cell">
+          КБЖУ: {{ formatKbzh(p) }}
+        </p>
+        <div v-if="currentUserId" class="cart-actions">
+          <input
+            v-model.number="cartQuantities[p.id]"
+            type="number"
+            min="1"
+            class="qty-input"
+          />
+          <button type="button" class="primary small" @click="addToCart(p)">
+            В корзину
+          </button>
+        </div>
+        <div v-if="isAdmin" class="tile-actions">
+          <button
+            type="button"
+            class="btn-edit"
+            :disabled="deleteId === p.id"
+            title="Изменить"
+            @click="startEditProduct(p)"
+          >
+            Изменить
+          </button>
+          <label class="btn-upload">
+            <input
+              type="file"
+              accept="image/*"
+              class="hidden-input"
+              @change="(e: Event) => uploadProductImage(p.id, e)"
+            />
+            {{ uploadId === p.id ? '…' : 'Фото' }}
+          </label>
+          <button
+            type="button"
+            class="btn-delete"
+            :disabled="deleteId === p.id"
+            title="Удалить"
+            @click="confirmDeleteProduct(p)"
+          >
+            {{ deleteId === p.id ? '…' : 'Удалить' }}
+          </button>
+        </div>
+      </article>
+
+      <p v-if="!loading && !filteredProducts.length" class="empty">
+        Нет товаров по заданным условиям.
+      </p>
+    </div>
 
     <p v-if="error" class="error">
       {{ error }}
+    </p>
+    <p v-if="notice" class="notice">
+      {{ notice }}
     </p>
 
     <div v-if="isAdmin" class="forms-row">
@@ -120,7 +163,7 @@
           <label class="field">
             <span>Категория</span>
             <select v-model="editProduct.category_id">
-              <option :value="null">— не выбрано</option>
+              <option :value="null" disabled>Выберите категорию</option>
               <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
             </select>
           </label>
@@ -130,6 +173,23 @@
               <option :value="null">— не выбрано</option>
               <option v-for="m in manufacturers" :key="m.id" :value="m.id">{{ m.name }}</option>
             </select>
+          </label>
+          <p class="field-hint">КБЖУ на 1 единицу товара (для расчёта блюд)</p>
+          <label class="field">
+            <span>Ккал</span>
+            <input v-model.number="editProduct.calories_kcal" type="number" step="0.01" min="0" />
+          </label>
+          <label class="field">
+            <span>Белки, г</span>
+            <input v-model.number="editProduct.protein_g" type="number" step="0.01" min="0" />
+          </label>
+          <label class="field">
+            <span>Жиры, г</span>
+            <input v-model.number="editProduct.fat_g" type="number" step="0.01" min="0" />
+          </label>
+          <label class="field">
+            <span>Углеводы, г</span>
+            <input v-model.number="editProduct.carbs_g" type="number" step="0.01" min="0" />
           </label>
           <div class="form-actions">
             <button type="submit" class="primary" :disabled="updateLoading">
@@ -172,11 +232,28 @@
             placeholder="Например: 4601234567890"
           />
         </label>
+        <p class="field-hint">КБЖУ на 1 единицу товара (опционально)</p>
+        <label class="field">
+          <span>Ккал</span>
+          <input v-model="newCaloriesKcal" type="number" step="0.01" min="0" placeholder="0" />
+        </label>
+        <label class="field">
+          <span>Белки, г</span>
+          <input v-model="newProteinG" type="number" step="0.01" min="0" placeholder="0" />
+        </label>
+        <label class="field">
+          <span>Жиры, г</span>
+          <input v-model="newFatG" type="number" step="0.01" min="0" placeholder="0" />
+        </label>
+        <label class="field">
+          <span>Углеводы, г</span>
+          <input v-model="newCarbsG" type="number" step="0.01" min="0" placeholder="0" />
+        </label>
         <label class="field">
           <span>Категория</span>
           <div class="field-row">
             <select v-model="newCategoryId">
-              <option :value="null">— не выбрано</option>
+              <option :value="null" disabled>Выберите категорию</option>
               <option
                 v-for="c in categories"
                 :key="c.id"
@@ -283,12 +360,21 @@ const categories = ref<Category[]>([])
 const manufacturers = ref<Manufacturer[]>([])
 const loading = ref(false)
 const error = ref<string | null>(null)
+const notice = ref<string | null>(null)
 const search = ref('')
+const selectedSort = ref<'name_asc' | 'name_desc' | 'price_asc' | 'price_desc'>('name_asc')
+const selectedCategoryId = ref<number | null>(null)
 const isAdmin = ref(false)
+const currentUserId = ref<number | null>(null)
+const cartQuantities = ref<Record<number, number>>({})
 
 const newName = ref('')
 const newPrice = ref<string>('')
 const newBarcode = ref('')
+const newCaloriesKcal = ref<string>('')
+const newProteinG = ref<string>('')
+const newFatG = ref<string>('')
+const newCarbsG = ref<string>('')
 const newCategoryId = ref<number | null>(null)
 const newManufacturerId = ref<number | null>(null)
 const createLoading = ref(false)
@@ -313,6 +399,120 @@ function addPhotoError(id: number) {
   photoErrorIds.value = new Set(photoErrorIds.value).add(id)
 }
 
+function formatKbzh(p: Product) {
+  const k = p.calories_kcal ?? 0
+  const pr = p.protein_g ?? 0
+  const f = p.fat_g ?? 0
+  const c = p.carbs_g ?? 0
+  return `${Number(k).toFixed(1)} / ${Number(pr).toFixed(1)} / ${Number(f).toFixed(1)} / ${Number(c).toFixed(1)}`
+}
+
+function categoryName(categoryId?: number | null): string {
+  if (!categoryId) return 'не указана'
+  return categories.value.find((c) => c.id === categoryId)?.name || `#${categoryId}`
+}
+
+function normalizeQty(v: number | undefined): number {
+  if (!v || Number.isNaN(v)) return 1
+  return Math.max(1, Math.floor(v))
+}
+
+function addToCart(p: Product) {
+  if (!currentUserId.value) {
+    error.value = 'Войдите, чтобы добавлять товары в корзину'
+    return
+  }
+  const qty = normalizeQty(cartQuantities.value[p.id])
+  cartQuantities.value[p.id] = qty
+  const raw = localStorage.getItem('cartItems')
+  const items: Array<{ product_id: number; name: string; price_per_unit: number; quantity: number }> =
+    raw ? JSON.parse(raw) : []
+  const idx = items.findIndex((x) => x.product_id === p.id)
+  if (idx >= 0) {
+    items[idx].quantity += qty
+  } else {
+    items.push({
+      product_id: p.id,
+      name: p.name,
+      price_per_unit: p.default_price,
+      quantity: qty,
+    })
+  }
+  localStorage.setItem('cartItems', JSON.stringify(items))
+  notice.value = `Добавлено в корзину: ${p.name} × ${qty}`
+  error.value = null
+  window.dispatchEvent(new Event('cart-changed'))
+}
+
+const favouriteProductIds = ref<Set<number>>(new Set())
+
+function isFavourite(productId: number): boolean {
+  return favouriteProductIds.value.has(productId)
+}
+
+async function loadFavouriteProductIds() {
+  if (!currentUserId.value) return
+  try {
+    const { data } = await api.get<Array<{ product_id: number }>>('/v1/favourites/products')
+    favouriteProductIds.value = new Set((data || []).map((x) => Number(x.product_id)).filter((v) => Number.isFinite(v)))
+  } catch {
+    // silently ignore, favourites are optional for products page
+  }
+}
+
+async function addToFavourites(p: Product): Promise<boolean> {
+  if (!currentUserId.value) {
+    error.value = 'Войдите, чтобы добавлять товары в избранное'
+    return false
+  }
+  error.value = null
+  try {
+    await api.post('/v1/favourites/product', { user_id: currentUserId.value, product_id: p.id })
+    notice.value = `Добавлено в избранное: ${p.name}`
+    return true
+  } catch (e: unknown) {
+    const resp = (e as { response?: { status?: number; data?: { error?: string } } })?.response
+    const msg = resp?.data?.error
+    if (resp?.status === 401) {
+      error.value = 'Сессия истекла. Войдите заново.'
+    } else if (resp?.status === 404) {
+      error.value = 'Маршрут избранного не найден. Перезапустите backend.'
+    } else {
+      error.value = msg || 'Не удалось добавить товар в избранное'
+    }
+    return false
+  }
+}
+
+async function removeFromFavourites(p: Product): Promise<boolean> {
+  if (!currentUserId.value) return false
+  error.value = null
+  try {
+    await api.delete(`/v1/favourites/product/${p.id}`)
+    const next = new Set(favouriteProductIds.value)
+    next.delete(p.id)
+    favouriteProductIds.value = next
+    notice.value = `Убрано из избранного: ${p.name}`
+    return true
+  } catch (e: unknown) {
+    const msg = (e as { response?: { data?: { error?: string } } })?.response?.data?.error
+    error.value = msg || 'Не удалось удалить товар из избранного'
+    return false
+  }
+}
+
+async function toggleFavourite(p: Product) {
+  if (isFavourite(p.id)) {
+    await removeFromFavourites(p)
+    return
+  }
+  const ok = await addToFavourites(p)
+  if (!ok) return
+  const next = new Set(favouriteProductIds.value)
+  next.add(p.id)
+  favouriteProductIds.value = next
+}
+
 function startEditProduct(p: Product) {
   editProduct.value = {
     id: p.id,
@@ -321,6 +521,10 @@ function startEditProduct(p: Product) {
     barcode: p.barcode ?? null,
     category_id: p.category_id ?? null,
     manufacturer_id: p.manufacturer_id ?? null,
+    calories_kcal: p.calories_kcal ?? 0,
+    protein_g: p.protein_g ?? 0,
+    fat_g: p.fat_g ?? 0,
+    carbs_g: p.carbs_g ?? 0,
   }
 }
 
@@ -330,6 +534,10 @@ function cancelEditProduct() {
 
 async function saveEditProduct() {
   if (!editProduct.value) return
+  if (!editProduct.value.category_id) {
+    error.value = 'Укажите категорию товара'
+    return
+  }
   const payload = {
     id: editProduct.value.id,
     name: editProduct.value.name.trim(),
@@ -337,6 +545,10 @@ async function saveEditProduct() {
     barcode: editProduct.value.barcode?.trim() || null,
     category_id: editProduct.value.category_id,
     manufacturer_id: editProduct.value.manufacturer_id,
+    calories_kcal: Number(editProduct.value.calories_kcal ?? 0),
+    protein_g: Number(editProduct.value.protein_g ?? 0),
+    fat_g: Number(editProduct.value.fat_g ?? 0),
+    carbs_g: Number(editProduct.value.carbs_g ?? 0),
   }
   if (!payload.name || Number.isNaN(payload.default_price) || payload.default_price < 0) return
   updateLoading.value = true
@@ -415,15 +627,36 @@ const loadManufacturers = async () => {
   }
 }
 
+const categoriesAlphabetical = computed(() => {
+  return [...categories.value].sort((a, b) => a.name.localeCompare(b.name, 'ru'))
+})
+
 const filteredProducts = computed(() => {
   const term = search.value.trim().toLowerCase()
-  if (!term) return products.value
-  return products.value.filter((p) => {
-    return (
+  let list = products.value.filter((p) => {
+    const matchesSearch =
+      !term ||
       p.name.toLowerCase().includes(term) ||
       (p.barcode && p.barcode.toLowerCase().includes(term))
-    )
+    const matchesCategory =
+      selectedCategoryId.value == null || p.category_id === selectedCategoryId.value
+    return matchesSearch && matchesCategory
   })
+
+  list = [...list].sort((a, b) => {
+    switch (selectedSort.value) {
+      case 'name_desc':
+        return b.name.localeCompare(a.name, 'ru')
+      case 'price_asc':
+        return a.default_price - b.default_price
+      case 'price_desc':
+        return b.default_price - a.default_price
+      case 'name_asc':
+      default:
+        return a.name.localeCompare(b.name, 'ru')
+    }
+  })
+  return list
 })
 
 const addCategory = async () => {
@@ -468,15 +701,23 @@ const createProduct = async () => {
   const name = newName.value.trim()
   const price = parseFloat(newPrice.value)
   if (!name || Number.isNaN(price) || price < 0) return
+  if (!newCategoryId.value) {
+    error.value = 'Выберите категорию для товара'
+    return
+  }
   createLoading.value = true
   error.value = null
   try {
     const payload: CreateProductDto = {
       name,
       default_price: price,
-      category_id: newCategoryId.value ?? undefined,
+      category_id: newCategoryId.value,
       manufacturer_id: newManufacturerId.value ?? undefined,
       barcode: newBarcode.value.trim() || undefined,
+      calories_kcal: parseFloat(newCaloriesKcal.value) || 0,
+      protein_g: parseFloat(newProteinG.value) || 0,
+      fat_g: parseFloat(newFatG.value) || 0,
+      carbs_g: parseFloat(newCarbsG.value) || 0,
     }
     const { data } = await api.post<Product>('/v1/products', payload)
     products.value = [...products.value, data]
@@ -498,6 +739,10 @@ const createProduct = async () => {
     newName.value = ''
     newPrice.value = ''
     newBarcode.value = ''
+    newCaloriesKcal.value = ''
+    newProteinG.value = ''
+    newFatG.value = ''
+    newCarbsG.value = ''
     newCategoryId.value = null
     newManufacturerId.value = null
     newImageFile.value = null
@@ -530,11 +775,16 @@ const confirmDeleteProduct = async (p: Product) => {
 }
 
 onMounted(() => {
+  const storedId = localStorage.getItem('currentUserId')
+  currentUserId.value = storedId ? Number(storedId) : null
   const role = localStorage.getItem('currentUserRole') || 'user'
   isAdmin.value = role === 'admin'
   void loadProducts()
+  void loadCategories()
+  if (currentUserId.value) {
+    void loadFavouriteProductIds()
+  }
   if (isAdmin.value) {
-    void loadCategories()
     void loadManufacturers()
   }
 })
@@ -601,6 +851,9 @@ h2 {
 
 .toolbar {
   margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 8px;
 }
 
 .search {
@@ -613,38 +866,108 @@ h2 {
   color: #e5e7eb;
 }
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
+.sort-select {
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  padding: 7px 12px;
   font-size: 13px;
+  background: #ffffff;
+  color: #111827;
 }
 
-th,
-td {
-  padding: 6px 8px;
-  text-align: left;
+.categories-filter {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
 }
 
-thead {
-  background: rgba(15, 23, 42, 0.9);
+.chip {
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: #111827;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
 }
 
-tbody tr:nth-child(even) {
-  background: rgba(15, 23, 42, 0.9);
+.chip.active {
+  background: #111827;
+  color: #f9fafb;
+  border-color: #111827;
 }
 
-tbody tr:nth-child(odd) {
-  background: rgba(15, 23, 42, 0.8);
+.tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.tile {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #f9fafb;
+  position: relative;
+}
+
+.fav-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  background: #374151;
+  color: #f9fafb;
+}
+
+.fav-btn .heart {
+  color: #ffffff;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.fav-btn.active {
+  border-color: #ef4444;
+  background: #fff1f2;
+  color: #111827;
+}
+
+.fav-btn.active .heart {
+  color: #ef4444;
+}
+
+.tile-meta {
+  margin: 6px 0 2px;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.tile-title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.tile-sub {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #374151;
 }
 
 .empty {
-  text-align: center;
   color: #9ca3af;
 }
 
-.col-photo {
-  width: 64px;
-  vertical-align: middle;
+.tile-photo {
+  margin-bottom: 4px;
 }
 
 .product-photo {
@@ -675,8 +998,27 @@ tbody tr:nth-child(odd) {
   margin-left: 8px;
 }
 
-.col-actions {
-  white-space: nowrap;
+.tile-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.cart-actions {
+  margin-top: 8px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.qty-input {
+  width: 64px;
+  padding: 5px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 12px;
+  background: #fff;
 }
 
 .btn-delete {
@@ -767,6 +1109,12 @@ tbody tr:nth-child(odd) {
   color: #fca5a5;
 }
 
+.notice {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #065f46;
+}
+
 .create-block {
   margin-top: 20px;
   padding-top: 16px;
@@ -802,6 +1150,21 @@ tbody tr:nth-child(odd) {
   border: 1px solid #d1d5db;
   border-radius: 4px;
   font-size: 13px;
+}
+
+.field-hint {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.col-kbzh {
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.kbzh-cell {
+  color: #9ca3af;
 }
 
 .field-row {

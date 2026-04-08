@@ -1,226 +1,109 @@
 <template>
-  <section class="layout">
-    <div v-if="!currentUser" class="guard">
-      <h2>Рекомендации доступны только после входа</h2>
-      <p class="muted">
-        Пожалуйста, зарегистрируйтесь или войдите в систему, чтобы увидеть персональные рекомендации.
-      </p>
-      <div class="guard-actions">
-        <RouterLink to="/" class="primary-link">Войти</RouterLink>
-        <RouterLink to="/register" class="secondary-link">Зарегистрироваться</RouterLink>
-      </div>
+  <section class="card">
+    <div v-if="!currentUserId" class="guard">
+      <h2>Рекомендации</h2>
+      <p class="muted">Войдите в аккаунт, чтобы получить персональные рекомендации.</p>
     </div>
 
     <div v-else>
       <header class="header">
         <div>
-          <h2>Персональные рекомендации</h2>
-          <p class="muted">
-            Товары и блюда, подобранные на основе истории предпочтений пользователя.
-          </p>
+          <h2>ML модель в действии</h2>
+          <p class="muted">Запуск Python-рекомендера в реальном времени (CF/CB + fallback).</p>
         </div>
-        <div class="user-pill">
-          <span class="user-name">
-            Пользователь #{{ currentUser.id }}
-          </span>
-          <span v-if="currentUser.name" class="user-extra">{{ currentUser.name }}</span>
-          <span v-if="currentUser.role" class="user-extra">· {{ currentUser.role }}</span>
+        <div class="controls">
+          <label class="inline-label">
+            Top-K:
+            <select v-model.number="limit" :disabled="loading">
+              <option :value="3">3</option>
+              <option :value="5">5</option>
+              <option :value="10">10</option>
+            </select>
+          </label>
+          <button class="primary" type="button" :disabled="loading" @click="loadFinalRecommendations">
+            {{ loading ? 'Запуск модели...' : 'Запустить ML модель' }}
+          </button>
         </div>
       </header>
 
-      <div class="columns">
-      <div class="column">
-        <h3>Рекомендуемые товары</h3>
-        <button
-          class="ghost-btn"
-          type="button"
-          @click="loadProducts"
-          :disabled="loadingProducts"
-        >
-          {{ loadingProducts ? 'Загрузка...' : 'Обновить рекомендации' }}
-        </button>
-        <ul class="list" v-if="productRecommendations.length">
-          <li
-            v-for="p in productRecommendations"
-            :key="p.id"
-            class="item"
-          >
-            <div>
-              <div class="item-title">
-                {{ p.name }}
-              </div>
-              <div class="item-meta">
-                <span v-if="p.default_price">
-                  Цена: {{ p.default_price.toFixed(2) }}
-                </span>
-                <span v-if="p.barcode">· Штрихкод: {{ p.barcode }}</span>
-              </div>
-            </div>
-          </li>
-        </ul>
-        <p v-else class="muted small">
-          Нет данных по рекомендациям товаров. Попробуйте оформить заказы или добавить
-          товары в избранное для выбранного пользователя.
-        </p>
-      </div>
-
-      <div class="column">
-        <h3>Рекомендуемые блюда</h3>
-        <button
-          class="ghost-btn"
-          type="button"
-          @click="loadDishes"
-          :disabled="loadingDishes"
-        >
-          {{ loadingDishes ? 'Загрузка...' : 'Обновить рекомендации' }}
-        </button>
-        <ul class="list" v-if="dishRecommendations.length">
-          <li
-            v-for="d in dishRecommendations"
-            :key="d.id"
-            class="item"
-          >
-            <div>
-              <div class="item-title">
-                {{ d.name }}
-              </div>
-            </div>
-          </li>
-        </ul>
-        <p v-else class="muted small">
-          Рекомендации по блюдам пока отсутствуют.
-        </p>
-      </div>
-      </div>
-
-      <p v-if="error" class="error">
-        {{ error }}
+      <p v-if="precision !== null" class="muted">
+        Метрика модели: precision@5 = <strong>{{ precision.toFixed(3) }}</strong>
       </p>
+      <p class="muted hint">
+        Endpoint: <code>/v1/users/{{ currentUserId }}/recommendations/final?limit={{ limit }}</code>
+      </p>
+
+      <div v-if="recommendations.length" class="list">
+        <article v-for="(r, idx) in recommendations" :key="`${r.recipe_id}-${idx}`" class="item">
+          <h3>{{ idx + 1 }}. {{ r.recipe_name }}</h3>
+          <p class="meta">ID: {{ r.recipe_id }} · score: {{ r.score.toFixed(4) }}</p>
+          <p v-if="r.kcal !== undefined" class="meta">
+            КБЖУ: {{ r.kcal?.toFixed(0) }} ккал · Б {{ r.protein_g?.toFixed(1) }} · Ж {{ r.fat_g?.toFixed(1) }} · У {{ r.carbs_g?.toFixed(1) }}
+          </p>
+        </article>
+      </div>
+      <p v-else-if="!loading" class="muted">Пока нет рекомендаций.</p>
+
+      <p v-if="error" class="error">{{ error }}</p>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { api, type Product } from '../api/http'
+import type { AxiosError } from 'axios'
+import { api, type FinalRecommendationItem, type FinalRecommendationsResponse } from '../api/http'
 
-interface Dish {
-  id: number
-  name: string
-}
-
-const currentUser = ref<{ id: number; name?: string; role?: string } | null>(null)
-const productRecommendations = ref<Product[]>([])
-const dishRecommendations = ref<Dish[]>([])
-const loadingProducts = ref(false)
-const loadingDishes = ref(false)
+const currentUserId = ref<number | null>(null)
+const loading = ref(false)
 const error = ref<string | null>(null)
+const precision = ref<number | null>(null)
+const recommendations = ref<FinalRecommendationItem[]>([])
+const limit = ref(5)
 
-const ensureUser = () => {
-  const storedId = localStorage.getItem('currentUserId')
-  if (!storedId) {
-    return
-  }
-  currentUser.value = {
-    id: Number(storedId),
-    name: localStorage.getItem('currentUserName') || undefined,
-    role: localStorage.getItem('currentUserRole') || undefined,
-  }
-}
-
-const loadProducts = async () => {
-  if (!currentUser.value) return
-  loadingProducts.value = true
+async function loadFinalRecommendations() {
+  if (!currentUserId.value) return
+  loading.value = true
   error.value = null
   try {
-    const { data } = await api.get<Product[]>(
-      `/v1/users/${currentUser.value.id}/recommendations/products`,
+    const { data } = await api.get<FinalRecommendationsResponse>(
+      `/v1/users/${currentUserId.value}/recommendations/final`,
+      { params: { limit: limit.value } },
     )
-    productRecommendations.value = data
+    precision.value = Number(data.precision_at_5 ?? 0)
+    recommendations.value = Array.isArray(data.recommendations) ? data.recommendations : []
   } catch (e) {
-    error.value = 'Ошибка загрузки рекомендаций по товарам'
+    const err = e as AxiosError<{ error?: string }>
+    const serverMsg = err.response?.data?.error
+    error.value = typeof serverMsg === 'string' && serverMsg.trim()
+      ? `Не удалось получить финальные рекомендации: ${serverMsg}`
+      : 'Не удалось получить финальные рекомендации'
+    recommendations.value = []
   } finally {
-    loadingProducts.value = false
+    loading.value = false
   }
 }
 
-const loadDishes = async () => {
-  if (!currentUser.value) return
-  loadingDishes.value = true
-  error.value = null
-  try {
-    const { data } = await api.get<Dish[]>(
-      `/v1/users/${currentUser.value.id}/recommendations/dishes`,
-    )
-    dishRecommendations.value = data
-  } catch (e) {
-    error.value = 'Ошибка загрузки рекомендаций по блюдам'
-  } finally {
-    loadingDishes.value = false
+onMounted(() => {
+  const raw = localStorage.getItem('currentUserId')
+  currentUserId.value = raw ? Number(raw) : null
+  if (currentUserId.value) {
+    void loadFinalRecommendations()
   }
-}
-
-onMounted(async () => {
-  ensureUser()
-  await Promise.all([loadProducts(), loadDishes()])
 })
 </script>
 
 <style scoped>
-.layout {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.guard {
+.card {
   background: #ffffff;
   border-radius: 8px;
   padding: 16px 18px;
   border: 1px solid #e5e7eb;
 }
 
-.guard h2 {
+h2 {
   margin: 0 0 6px;
   font-size: 18px;
-}
-
-.guard-actions {
-  margin-top: 12px;
-  display: flex;
-  gap: 8px;
-}
-
-.primary-link,
-.secondary-link {
-  font-size: 13px;
-  text-decoration: none;
-  border-radius: 4px;
-  padding: 6px 12px;
-}
-
-.primary-link {
-  background: #111827;
-  color: #f9fafb;
-}
-
-.secondary-link {
-  border: 1px solid #d1d5db;
-  color: #111827;
-  background: #ffffff;
-}
-
-.header {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 16px;
-  align-items: center;
-  justify-content: space-between;
-}
-
-h2 {
-  margin: 0 0 4px;
-  font-size: 20px;
 }
 
 .muted {
@@ -229,104 +112,76 @@ h2 {
   color: #6b7280;
 }
 
-.small {
-  font-size: 12px;
-}
-
-.user-pill {
-  padding: 6px 10px;
-  border-radius: 4px;
-  border: 1px solid #e5e7eb;
-  font-size: 12px;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: #f9fafb;
-}
-
-.user-name {
-  font-weight: 500;
-  color: #111827;
-}
-
-.user-extra {
-  color: #6b7280;
-}
-
-.link {
-  font-size: 13px;
-  color: #1d4ed8;
-  text-decoration: none;
-}
-
-.columns {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
-}
-
-.column {
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 12px 14px;
-  border: 1px solid #e5e7eb;
-}
-
-h3 {
-  margin: 0 0 10px;
-  font-size: 16px;
-}
-
-.ghost-btn {
-  margin-bottom: 10px;
-  border-radius: 4px;
-  padding: 6px 12px;
-  border: 1px solid #d1d5db;
-  background: transparent;
-  color: #111827;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-.ghost-btn:disabled {
-  opacity: 0.6;
-  cursor: default;
-}
-
-.list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.header {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
   gap: 8px;
 }
 
-.item {
-  padding: 10px 11px;
-  border-radius: 12px;
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid rgba(55, 65, 81, 0.9);
-}
-
-.item-title {
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.item-meta {
-  margin-top: 4px;
+.inline-label {
   font-size: 12px;
-  color: #9ca3af;
+  color: #4b5563;
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
+  align-items: center;
+  gap: 6px;
+}
+
+.inline-label select {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 4px 6px;
+  background: #fff;
+}
+
+.primary {
+  border-radius: 6px;
+  border: 1px solid #111827;
+  background: #111827;
+  color: #fff;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.item {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #fafafa;
+}
+
+h3 {
+  margin: 0 0 4px;
+  font-size: 14px;
+}
+
+.meta {
+  margin: 0;
+  font-size: 12px;
+  color: #4b5563;
 }
 
 .error {
-  margin: 4px 0 0;
+  margin-top: 10px;
+  color: #b91c1c;
   font-size: 13px;
-  color: #fca5a5;
+}
+
+.hint {
+  margin-top: 6px;
 }
 </style>
-

@@ -86,6 +86,11 @@ const setCurrentUser = (user: User) => {
   localStorage.setItem('currentUserId', String(user.id))
   localStorage.setItem('currentUserName', user.name)
   localStorage.setItem('currentUserRole', user.role)
+  if (user.gender) {
+    localStorage.setItem('currentUserGender', user.gender)
+  } else {
+    localStorage.removeItem('currentUserGender')
+  }
 }
 
 const login = async () => {
@@ -210,4 +215,3 @@ input::placeholder {
   color: #b91c1c;
 }
 </style>
-

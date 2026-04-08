@@ -1,91 +1,91 @@
 <template>
   <section class="card">
-    <header class="header">
-      <div>
-        <h2>Избранные товары</h2>
-        <p class="muted">
-          Товары, помеченные пользователем как избранные.
-        </p>
-      </div>
-      <button
-        class="primary"
-        type="button"
-        @click="loadFavourites"
-        :disabled="loading || !currentUser"
-      >
+    <h2>Избранное</h2>
+    <p class="muted">Ваши избранные товары.</p>
+
+    <div class="actions">
+      <button class="secondary" type="button" @click="loadFavourites" :disabled="loading || !currentUserId">
         {{ loading ? 'Загрузка...' : 'Обновить' }}
       </button>
-    </header>
-
-    <div v-if="!currentUser" class="guard">
-      <p class="warning">
-        Избранное доступно только зарегистрированным пользователям. Пожалуйста, войдите или
-        зарегистрируйтесь.
-      </p>
-      <div class="guard-actions">
-        <RouterLink to="/" class="primary-link">Войти</RouterLink>
-        <RouterLink to="/register" class="secondary-link">Зарегистрироваться</RouterLink>
-      </div>
     </div>
 
-    <ul v-else class="list">
-      <li v-for="item in favourites" :key="item.product.id" class="item">
-        <div class="title">{{ item.product.name }}</div>
-        <div class="meta">
-          <span v-if="item.product.default_price">
-            Цена: {{ item.product.default_price.toFixed(2) }}
-          </span>
-          <span v-if="item.product.barcode">· Штрихкод: {{ item.product.barcode }}</span>
-        </div>
-      </li>
-      <li v-if="!loading && !favourites.length" class="empty">
-        У пользователя пока нет избранных товаров.
-      </li>
-    </ul>
+    <div v-if="!currentUserId" class="muted">Войдите в аккаунт, чтобы видеть избранное.</div>
 
-    <p v-if="error" class="error">
-      {{ error }}
-    </p>
+    <div v-else-if="items.length" class="list">
+      <article v-for="it in items" :key="it.id" class="item">
+        <div>
+          <strong>{{ it.product?.name || ('Товар #' + it.product_id) }}</strong>
+          <p class="muted small">ID товара: {{ it.product_id }}</p>
+        </div>
+        <button class="danger" type="button" @click="removeFavourite(it.product_id)" :disabled="deletingProductId === it.product_id">
+          {{ deletingProductId === it.product_id ? 'Удаление...' : 'Убрать' }}
+        </button>
+      </article>
+    </div>
+    <p v-else-if="!loading" class="muted">Пока нет избранных товаров.</p>
+
+    <p v-if="error" class="error">{{ error }}</p>
   </section>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { RouterLink } from 'vue-router'
 import { api, type Product } from '../api/http'
 
-interface FavouriteProduct {
+type FavouriteProduct = {
   id: number
   user_id: number
   product_id: number
-  product: Product
+  product?: Product
 }
 
-const currentUser = ref<{ id: number } | null>(null)
-const favourites = ref<FavouriteProduct[]>([])
+const currentUserId = ref<number | null>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
+const items = ref<FavouriteProduct[]>([])
+const deletingProductId = ref<number | null>(null)
 
-const loadFavourites = async () => {
-  if (!currentUser.value) return
+async function loadFavourites() {
+  if (!currentUserId.value) return
   loading.value = true
   error.value = null
   try {
-    const { data } = await api.get<FavouriteProduct[]>(
-      `/v1/users/${currentUser.value.id}/favourites/products`,
-    )
-    favourites.value = data
-  } catch (e) {
-    error.value = 'Ошибка загрузки избранных товаров'
+    const { data } = await api.get<FavouriteProduct[]>('/v1/favourites/products')
+    items.value = data
+  } catch (e: unknown) {
+    const resp = (e as { response?: { status?: number; data?: { error?: string } } })?.response
+    const msg = resp?.data?.error
+    if (resp?.status === 401) {
+      error.value = 'Сессия истекла. Войдите заново.'
+    } else if (resp?.status === 404) {
+      error.value = 'Маршрут избранного не найден. Перезапустите backend.'
+    } else {
+      error.value = msg || 'Не удалось загрузить избранное'
+    }
+    items.value = []
   } finally {
     loading.value = false
   }
 }
 
+async function removeFavourite(productId: number) {
+  deletingProductId.value = productId
+  error.value = null
+  try {
+    await api.delete(`/v1/favourites/product/${productId}`)
+    items.value = items.value.filter((x) => x.product_id !== productId)
+  } catch (e: unknown) {
+    const msg = (e as { response?: { data?: { error?: string } } })?.response?.data?.error
+    error.value = msg || 'Не удалось удалить из избранного'
+  } finally {
+    deletingProductId.value = null
+  }
+}
+
 onMounted(() => {
-  const storedId = localStorage.getItem('currentUserId')
-  if (storedId) {
-    currentUser.value = { id: Number(storedId) }
+  const raw = localStorage.getItem('currentUserId')
+  currentUserId.value = raw ? Number(raw) : null
+  if (currentUserId.value) {
     void loadFavourites()
   }
 })
@@ -99,16 +99,8 @@ onMounted(() => {
   border: 1px solid #e5e7eb;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 10px;
-}
-
 h2 {
-  margin: 0 0 4px;
+  margin: 0 0 6px;
   font-size: 18px;
 }
 
@@ -118,89 +110,54 @@ h2 {
   color: #6b7280;
 }
 
-.primary {
-  border-radius: 4px;
-  padding: 6px 12px;
-  border: 1px solid #d1d5db;
-  font-size: 13px;
-  cursor: pointer;
-  background: #111827;
-  color: #f9fafb;
-  font-weight: 500;
+.small {
+  font-size: 12px;
 }
 
-.primary:disabled {
-  opacity: 0.6;
-  cursor: default;
-}
-
-.warning {
-  font-size: 13px;
-  color: #fbbf24;
-}
-
-.guard-actions {
-  margin-top: 8px;
-  display: flex;
-  gap: 8px;
-}
-
-.primary-link,
-.secondary-link {
-  font-size: 13px;
-  text-decoration: none;
-  border-radius: 4px;
-  padding: 6px 12px;
-}
-
-.primary-link {
-  background: #111827;
-  color: #f9fafb;
-}
-
-.secondary-link {
-  border: 1px solid #d1d5db;
-  color: #111827;
-  background: #ffffff;
+.actions {
+  margin: 10px 0;
 }
 
 .list {
-  list-style: none;
-  padding: 0;
-  margin: 10px 0 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
 .item {
-  padding: 10px 11px;
-  border-radius: 12px;
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid rgba(55, 65, 81, 0.9);
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.title {
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.meta {
-  margin-top: 4px;
+.secondary,
+.danger {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 10px;
   font-size: 12px;
-  color: #9ca3af;
+  cursor: pointer;
 }
 
-.empty {
-  padding: 6px 0;
-  font-size: 13px;
-  color: #9ca3af;
+.secondary {
+  background: #fff;
+  color: #111827;
+}
+
+.danger {
+  background: #fff1f2;
+  color: #b91c1c;
+  border-color: #fecdd3;
 }
 
 .error {
-  margin-top: 8px;
+  margin-top: 10px;
+  color: #b91c1c;
   font-size: 13px;
-  color: #fca5a5;
 }
 </style>
-

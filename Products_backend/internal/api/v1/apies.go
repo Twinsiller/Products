@@ -16,8 +16,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 // enableCORS включает простую CORS‑политику для разработки.
@@ -114,7 +114,6 @@ func Apies() {
 	productHandler := handlers.BaseHandler[models.Product]{DB: database.DbPostgres}
 	categoryHandler := handlers.BaseHandler[models.Category]{DB: database.DbPostgres}
 	manufacturerHandler := handlers.BaseHandler[models.Manufacturer]{DB: database.DbPostgres}
-	orderHandler := handlers.BaseHandler[models.Order]{DB: database.DbPostgres}
 	orderItemHandler := handlers.BaseHandler[models.OrderItem]{DB: database.DbPostgres}
 	favouriteHandler := handlers.NewFavouriteHandler(database.DbPostgres)
 	recommendationHandler := &handlers.RecommendationHandler{
@@ -126,16 +125,22 @@ func Apies() {
 	users := routerv1Protected.Group("/users")
 	{
 		users.GET("", userHandler.GetAll)
+		// Блюда по заказу (КБЖУ) — до /:id, чтобы не пересекаться с более короткими шаблонами при необходимости
+		users.GET("/:id/meals/from-order/:orderId", recommendationHandler.GetMealsFromOrder)
+		users.POST("/:id/meals/from-cart", recommendationHandler.GetMealsFromCart)
 		users.GET("/:id", userHandler.GetByID)
 
 		// Рекомендации для пользователя
 		users.GET("/:id/recommendations/products", recommendationHandler.GetProductRecommendations)
 		users.GET("/:id/recommendations/dishes", recommendationHandler.GetDishRecommendations)
+		users.GET("/:id/recommendations/final", recommendationHandler.GetFinalRecommendations)
 	}
 	// Изменение и удаление пользователей — только админ.
 	usersAdmin := routerv1Protected.Group("/users")
 	usersAdmin.Use(adminOnly())
 	{
+		usersAdmin.GET("/full", handlers.ListUsersDetailed)
+		usersAdmin.GET("/:id/full", handlers.GetUserDetailed)
 		usersAdmin.POST("", userHandler.Create)
 		usersAdmin.PUT("/:id", userHandler.Update)
 		usersAdmin.DELETE("/:id", userHandler.Delete)
@@ -169,6 +174,25 @@ func Apies() {
 		manufacturersAdmin.DELETE("/:id", manufacturerHandler.Delete)
 	}
 
+	// 🍽 БЛЮДА (справочник с составом — для подбора по заказу)
+	dishes := routerv1Public.Group("/dishes")
+	{
+		dishes.GET("", handlers.ListDishes)
+		dishes.GET("/:id", handlers.GetDishByID)
+	}
+	dishesAdmin := routerv1Protected.Group("/dishes")
+	dishesAdmin.Use(adminOnly())
+	{
+		dishesAdmin.POST("", handlers.CreateDish)
+		dishesAdmin.PUT("/:id", handlers.UpdateDish)
+		dishesAdmin.DELETE("/:id", handlers.DeleteDish)
+		dishesAdmin.POST("/:id/products", handlers.AddDishProduct)
+		dishesAdmin.DELETE("/:id/products/:dishProductId", handlers.DeleteDishProduct)
+		dishesAdmin.POST("/:id/category-requirements", handlers.AddDishCategoryRequirement)
+		dishesAdmin.PUT("/:id/category-requirements/:reqId", handlers.UpdateDishCategoryRequirement)
+		dishesAdmin.DELETE("/:id/category-requirements/:reqId", handlers.DeleteDishCategoryRequirement)
+	}
+
 	// 🏷 PRODUCTS (чтение — гостям, изменения — только админ)
 	products := routerv1Public.Group("/products")
 	{
@@ -179,20 +203,21 @@ func Apies() {
 	productsAdmin := routerv1Protected.Group("/products")
 	productsAdmin.Use(adminOnly())
 	{
-		productsAdmin.POST("", productHandler.Create)
+		productsAdmin.POST("", handlers.CreateProduct)
 		productsAdmin.POST("/:id/image", handlers.UploadProductImage)
-		productsAdmin.PUT("/:id", productHandler.Update)
+		productsAdmin.PUT("/:id", handlers.UpdateProduct)
 		productsAdmin.DELETE("/:id", deleteProductAndImage(&productHandler))
 	}
 
 	// 🧾 ORDERS (требует авторизации)
 	orders := routerv1Protected.Group("/orders")
 	{
-		orders.GET("", orderHandler.GetAll)
-		orders.GET("/:id", orderHandler.GetByID)
-		orders.POST("", orderHandler.Create)
-		orders.PUT("/:id", orderHandler.Update)
-		orders.DELETE("/:id", orderHandler.Delete)
+		orders.GET("", handlers.ListOrders)
+		orders.GET("/:id/items", handlers.ListOrderItemsByOrder)
+		orders.GET("/:id", handlers.GetOrderByID)
+		orders.POST("", handlers.CreateOrder)
+		orders.PUT("/:id", handlers.UpdateOrder)
+		orders.DELETE("/:id", handlers.DeleteOrder)
 	}
 
 	// 🛒 ORDER ITEMS (требует авторизации)
@@ -208,7 +233,9 @@ func Apies() {
 	// ❤️ FAVOURITES (только авторизованные пользователи)
 	favourites := routerv1Protected.Group("/favourites")
 	{
+		favourites.GET("/products", favouriteHandler.ListMyProducts)
 		favourites.POST("/product", favouriteHandler.AddProduct)
+		favourites.DELETE("/product/:productId", favouriteHandler.RemoveProduct)
 	}
 
 	// --- GRACEFUL SHUTDOWN ---

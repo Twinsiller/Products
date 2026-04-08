@@ -1,0 +1,6 @@
+pandas
+numpy
+scikit-learn
+scipy
+SQLAlchemy
+psycopg2-binary

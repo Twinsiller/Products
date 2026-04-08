@@ -15,6 +15,9 @@ type User struct {
 
 	PasswordHash string `gorm:"type:text;not null" json:"-"`
 
+	// Gender: male | female — используется для среднего расчёта калорийности.
+	Gender string `gorm:"type:text;default:''" json:"gender"`
+
 	HiredAt time.Time `gorm:"type:timestamptz;default:now()" json:"hired_at"`
 	// Дата найма
 
@@ -33,6 +36,7 @@ type CreateUser struct {
 type RegisterUser struct {
 	Name     string `json:"name" binding:"required"`
 	Password string `json:"password" binding:"required,min=4"`
+	Gender   string `json:"gender" binding:"required,oneof=male female"`
 }
 
 type UpdateUser struct {

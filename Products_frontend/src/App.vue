@@ -17,6 +17,8 @@
           <RouterLink to="/orders" class="nav-link">Заказы</RouterLink>
           <RouterLink to="/categories" class="nav-link">Категории</RouterLink>
           <RouterLink to="/manufacturers" class="nav-link">Производители</RouterLink>
+          <RouterLink v-if="isAdmin" to="/dishes" class="nav-link">Блюда</RouterLink>
+          <RouterLink v-if="isAdmin" to="/users" class="nav-link">Пользователи</RouterLink>
         </nav>
         <div v-if="currentUser" class="user-block">
           <div class="user-pill" :class="{ 'user-pill-admin': isAdmin }">
@@ -62,6 +64,7 @@ const logout = () => {
   localStorage.removeItem('currentUserId')
   localStorage.removeItem('currentUserName')
   localStorage.removeItem('currentUserRole')
+  localStorage.removeItem('currentUserGender')
   localStorage.removeItem('authToken')
   syncFromStorage()
   router.push({ name: 'login' })
@@ -201,4 +204,3 @@ onBeforeUnmount(() => {
   }
 }
 </style>
-

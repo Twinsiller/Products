@@ -5,8 +5,9 @@ type Dish struct {
 	Name string `gorm:"type:text;not null" json:"name"`
 
 	// Связи
-	Products   []DishProduct   `gorm:"foreignKey:DishID" json:"products,omitempty"`
-	Favourites []FavouriteDish `gorm:"foreignKey:DishID" json:"favourites,omitempty"`
+	Products             []DishProduct             `gorm:"foreignKey:DishID" json:"products,omitempty"`
+	CategoryRequirements []DishCategoryRequirement `gorm:"foreignKey:DishID" json:"category_requirements,omitempty"`
+	Favourites           []FavouriteDish           `gorm:"foreignKey:DishID" json:"favourites,omitempty"`
 }
 
 type CreateDish struct {

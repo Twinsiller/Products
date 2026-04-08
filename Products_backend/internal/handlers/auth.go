@@ -87,6 +87,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	user := models.User{
 		Name:         req.Name,
 		Role:         "user",
+		Gender:       req.Gender,
 		PasswordHash: passwordHash,
 	}
 

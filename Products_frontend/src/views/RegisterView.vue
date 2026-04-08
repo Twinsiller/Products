@@ -27,6 +27,15 @@
         />
       </label>
 
+      <label class="field">
+        <span>Пол</span>
+        <select v-model="gender" required>
+          <option disabled value="">Выберите</option>
+          <option value="male">Мужской</option>
+          <option value="female">Женский</option>
+        </select>
+      </label>
+
       <div class="actions">
         <button type="submit" class="primary" :disabled="loading">
           {{ loading ? 'Создание...' : 'Зарегистрировать и войти' }}
@@ -48,6 +57,7 @@ const router = useRouter()
 
 const name = ref('')
 const password = ref('')
+const gender = ref<'male' | 'female' | ''>('')
 const loading = ref(false)
 const error = ref<string | null>(null)
 
@@ -55,16 +65,20 @@ const setCurrentUser = (user: User) => {
   localStorage.setItem('currentUserId', String(user.id))
   localStorage.setItem('currentUserName', user.name)
   localStorage.setItem('currentUserRole', user.role)
+  if (user.gender) {
+    localStorage.setItem('currentUserGender', user.gender)
+  }
 }
 
 const registerUser = async () => {
-  if (!name.value || !password.value) return
+  if (!name.value || !password.value || !gender.value) return
   loading.value = true
   error.value = null
   try {
-    const payload: CreateUserDto & { password: string } = {
+    const payload: CreateUserDto & { password: string; gender: string } = {
       name: name.value,
       password: password.value,
+      gender: gender.value,
     }
     const { data } = await api.post<AuthResponse>('/register', payload)
     setCurrentUser(data.user)
@@ -111,7 +125,8 @@ h2 {
   font-size: 13px;
 }
 
-input {
+input,
+select {
   border-radius: 4px;
   border: 1px solid #d1d5db;
   padding: 8px 10px;
@@ -159,4 +174,3 @@ input::placeholder {
   color: #b91c1c;
 }
 </style>
-
