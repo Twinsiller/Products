@@ -14,8 +14,21 @@ type RecommendationService struct {
 
 // ProductRecommendation представляет рекомендованный товар с простым скором.
 type ProductRecommendation struct {
-	Product models.Product `json:"product"`
-	Score   int            `json:"score"`
+	Product      models.Product                 `json:"product"`
+	Score        float64                        `json:"score"`
+	CBScore      float64                        `json:"cb_score,omitempty"`
+	CFScore      float64                        `json:"cf_score,omitempty"`
+	MealScore    float64                        `json:"meal_score,omitempty"`
+	RecencyScore float64                        `json:"recency_score,omitempty"`
+	Reason       string                         `json:"reason,omitempty"`
+	LinkedDishes []ProductRecommendationDishRef `json:"linked_dishes,omitempty"`
+}
+
+type ProductRecommendationDishRef struct {
+	DishID                     int64   `json:"dish_id"`
+	DishName                   string  `json:"dish_name"`
+	DishScore                  float64 `json:"dish_score"`
+	MissingIngredientsEstimate int     `json:"missing_ingredients_estimate"`
 }
 
 // DishRecommendation представляет рекомендованное блюдо с простым скором.
@@ -28,6 +41,11 @@ type DishRecommendation struct {
 func (s *RecommendationService) RecommendProducts(userID int64, limit int) ([]ProductRecommendation, error) {
 	if limit <= 0 {
 		limit = 10
+	}
+
+	mlRecs, err := s.RunProductRecommender(userID, limit)
+	if err == nil && len(mlRecs) > 0 {
+		return mlRecs, nil
 	}
 
 	// 1. Собираем избранные товары пользователя.
@@ -84,7 +102,8 @@ func (s *RecommendationService) RecommendProducts(userID int64, limit int) ([]Pr
 		if score > 0 {
 			result = append(result, ProductRecommendation{
 				Product: c,
-				Score:   score,
+				Score:   float64(score),
+				Reason:  "Рекомендация по совпадению с вашими избранными товарами (категория и производитель).",
 			})
 		}
 	}
@@ -208,4 +227,3 @@ func (s *RecommendationService) RecommendDishes(userID int64, limit int) ([]Dish
 
 	return result, nil
 }
-

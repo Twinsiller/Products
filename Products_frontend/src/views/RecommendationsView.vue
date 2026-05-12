@@ -8,8 +8,8 @@
     <div v-else>
       <header class="header">
         <div>
-          <h2>ML модель в действии</h2>
-          <p class="muted">Запуск Python-рекомендера в реальном времени (CF/CB + fallback).</p>
+          <h2>Персональные рекомендации</h2>
+          <p class="muted">Показываем, почему товар рекомендован: оценка, факторы и блюда, которые можно приготовить.</p>
         </div>
         <div class="controls">
           <label class="inline-label">
@@ -20,21 +20,49 @@
               <option :value="10">10</option>
             </select>
           </label>
-          <button class="primary" type="button" :disabled="loading" @click="loadFinalRecommendations">
-            {{ loading ? 'Запуск модели...' : 'Запустить ML модель' }}
+          <button class="primary" type="button" :disabled="loading" @click="loadRecommendations">
+            {{ loading ? 'Загрузка...' : 'Обновить рекомендации' }}
           </button>
         </div>
       </header>
 
-      <p v-if="precision !== null" class="muted">
-        Метрика модели: precision@5 = <strong>{{ precision.toFixed(3) }}</strong>
+      <p class="muted hint">
+        Товары: <code>/v1/users/{{ currentUserId }}/recommendations/products?limit={{ limit }}</code>
       </p>
       <p class="muted hint">
-        Endpoint: <code>/v1/users/{{ currentUserId }}/recommendations/final?limit={{ limit }}</code>
+        Блюда (ML): <code>/v1/users/{{ currentUserId }}/recommendations/final?limit={{ limit }}</code>
+      </p>
+      <p v-if="precision !== null" class="muted">
+        Метрика ML-блюд: precision@5 = <strong>{{ precision.toFixed(3) }}</strong>
       </p>
 
-      <div v-if="recommendations.length" class="list">
-        <article v-for="(r, idx) in recommendations" :key="`${r.recipe_id}-${idx}`" class="item">
+      <h3 class="section-title">Что купить и почему</h3>
+      <div v-if="productRecommendations.length" class="list">
+        <article v-for="(r, idx) in productRecommendations" :key="`${r.product.id}-${idx}`" class="item">
+          <h3>{{ idx + 1 }}. {{ r.product.name }}</h3>
+          <p class="meta">
+            Итоговая оценка: <strong>{{ toFixedSafe(r.score, 4) }}</strong>
+            · Цена: {{ Number(r.product.default_price || 0).toFixed(2) }} ₽
+          </p>
+          <p class="meta">
+            Компоненты: КБЖУ={{ toFixedSafe(r.cb_score, 3) }} · История={{ toFixedSafe(r.cf_score, 3) }}
+            · Блюда={{ toFixedSafe(r.meal_score, 3) }} · Штраф за недавнюю покупку={{ toFixedSafe(r.recency_score, 3) }}
+          </p>
+          <p v-if="r.reason" class="meta reason">{{ r.reason }}</p>
+
+          <div v-if="r.linked_dishes?.length" class="dish-links">
+            <p class="meta"><strong>Если взять этот товар, подходят блюда:</strong></p>
+            <p v-for="d in r.linked_dishes" :key="`${r.product.id}-${d.dish_id}`" class="meta">
+              • {{ d.dish_name }} (оценка блюда: {{ toFixedSafe(d.dish_score, 3) }}, недостающих ингредиентов: {{ d.missing_ingredients_estimate }})
+            </p>
+          </div>
+        </article>
+      </div>
+      <p v-else-if="!loading" class="muted">Пока нет товарных рекомендаций.</p>
+
+      <h3 class="section-title">Рекомендованные блюда (ML)</h3>
+      <div v-if="dishRecommendations.length" class="list">
+        <article v-for="(r, idx) in dishRecommendations" :key="`${r.recipe_id}-${idx}`" class="item">
           <h3>{{ idx + 1 }}. {{ r.recipe_name }}</h3>
           <p class="meta">ID: {{ r.recipe_id }} · score: {{ r.score.toFixed(4) }}</p>
           <p v-if="r.kcal !== undefined" class="meta">
@@ -42,7 +70,7 @@
           </p>
         </article>
       </div>
-      <p v-else-if="!loading" class="muted">Пока нет рекомендаций.</p>
+      <p v-else-if="!loading" class="muted">Пока нет рекомендаций блюд.</p>
 
       <p v-if="error" class="error">{{ error }}</p>
     </div>
@@ -52,33 +80,52 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import type { AxiosError } from 'axios'
-import { api, type FinalRecommendationItem, type FinalRecommendationsResponse } from '../api/http'
+import {
+  api,
+  type FinalRecommendationItem,
+  type FinalRecommendationsResponse,
+  type ProductRecommendationItem,
+} from '../api/http'
 
 const currentUserId = ref<number | null>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
 const precision = ref<number | null>(null)
-const recommendations = ref<FinalRecommendationItem[]>([])
+const dishRecommendations = ref<FinalRecommendationItem[]>([])
+const productRecommendations = ref<ProductRecommendationItem[]>([])
 const limit = ref(5)
 
-async function loadFinalRecommendations() {
+function toFixedSafe(value: number | undefined, digits = 3): string {
+  if (typeof value !== 'number' || Number.isNaN(value)) return '0.000'
+  return value.toFixed(digits)
+}
+
+async function loadRecommendations() {
   if (!currentUserId.value) return
   loading.value = true
   error.value = null
   try {
-    const { data } = await api.get<FinalRecommendationsResponse>(
-      `/v1/users/${currentUserId.value}/recommendations/final`,
-      { params: { limit: limit.value } },
-    )
-    precision.value = Number(data.precision_at_5 ?? 0)
-    recommendations.value = Array.isArray(data.recommendations) ? data.recommendations : []
+    const [productRes, finalRes] = await Promise.all([
+      api.get<ProductRecommendationItem[]>(
+        `/v1/users/${currentUserId.value}/recommendations/products`,
+        { params: { limit: limit.value } },
+      ),
+      api.get<FinalRecommendationsResponse>(
+        `/v1/users/${currentUserId.value}/recommendations/final`,
+        { params: { limit: limit.value } },
+      ),
+    ])
+    productRecommendations.value = Array.isArray(productRes.data) ? productRes.data : []
+    precision.value = Number(finalRes.data.precision_at_5 ?? 0)
+    dishRecommendations.value = Array.isArray(finalRes.data.recommendations) ? finalRes.data.recommendations : []
   } catch (e) {
     const err = e as AxiosError<{ error?: string }>
     const serverMsg = err.response?.data?.error
     error.value = typeof serverMsg === 'string' && serverMsg.trim()
-      ? `Не удалось получить финальные рекомендации: ${serverMsg}`
-      : 'Не удалось получить финальные рекомендации'
-    recommendations.value = []
+      ? `Не удалось получить рекомендации: ${serverMsg}`
+      : 'Не удалось получить рекомендации'
+    productRecommendations.value = []
+    dishRecommendations.value = []
   } finally {
     loading.value = false
   }
@@ -88,7 +135,7 @@ onMounted(() => {
   const raw = localStorage.getItem('currentUserId')
   currentUserId.value = raw ? Number(raw) : null
   if (currentUserId.value) {
-    void loadFinalRecommendations()
+    void loadRecommendations()
   }
 })
 </script>
@@ -182,6 +229,19 @@ h3 {
 }
 
 .hint {
+  margin-top: 6px;
+}
+
+.section-title {
+  margin: 16px 0 8px;
+  font-size: 15px;
+}
+
+.reason {
+  margin-top: 6px;
+}
+
+.dish-links {
   margin-top: 6px;
 }
 </style>

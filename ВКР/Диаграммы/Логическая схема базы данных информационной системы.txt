@@ -1,0 +1,105 @@
+Table Category  {
+	ID int64 [primary key]
+	Name string 
+}
+
+Table Manufacturer {
+	ID int64 [primary key]
+	Name        string        
+	Country     string       
+	ContactInfo datatypes.JSON 
+}
+
+Table Order {
+  ID int64 [primary key]
+	CashierID int64 
+	TotalAmount   float64 
+	PaymentMethod string  
+	ShiftID       string
+}
+
+Table OrderItem {
+	ID int64 [primary key]
+	OrderID int64
+	ProductID int64 
+	Quantity     float64 
+	PricePerUnit float64  
+	Discount     float64 
+	VatRate      float64 
+}
+
+Table Product {
+	ID int64 [primary key]
+	Name string 
+	CategoryID int64                  
+	ManufacturerID int64         
+	PhotoID      string   
+	Unit         string    
+	Barcode      string   
+	DefaultPrice float64   
+	MinStock     float64   
+	CreatedAt    time.Time 
+}
+
+Table Purchase {
+	ID int64 [primary key]
+	SupplierID int64
+	CreatedAt     time.Time 
+	TotalAmount   float64   
+	InvoiceNumber string   
+}
+
+Table PurchaseItem {
+	ID int64 [primary key]
+	PurchaseID int64    
+	ProductID int64   
+	Quantity      float64    
+	PurchasePrice float64    
+	ExpiryDate    time.Time 
+	BatchNumber   string 
+}
+
+Table Stock  {
+	ID int64 [primary key]
+	ProductID int64   
+	Quantity      float64    
+	BatchNumber   string    
+	PurchasePrice float64   
+	ReceivedAt    time.Time  
+	ExpiryDate    time.Time 
+}
+
+Table Supplier {
+	ID int64 [primary key]
+	Name        string         
+	ContactInfo datatypes.JSON 
+	Preferred   bool           
+}
+
+Table User {
+	ID int64 [primary key]
+	Nickname     string    
+	HashPassword string    
+	Name         string    
+	Role         string    
+	Email        string   
+	HiredAt      time.Time 
+}
+
+
+
+Ref: Order.CashierID < User.ID
+
+Ref: Order.ID > OrderItem.OrderID
+
+Ref: Stock.ProductID < Product.ID
+
+Ref: PurchaseItem.ProductID < Product.ID
+
+Ref: Product.ManufacturerID < Manufacturer.ID
+
+Ref: Product.CategoryID < Category.ID
+
+Ref: PurchaseItem.PurchaseID < Purchase.ID
+
+Ref: Purchase.SupplierID < Supplier.ID

@@ -160,3 +160,21 @@ export interface FinalRecommendationsResponse {
   recommendations: FinalRecommendationItem[]
 }
 
+export interface ProductRecommendationDishRef {
+  dish_id: number
+  dish_name: string
+  dish_score: number
+  missing_ingredients_estimate: number
+}
+
+export interface ProductRecommendationItem {
+  product: Product
+  score: number
+  cb_score?: number
+  cf_score?: number
+  meal_score?: number
+  recency_score?: number
+  reason?: string
+  linked_dishes?: ProductRecommendationDishRef[]
+}
+

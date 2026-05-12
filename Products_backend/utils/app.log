@@ -133,3 +133,11 @@
 {"level":"info","msg":"Успешная миграция моделей","time":"2026-04-08T23:38:46+03:00"}
 {"level":"warning","msg":"Shutting down server...","time":"2026-04-08T23:49:56+03:00"}
 {"level":"info","msg":"Server exiting","time":"2026-04-08T23:49:56+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-05-10T18:32:01+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-05-10T18:32:02+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-05-10T18:32:08+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-05-10T18:32:08+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-05-10T18:40:24+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-05-10T18:40:24+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-05-11T03:22:37+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-05-11T03:22:37+03:00"}
