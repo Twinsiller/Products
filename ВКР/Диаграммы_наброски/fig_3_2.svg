@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" font-family="Arial, sans-serif" font-size="13">
+  <style>
+    .ttl { font-weight:bold; font-size:16px; }
+    .actor { fill:#fff; stroke:#2c5d8c; stroke-width:1.5; }
+    .life { stroke:#2c5d8c; stroke-width:1; stroke-dasharray:4 3; }
+    .act { fill:#e7f3ff; stroke:#2c5d8c; stroke-width:1.2; }
+    .ar { stroke:#333; stroke-width:1.4; fill:none; }
+    .arr { stroke:#1f8a40; stroke-width:1.4; fill:none; stroke-dasharray:5 3; }
+    .lbl { fill:#111; }
+    .name { font-weight:bold; }
+    .py { fill:#dff1d5; stroke:#1f8a40; stroke-width:1.5; }
+    .alt { fill:#fff7e0; stroke:#b08900; stroke-width:1; }
+  </style>
+  <defs>
+    <marker id="m" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+    </marker>
+    <marker id="mg" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1f8a40"/>
+    </marker>
+  </defs>
+
+  <text x="600" y="22" text-anchor="middle" class="ttl">Sequence: гибридная рекомендация (GET /v1/users/:id/recommendations/products)</text>
+
+  <g>
+    <rect class="actor" x="40"  y="50" width="140" height="40"/><text class="name" x="110" y="75" text-anchor="middle">Vue 3 SPA</text>
+    <line class="life" x1="110" y1="90" x2="110" y2="600"/>
+  </g>
+  <g>
+    <rect class="actor" x="220" y="50" width="160" height="40"/><text class="name" x="300" y="75" text-anchor="middle">Go: Handler</text>
+    <line class="life" x1="300" y1="90" x2="300" y2="600"/>
+  </g>
+  <g>
+    <rect class="actor" x="420" y="50" width="200" height="40"/><text class="name" x="520" y="75" text-anchor="middle">Service: Recommendation</text>
+    <line class="life" x1="520" y1="90" x2="520" y2="600"/>
+  </g>
+  <g>
+    <rect class="py" x="660" y="50" width="200" height="40"/><text class="name" x="760" y="75" text-anchor="middle">Python: food_recommender</text>
+    <line class="life" x1="760" y1="90" x2="760" y2="600"/>
+  </g>
+  <g>
+    <rect class="actor" x="900" y="50" width="160" height="40"/><text class="name" x="980" y="75" text-anchor="middle">PostgreSQL</text>
+    <line class="life" x1="980" y1="90" x2="980" y2="600"/>
+  </g>
+
+  <path class="ar" d="M115,120 L295,120" marker-end="url(#m)"/>
+  <text class="lbl" x="140" y="115">GET /recommendations/products?limit=K</text>
+
+  <path class="ar" d="M305,150 L515,150" marker-end="url(#m)"/>
+  <text class="lbl" x="330" y="145">RecommendProducts(uid, K)</text>
+
+  <rect class="alt" x="395" y="170" width="690" height="320"/>
+  <text x="400" y="190" font-style="italic">alt: основной путь — вызов Python</text>
+
+  <path class="arr" stroke="#1f8a40" stroke-dasharray="0" d="M525,210 L755,210" marker-end="url(#mg)"/>
+  <text class="lbl" x="540" y="205" fill="#1f8a40">exec.Command(python, food_recommender.py, --user-id, --k, --db-url)</text>
+
+  <path class="ar" d="M765,240 L975,240" marker-end="url(#m)"/>
+  <text class="lbl" x="780" y="235">SELECT orders, order_items, favourites</text>
+  <path class="arr" d="M975,265 L765,265" marker-end="url(#mg)"/>
+
+  <rect x="690" y="285" width="220" height="40" fill="#fff7e0" stroke="#b08900"/>
+  <text x="800" y="310" text-anchor="middle" font-style="italic">TruncatedSVD + CB + meal + recency</text>
+
+  <path class="arr" d="M755,360 L525,360" marker-end="url(#mg)"/>
+  <text class="lbl" x="540" y="355" fill="#1f8a40">JSON {recommendations: [...]} (stdout)</text>
+
+  <rect class="alt" x="395" y="390" width="690" height="90" stroke-dasharray="6 4"/>
+  <text x="400" y="410" font-style="italic">alt: fallback — нет Python или пустой ответ</text>
+  <path class="ar" d="M525,440 L975,440" marker-end="url(#m)"/>
+  <text class="lbl" x="540" y="435">SELECT favourites + кандидаты по категориям/производителям</text>
+  <path class="arr" d="M975,465 L525,465" marker-end="url(#mg)"/>
+
+  <path class="arr" d="M515,510 L305,510" marker-end="url(#mg)"/>
+  <text class="lbl" x="320" y="505">[]ProductRecommendation</text>
+
+  <path class="arr" d="M295,550 L115,550" marker-end="url(#mg)"/>
+  <text class="lbl" x="135" y="545">200 OK + JSON</text>
+
+  <rect x="40" y="585" width="1140" height="22" fill="#f6f9fb" stroke="#bcd"/>
+  <text x="60" y="601" font-style="italic">Целевая задержка цикла: до 500 мс. Fallback гарантирует доступность эндпоинта при отсутствии Python.</text>
+</svg>

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" font-family="Arial, sans-serif" font-size="14">
+  <style>
+    .node { fill:#fff; stroke:#2c5d8c; stroke-width:1.5; }
+    .ttl { font-weight:bold; font-size:16px; }
+    .lbl { fill:#111; }
+    .ar { stroke:#333; stroke-width:1.5; fill:none; }
+    .arP { stroke:#1f8a40; stroke-width:2.2; fill:none; }
+    .arI { stroke:#888; stroke-width:1.6; stroke-dasharray:5 4; fill:none; }
+    .arR { stroke:#d35400; stroke-width:1.8; fill:none; }
+    .ed { font-size:12px; font-weight:bold; }
+    .blk { stroke:#c0392b; stroke-width:2; fill:none; }
+  </style>
+
+  <defs>
+    <marker id="m" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#333"/>
+    </marker>
+    <marker id="mp" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#1f8a40"/>
+    </marker>
+    <marker id="mr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#d35400"/>
+    </marker>
+  </defs>
+
+  <text x="450" y="28" text-anchor="middle" class="ttl">Граф отношений предпочтения для категории «Молочные продукты»</text>
+
+  <ellipse class="node" cx="170" cy="120" rx="80" ry="32"/>
+  <text class="lbl" x="170" y="116" text-anchor="middle">Цельное молоко</text>
+  <text class="lbl" x="170" y="134" text-anchor="middle" font-size="11" fill="#666">3,2% жирн.</text>
+
+  <ellipse class="node" cx="450" cy="120" rx="90" ry="32"/>
+  <text class="lbl" x="450" y="116" text-anchor="middle">Безлактозное молоко</text>
+  <text class="lbl" x="450" y="134" text-anchor="middle" font-size="11" fill="#666">3,2% жирн.</text>
+
+  <ellipse class="node" cx="730" cy="120" rx="80" ry="32"/>
+  <text class="lbl" x="730" y="116" text-anchor="middle">Растительное</text>
+  <text class="lbl" x="730" y="134" text-anchor="middle" font-size="11" fill="#666">«молоко» (овс.)</text>
+
+  <ellipse class="node" cx="280" cy="270" rx="80" ry="32"/>
+  <text class="lbl" x="280" y="266" text-anchor="middle">Йогурт натур.</text>
+  <text class="lbl" x="280" y="284" text-anchor="middle" font-size="11" fill="#666">2% жирн.</text>
+
+  <ellipse class="node" cx="600" cy="270" rx="80" ry="32"/>
+  <text class="lbl" x="600" y="266" text-anchor="middle">Йогурт с</text>
+  <text class="lbl" x="600" y="284" text-anchor="middle" font-size="11" fill="#666">сахаром</text>
+
+  <path class="arP" d="M250,120 L360,120" marker-end="url(#mp)"/>
+  <text class="ed" x="305" y="108" text-anchor="middle" fill="#1f8a40">P (строгое)</text>
+
+  <path class="arI" d="M540,120 L650,120"/>
+  <text class="ed" x="595" y="108" text-anchor="middle" fill="#666">I (безразличие)</text>
+
+  <path class="arR" d="M170,152 Q180,210 245,250" marker-end="url(#mr)"/>
+  <text class="ed" x="155" y="200" text-anchor="middle" fill="#d35400">R</text>
+
+  <path class="arP" d="M315,260 Q450,200 555,260" marker-end="url(#mp)"/>
+  <text class="ed" x="430" y="220" text-anchor="middle" fill="#1f8a40">P</text>
+
+  <rect class="blk" x="540" y="240" width="120" height="60" rx="6"/>
+  <text class="ed" x="600" y="320" text-anchor="middle" fill="#c0392b">«Запрет» (диета)</text>
+
+  <rect x="40" y="370" width="820" height="80" rx="6" fill="#f6f9fb" stroke="#bcd"/>
+  <text x="60" y="395" font-weight="bold">Легенда:</text>
+  <text x="60" y="415">P — строгое предпочтение (зелёная сплошная), I — безразличие (серая пунктирная),</text>
+  <text x="60" y="433">R — нестрогое «не хуже» (оранжевая), красная рамка — жёсткое ограничение (запрет).</text>
+</svg>

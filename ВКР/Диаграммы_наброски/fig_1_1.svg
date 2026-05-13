@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" font-family="Arial, sans-serif" font-size="14">
+  <style>
+    .box { fill: #fff; stroke: #333; stroke-width: 1.5; }
+    .lbl { fill: #111; }
+    .ttl { font-weight: bold; font-size: 16px; }
+    .gap { stroke: #c0392b; stroke-width: 2; stroke-dasharray: 6 4; fill: none; }
+    .arr { stroke: #333; stroke-width: 1.5; fill: none; }
+    .gaplbl { fill: #c0392b; font-style: italic; font-size: 13px; }
+  </style>
+  <text x="450" y="30" text-anchor="middle" class="ttl">Информационные разрывы при формировании рациона (текущее состояние)</text>
+
+  <rect class="box" x="40" y="80" width="160" height="80" rx="6"/>
+  <text class="lbl" x="120" y="115" text-anchor="middle">Потребность</text>
+  <text class="lbl" x="120" y="135" text-anchor="middle">пользователя</text>
+  <text class="lbl" x="120" y="153" text-anchor="middle" font-size="12" fill="#666">(нормы КБЖУ)</text>
+
+  <rect class="box" x="240" y="80" width="160" height="80" rx="6"/>
+  <text class="lbl" x="320" y="115" text-anchor="middle">Каталог</text>
+  <text class="lbl" x="320" y="135" text-anchor="middle">e-grocery</text>
+  <text class="lbl" x="320" y="153" text-anchor="middle" font-size="12" fill="#666">(без учёта КБЖУ)</text>
+
+  <rect class="box" x="440" y="80" width="160" height="80" rx="6"/>
+  <text class="lbl" x="520" y="115" text-anchor="middle">Корзина и</text>
+  <text class="lbl" x="520" y="135" text-anchor="middle">оформление</text>
+  <text class="lbl" x="520" y="153" text-anchor="middle" font-size="12" fill="#666">(ручной контроль)</text>
+
+  <rect class="box" x="640" y="80" width="220" height="80" rx="6"/>
+  <text class="lbl" x="750" y="115" text-anchor="middle">Учёт КБЖУ</text>
+  <text class="lbl" x="750" y="135" text-anchor="middle">(фитнес-трекер)</text>
+  <text class="lbl" x="750" y="153" text-anchor="middle" font-size="12" fill="#666">(после потребления)</text>
+
+  <path class="arr" d="M200,120 L240,120" marker-end="url(#a)"/>
+  <path class="arr" d="M400,120 L440,120" marker-end="url(#a)"/>
+  <path class="arr" d="M600,120 L640,120" marker-end="url(#a)"/>
+
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#333"/>
+    </marker>
+  </defs>
+
+  <path class="gap" d="M210,180 Q220,250 320,260"/>
+  <text class="gaplbl" x="210" y="200">Разрыв 1: каталог не знает</text>
+  <text class="gaplbl" x="210" y="218">о потребностях пользователя</text>
+
+  <path class="gap" d="M520,180 Q520,260 520,290"/>
+  <text class="gaplbl" x="380" y="320">Разрыв 2: корзина не сверяется с нормами КБЖУ в момент покупки</text>
+
+  <path class="gap" d="M750,180 Q750,260 750,290"/>
+  <text class="gaplbl" x="610" y="370">Разрыв 3: контроль постфактум, не влияет на следующую покупку</text>
+
+  <rect x="40" y="380" width="820" height="60" rx="6" fill="#fff7e0" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="450" y="408" text-anchor="middle" font-weight="bold" fill="#7b3a16">Целевое решение: устранить все три разрыва за счёт интеграции расчёта КБЖУ и подбора блюд</text>
+  <text x="450" y="428" text-anchor="middle" font-style="italic" fill="#7b3a16">непосредственно в каталог и корзину (см. процесс «To-Be», Рисунок 2.2)</text>
+</svg>

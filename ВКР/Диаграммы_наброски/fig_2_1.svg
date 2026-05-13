@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" font-family="Arial, sans-serif" font-size="13">
+  <style>
+    .lane { fill:#f6f9fb; stroke:#7a99b1; stroke-width:1.2; }
+    .laneT { fill:#fff; stroke:#7a99b1; stroke-width:1.2; }
+    .ttl { font-weight:bold; font-size:16px; }
+    .task { fill:#fff; stroke:#2c5d8c; stroke-width:1.5; rx:18; ry:18; }
+    .gw { fill:#fff5d1; stroke:#b08900; stroke-width:1.5; }
+    .se { fill:#9bd1a4; stroke:#1f8a40; stroke-width:2; }
+    .ee { fill:#f5b7b1; stroke:#c0392b; stroke-width:2; }
+    .ar { stroke:#333; stroke-width:1.5; fill:none; }
+    .lbl { fill:#111; }
+  </style>
+  <defs>
+    <marker id="m" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#333"/>
+    </marker>
+  </defs>
+
+  <text x="500" y="22" text-anchor="middle" class="ttl">BPMN «As-Is»: текущий процесс онлайн-покупки продуктов</text>
+
+  <rect class="laneT" x="20" y="50"  width="160" height="120"/>
+  <rect class="lane"  x="180" y="50" width="800" height="120"/>
+  <text x="100" y="115" text-anchor="middle" font-weight="bold">Пользователь</text>
+
+  <rect class="laneT" x="20" y="170" width="160" height="120"/>
+  <rect class="lane"  x="180" y="170" width="800" height="120"/>
+  <text x="100" y="235" text-anchor="middle" font-weight="bold">Сервис e-grocery</text>
+
+  <circle class="se" cx="220" cy="110" r="16"/>
+  <text class="lbl" x="220" y="145" text-anchor="middle" font-size="11">Открыть сервис</text>
+
+  <rect class="task" x="280" y="80" width="120" height="60"/>
+  <text class="lbl" x="340" y="105" text-anchor="middle">Просмотреть</text>
+  <text class="lbl" x="340" y="123" text-anchor="middle">каталог</text>
+
+  <rect class="task" x="430" y="80" width="120" height="60"/>
+  <text class="lbl" x="490" y="105" text-anchor="middle">Выбрать</text>
+  <text class="lbl" x="490" y="123" text-anchor="middle">товары</text>
+
+  <rect class="task" x="580" y="80" width="120" height="60"/>
+  <text class="lbl" x="640" y="105" text-anchor="middle">Оформить</text>
+  <text class="lbl" x="640" y="123" text-anchor="middle">заказ</text>
+
+  <rect class="task" x="730" y="80" width="120" height="60"/>
+  <text class="lbl" x="790" y="105" text-anchor="middle">Оплатить и</text>
+  <text class="lbl" x="790" y="123" text-anchor="middle">получить</text>
+
+  <circle class="ee" cx="900" cy="110" r="16"/>
+  <text class="lbl" x="900" y="145" text-anchor="middle" font-size="11">Конец</text>
+
+  <path class="ar" d="M236,110 L280,110" marker-end="url(#m)"/>
+  <path class="ar" d="M400,110 L430,110" marker-end="url(#m)"/>
+  <path class="ar" d="M550,110 L580,110" marker-end="url(#m)"/>
+  <path class="ar" d="M700,110 L730,110" marker-end="url(#m)"/>
+  <path class="ar" d="M850,110 L884,110" marker-end="url(#m)"/>
+
+  <rect class="task" x="280" y="200" width="120" height="60"/>
+  <text class="lbl" x="340" y="225" text-anchor="middle">Отдать</text>
+  <text class="lbl" x="340" y="243" text-anchor="middle">список товаров</text>
+
+  <rect class="task" x="580" y="200" width="120" height="60"/>
+  <text class="lbl" x="640" y="225" text-anchor="middle">Принять</text>
+  <text class="lbl" x="640" y="243" text-anchor="middle">заказ</text>
+
+  <rect class="task" x="730" y="200" width="120" height="60"/>
+  <text class="lbl" x="790" y="225" text-anchor="middle">Доставить</text>
+
+  <path class="ar" d="M340,140 L340,200" marker-end="url(#m)"/>
+  <path class="ar" d="M640,140 L640,200" marker-end="url(#m)"/>
+  <path class="ar" d="M790,140 L790,200" marker-end="url(#m)"/>
+
+  <rect x="20" y="305" width="960" height="40" rx="6" fill="#fff7e0" stroke="#c0392b"/>
+  <text x="500" y="328" text-anchor="middle" font-style="italic" fill="#7b3a16">
+    В процессе нет шагов «расчёт КБЖУ корзины» и «подбор блюд» — всё это вынесено за периметр сервиса.
+  </text>
+</svg>

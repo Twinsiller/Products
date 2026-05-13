@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" font-family="Arial, sans-serif" font-size="12">
+  <style>
+    .ttl { font-weight:bold; font-size:16px; }
+    .ent { fill:#fff; stroke:#2c5d8c; stroke-width:1.5; }
+    .hdr { fill:#dde9f6; stroke:#2c5d8c; stroke-width:1.5; }
+    .pk  { font-weight:bold; }
+    .fk  { font-style:italic; fill:#7a4a00; }
+    .rel { stroke:#666; stroke-width:1.2; fill:none; }
+    .mongo { fill:#fff5d1; stroke:#b08900; stroke-width:1.5; }
+    .lbl { fill:#111; }
+    .name { font-weight:bold; }
+  </style>
+  <defs>
+    <marker id="m1" markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto">
+      <path d="M0,0 L11,6 L0,12 z" fill="none" stroke="#666" stroke-width="1"/>
+    </marker>
+  </defs>
+
+  <text x="600" y="22" text-anchor="middle" class="ttl">ER-диаграмма базы данных (PostgreSQL: 12 сущностей + MongoDB: коллекция изображений)</text>
+
+  <!-- User -->
+  <rect class="hdr" x="40" y="50" width="160" height="22"/>
+  <text class="name lbl" x="120" y="67" text-anchor="middle">User</text>
+  <rect class="ent" x="40" y="72" width="160" height="120"/>
+  <text class="pk lbl" x="50" y="90">PK id</text>
+  <text class="lbl" x="50" y="108">name</text>
+  <text class="lbl" x="50" y="126">role</text>
+  <text class="lbl" x="50" y="144">password_hash</text>
+  <text class="lbl" x="50" y="162">gender</text>
+  <text class="lbl" x="50" y="180">hired_at</text>
+
+  <!-- Order -->
+  <rect class="hdr" x="260" y="50" width="160" height="22"/>
+  <text class="name lbl" x="340" y="67" text-anchor="middle">Order</text>
+  <rect class="ent" x="260" y="72" width="160" height="100"/>
+  <text class="pk lbl" x="270" y="90">PK id</text>
+  <text class="fk lbl" x="270" y="108">FK cashier_id → User</text>
+  <text class="lbl" x="270" y="126">created_at</text>
+  <text class="lbl" x="270" y="144">total_amount</text>
+
+  <!-- OrderItem -->
+  <rect class="hdr" x="480" y="50" width="180" height="22"/>
+  <text class="name lbl" x="570" y="67" text-anchor="middle">OrderItem</text>
+  <rect class="ent" x="480" y="72" width="180" height="120"/>
+  <text class="pk lbl" x="490" y="90">PK id</text>
+  <text class="fk lbl" x="490" y="108">FK order_id → Order</text>
+  <text class="fk lbl" x="490" y="126">FK product_id → Product</text>
+  <text class="lbl" x="490" y="144">quantity</text>
+  <text class="lbl" x="490" y="162">price_per_unit</text>
+  <text class="lbl" x="490" y="180">discount</text>
+
+  <!-- Product -->
+  <rect class="hdr" x="720" y="50" width="200" height="22"/>
+  <text class="name lbl" x="820" y="67" text-anchor="middle">Product</text>
+  <rect class="ent" x="720" y="72" width="200" height="200"/>
+  <text class="pk lbl" x="730" y="90">PK id</text>
+  <text class="lbl" x="730" y="108">name</text>
+  <text class="fk lbl" x="730" y="126">FK category_id → Category</text>
+  <text class="fk lbl" x="730" y="144">FK manufacturer_id → Manuf.</text>
+  <text class="lbl" x="730" y="162">barcode (UNIQUE)</text>
+  <text class="lbl" x="730" y="180">default_price</text>
+  <text class="lbl" x="730" y="198">calories_kcal</text>
+  <text class="lbl" x="730" y="216">protein_g</text>
+  <text class="lbl" x="730" y="234">fat_g, carbs_g</text>
+  <text class="lbl" x="730" y="252">created_at</text>
+
+  <!-- Category -->
+  <rect class="hdr" x="40" y="240" width="160" height="22"/>
+  <text class="name lbl" x="120" y="257" text-anchor="middle">Category</text>
+  <rect class="ent" x="40" y="262" width="160" height="60"/>
+  <text class="pk lbl" x="50" y="280">PK id</text>
+  <text class="lbl" x="50" y="298">name</text>
+
+  <!-- Manufacturer -->
+  <rect class="hdr" x="220" y="240" width="160" height="22"/>
+  <text class="name lbl" x="300" y="257" text-anchor="middle">Manufacturer</text>
+  <rect class="ent" x="220" y="262" width="160" height="80"/>
+  <text class="pk lbl" x="230" y="280">PK id</text>
+  <text class="lbl" x="230" y="298">name</text>
+  <text class="lbl" x="230" y="316">country</text>
+  <text class="lbl" x="230" y="334">contact_info (jsonb)</text>
+
+  <!-- Country -->
+  <rect class="hdr" x="400" y="240" width="120" height="22"/>
+  <text class="name lbl" x="460" y="257" text-anchor="middle">Country</text>
+  <rect class="ent" x="400" y="262" width="120" height="60"/>
+  <text class="pk lbl" x="410" y="280">PK id</text>
+  <text class="lbl" x="410" y="298">name</text>
+
+  <!-- Dish -->
+  <rect class="hdr" x="40" y="380" width="160" height="22"/>
+  <text class="name lbl" x="120" y="397" text-anchor="middle">Dish</text>
+  <rect class="ent" x="40" y="402" width="160" height="60"/>
+  <text class="pk lbl" x="50" y="420">PK id</text>
+  <text class="lbl" x="50" y="438">name</text>
+
+  <!-- DishProduct -->
+  <rect class="hdr" x="240" y="380" width="200" height="22"/>
+  <text class="name lbl" x="340" y="397" text-anchor="middle">DishProduct</text>
+  <rect class="ent" x="240" y="402" width="200" height="120"/>
+  <text class="pk lbl" x="250" y="420">PK id</text>
+  <text class="fk lbl" x="250" y="438">FK dish_id → Dish</text>
+  <text class="fk lbl" x="250" y="456">FK product_id → Product</text>
+  <text class="lbl" x="250" y="474">quantity</text>
+  <text class="lbl" x="250" y="492">price_per_unit</text>
+  <text class="lbl" x="250" y="510">discount</text>
+
+  <!-- DishCategoryRequirement -->
+  <rect class="hdr" x="470" y="380" width="240" height="22"/>
+  <text class="name lbl" x="590" y="397" text-anchor="middle">DishCategoryRequirement</text>
+  <rect class="ent" x="470" y="402" width="240" height="140"/>
+  <text class="pk lbl" x="480" y="420">PK id</text>
+  <text class="fk lbl" x="480" y="438">FK dish_id → Dish</text>
+  <text class="fk lbl" x="480" y="456">FK category_id → Category (опц.)</text>
+  <text class="lbl" x="480" y="474">ingredient_name</text>
+  <text class="lbl" x="480" y="492">quantity</text>
+  <text class="lbl" x="480" y="510">note</text>
+
+  <!-- FavouriteProduct -->
+  <rect class="hdr" x="730" y="380" width="200" height="22"/>
+  <text class="name lbl" x="830" y="397" text-anchor="middle">FavouriteProduct</text>
+  <rect class="ent" x="730" y="402" width="200" height="80"/>
+  <text class="pk lbl" x="740" y="420">PK id</text>
+  <text class="fk lbl" x="740" y="438">FK user_id → User</text>
+  <text class="fk lbl" x="740" y="456">FK product_id → Product</text>
+
+  <!-- FavouriteDish -->
+  <rect class="hdr" x="950" y="380" width="200" height="22"/>
+  <text class="name lbl" x="1050" y="397" text-anchor="middle">FavouriteDish</text>
+  <rect class="ent" x="950" y="402" width="200" height="80"/>
+  <text class="pk lbl" x="960" y="420">PK id</text>
+  <text class="fk lbl" x="960" y="438">FK user_id → User</text>
+  <text class="fk lbl" x="960" y="456">FK dish_id → Dish</text>
+
+  <!-- MongoDB collection -->
+  <rect class="mongo" x="950" y="200" width="200" height="120" rx="60" ry="20"/>
+  <text class="name lbl" x="1050" y="225" text-anchor="middle">MongoDB: products</text>
+  <text class="lbl" x="970" y="248">{ product_id: int64,</text>
+  <text class="lbl" x="970" y="266">  content_type: string,</text>
+  <text class="lbl" x="970" y="284">  data: BinData }</text>
+  <text class="fk lbl" x="970" y="306">связь по product_id</text>
+
+  <!-- Relationships -->
+  <path class="rel" d="M200,130 L260,110" marker-end="url(#m1)"/>
+  <path class="rel" d="M420,130 L480,110" marker-end="url(#m1)"/>
+  <path class="rel" d="M660,130 L720,150" marker-end="url(#m1)"/>
+  <path class="rel" d="M200,290 L720,200" marker-end="url(#m1)"/>
+  <path class="rel" d="M380,290 L720,200" marker-end="url(#m1)"/>
+
+  <path class="rel" d="M200,432 L240,432" marker-end="url(#m1)"/>
+  <path class="rel" d="M440,432 L470,432" marker-end="url(#m1)"/>
+  <path class="rel" d="M440,460 L720,260" marker-end="url(#m1)"/>
+  <path class="rel" d="M710,420 L730,420" marker-end="url(#m1)"/>
+  <path class="rel" d="M200,160 L730,420" marker-end="url(#m1)"/>
+  <path class="rel" d="M200,170 L950,420" marker-end="url(#m1)"/>
+  <path class="rel" d="M200,432 L950,432" marker-end="url(#m1)"/>
+
+  <path class="rel" d="M820,272 Q900,250 950,260" marker-end="url(#m1)" stroke-dasharray="5 4"/>
+
+  <rect x="40" y="600" width="1110" height="80" rx="6" fill="#f6f9fb" stroke="#bcd"/>
+  <text class="name" x="60" y="620">Условные обозначения:</text>
+  <text x="60" y="640">PK — первичный ключ; FK — внешний ключ; пунктирная линия — логическая связь между PostgreSQL и MongoDB</text>
+  <text x="60" y="658">через product_id (физического FK между разными СУБД нет).</text>
+</svg>
