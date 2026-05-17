@@ -1,13 +1,13 @@
 <template>
   <section class="card">
-    <h2>Регистрация покупателя</h2>
+    <h2>Регистрация</h2>
     <p class="muted">
-      Создайте учётную запись покупателя, чтобы получать персональные рекомендации и управлять покупками.
+      Зарегистрируйтесь, чтобы получать персональные рекомендации и оформлять заказы. Пол нужен только для расчёта суточной нормы калорий.
     </p>
 
     <form class="form" @submit.prevent="registerUser">
       <label class="field">
-        <span>Имя покупателя</span>
+        <span>Имя</span>
         <input
           v-model="name"
           type="text"
@@ -23,14 +23,14 @@
           type="password"
           required
           minlength="4"
-          placeholder="Минимум 4 символа"
+          placeholder="Не менее 4 символов"
         />
       </label>
 
       <label class="field">
         <span>Пол</span>
         <select v-model="gender" required>
-          <option disabled value="">Выберите</option>
+          <option disabled value="">Выберите пол</option>
           <option value="male">Мужской</option>
           <option value="female">Женский</option>
         </select>
@@ -38,9 +38,9 @@
 
       <div class="actions">
         <button type="submit" class="primary" :disabled="loading">
-          {{ loading ? 'Создание...' : 'Зарегистрировать и войти' }}
+          {{ loading ? 'Создаём аккаунт…' : 'Зарегистрироваться' }}
         </button>
-        <RouterLink to="/" class="link">У меня уже есть аккаунт</RouterLink>
+        <RouterLink to="/" class="link">Уже есть аккаунт — войти</RouterLink>
       </div>
     </form>
 
@@ -86,7 +86,12 @@ const registerUser = async () => {
     window.dispatchEvent(new Event('auth-changed'))
     router.push({ name: 'recommendations' })
   } catch (e) {
-    error.value = 'Не удалось зарегистрировать пользователя'
+    const status = (e as { response?: { status?: number } })?.response?.status
+    if (status === 409 || status === 400) {
+      error.value = 'Не удалось создать аккаунт. Возможно, такое имя уже занято.'
+    } else {
+      error.value = 'Не удалось зарегистрироваться. Проверьте подключение и попробуйте ещё раз.'
+    }
   } finally {
     loading.value = false
   }

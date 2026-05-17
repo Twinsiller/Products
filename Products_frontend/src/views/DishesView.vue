@@ -3,15 +3,15 @@
     <header class="header">
       <div>
         <h2>Блюда</h2>
-        <p class="muted">Админ задаёт блюда и товары, из которых они состоят.</p>
+        <p class="muted">Каталог блюд: для каждого блюда указан состав ингредиентов.</p>
       </div>
       <button class="primary" type="button" @click="loadAll" :disabled="loading">
-        {{ loading ? 'Загрузка...' : 'Обновить' }}
+        {{ loading ? 'Загрузка…' : 'Обновить' }}
       </button>
     </header>
 
     <div v-if="!isAdmin" class="guard">
-      <p class="muted">Только администратор может создавать и изменять блюда.</p>
+      <p class="muted">Создавать и изменять блюда может только администратор.</p>
     </div>
 
     <div v-else class="admin-content">
@@ -20,7 +20,7 @@
         <div class="row">
           <input v-model="newDishName" type="text" placeholder="Название блюда" required />
           <button class="primary" type="submit" :disabled="creatingDish">
-            {{ creatingDish ? 'Создание...' : 'Создать' }}
+            {{ creatingDish ? 'Создаём…' : 'Создать' }}
           </button>
         </div>
         <p v-if="createStatusText" class="save-hint">{{ createStatusText }}</p>
@@ -42,7 +42,7 @@
                 :disabled="!isDishDirty(dish.id) || dishSaveState[dish.id] === 'saving'"
                 @click="saveDishAll(dish.id)"
               >
-                {{ dishSaveState[dish.id] === 'saving' ? 'Сохранение...' : 'Сохранить' }}
+                {{ dishSaveState[dish.id] === 'saving' ? 'Сохраняем…' : 'Сохранить' }}
               </button>
               <button class="danger" type="button" @click="deleteDish(dish.id)">Удалить</button>
             </div>
@@ -54,28 +54,28 @@
           <div class="requirements">
             <h4>Состав блюда (товары)</h4>
             <p class="inline-note">
-              Изменения ниже применяются только после нажатия "Сохранить" у этого блюда.
+              Изменения применятся только после нажатия «Сохранить» у этого блюда.
             </p>
             <ul v-if="currentRequirements(dish.id).length" class="req-list">
               <li v-for="req in currentRequirements(dish.id)" :key="req.id" class="req-item">
                 <span>
-                  {{ reqProductName(req.product_id) }}: {{ req.quantity }} шт.
-                  <span v-if="req.id < 0" class="muted">(новый пункт)</span>
+                  {{ reqProductName(req.product_id) }} — {{ req.quantity }} шт.
+                  <span v-if="req.id < 0" class="muted">(не сохранён)</span>
                 </span>
                 <button class="link danger-link" type="button" @click="deleteRequirement(dish.id, req.id)">
-                  Удалить
+                  Убрать
                 </button>
               </li>
             </ul>
-            <p v-else class="muted">Пока нет товаров в составе блюда.</p>
+            <p v-else class="muted">Состав блюда пока пуст.</p>
 
             <div class="req-form">
               <select v-model.number="newReq[dish.id].product_id">
-                <option :value="0">Выберите товар</option>
+                <option :value="0">Выберите товар…</option>
                 <option v-for="p in products" :key="p.id" :value="p.id">{{ p.name }}</option>
               </select>
               <input v-model.number="newReq[dish.id].quantity" type="number" min="1" placeholder="Кол-во" />
-              <button class="secondary" type="button" @click="addRequirement(dish.id)">Добавить товар</button>
+              <button class="secondary" type="button" @click="addRequirement(dish.id)">Добавить</button>
             </div>
           </div>
         </article>
@@ -190,9 +190,9 @@ function getApiErrorMessage(e: unknown, fallback: string): string {
   if (typeof serverMsg === 'string' && serverMsg.trim()) {
     return serverMsg
   }
-  if (err.response?.status === 401) return 'Требуется вход в систему'
-  if (err.response?.status === 403) return 'Доступ только для администратора'
-  if (err.response?.status === 404) return 'Маршрут не найден. Перезапустите backend'
+  if (err.response?.status === 401) return 'Сначала войдите в аккаунт'
+  if (err.response?.status === 403) return 'Это действие доступно только администратору'
+  if (err.response?.status === 404) return 'Не удалось найти запрашиваемые данные'
   return fallback
 }
 

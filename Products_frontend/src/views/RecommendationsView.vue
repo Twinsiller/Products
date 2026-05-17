@@ -9,11 +9,11 @@
       <header class="header">
         <div>
           <h2>Персональные рекомендации</h2>
-          <p class="muted">Показываем, почему товар рекомендован: оценка, факторы и блюда, которые можно приготовить.</p>
+          <p class="muted">Подбираем товары и блюда под ваши вкусы и сбалансированный рацион.</p>
         </div>
         <div class="controls">
           <label class="inline-label">
-            Top-K:
+            Сколько показывать:
             <select v-model.number="limit" :disabled="loading">
               <option :value="3">3</option>
               <option :value="5">5</option>
@@ -21,56 +21,60 @@
             </select>
           </label>
           <button class="primary" type="button" :disabled="loading" @click="loadRecommendations">
-            {{ loading ? 'Загрузка...' : 'Обновить рекомендации' }}
+            {{ loading ? 'Загрузка...' : 'Обновить' }}
           </button>
         </div>
       </header>
 
-      <p class="muted hint">
-        Товары: <code>/v1/users/{{ currentUserId }}/recommendations/products?limit={{ limit }}</code>
-      </p>
-      <p class="muted hint">
-        Блюда (ML): <code>/v1/users/{{ currentUserId }}/recommendations/final?limit={{ limit }}</code>
-      </p>
-      <p v-if="precision !== null" class="muted">
-        Метрика ML-блюд: precision@5 = <strong>{{ precision.toFixed(3) }}</strong>
-      </p>
-
-      <h3 class="section-title">Что купить и почему</h3>
+      <h3 class="section-title">Что стоит купить</h3>
       <div v-if="productRecommendations.length" class="list">
         <article v-for="(r, idx) in productRecommendations" :key="`${r.product.id}-${idx}`" class="item">
-          <h3>{{ idx + 1 }}. {{ r.product.name }}</h3>
-          <p class="meta">
-            Итоговая оценка: <strong>{{ toFixedSafe(r.score, 4) }}</strong>
-            · Цена: {{ Number(r.product.default_price || 0).toFixed(2) }} ₽
-          </p>
-          <p class="meta">
-            Компоненты: КБЖУ={{ toFixedSafe(r.cb_score, 3) }} · История={{ toFixedSafe(r.cf_score, 3) }}
-            · Блюда={{ toFixedSafe(r.meal_score, 3) }} · Штраф за недавнюю покупку={{ toFixedSafe(r.recency_score, 3) }}
-          </p>
-          <p v-if="r.reason" class="meta reason">{{ r.reason }}</p>
+          <div class="item-head">
+            <h3>{{ idx + 1 }}. {{ r.product.name }}</h3>
+            <span class="price">{{ Number(r.product.default_price || 0).toFixed(2) }} ₽</span>
+          </div>
+          <p v-if="r.reason" class="reason">{{ r.reason }}</p>
+
+          <div class="why-row">
+            <span class="why-chip" v-if="r.cb_score > 0">подходит по КБЖУ</span>
+            <span class="why-chip" v-if="r.cf_score > 0">похоже на ваши прошлые покупки</span>
+            <span class="why-chip" v-if="r.meal_score > 0">пригодится для блюд</span>
+            <span class="why-chip neutral" v-if="r.recency_score < 0">недавно уже покупали</span>
+          </div>
 
           <div v-if="r.linked_dishes?.length" class="dish-links">
-            <p class="meta"><strong>Если взять этот товар, подходят блюда:</strong></p>
-            <p v-for="d in r.linked_dishes" :key="`${r.product.id}-${d.dish_id}`" class="meta">
-              • {{ d.dish_name }} (оценка блюда: {{ toFixedSafe(d.dish_score, 3) }}, недостающих ингредиентов: {{ d.missing_ingredients_estimate }})
-            </p>
+            <p class="dish-links-title">Из этого товара можно приготовить:</p>
+            <ul>
+              <li v-for="d in r.linked_dishes" :key="`${r.product.id}-${d.dish_id}`">
+                {{ d.dish_name }}
+                <span class="missing" v-if="d.missing_ingredients_estimate > 0">
+                  — не хватает ещё {{ d.missing_ingredients_estimate }} {{ ingredientWord(d.missing_ingredients_estimate) }}
+                </span>
+                <span class="ready" v-else>— все ингредиенты есть</span>
+              </li>
+            </ul>
           </div>
         </article>
       </div>
-      <p v-else-if="!loading" class="muted">Пока нет товарных рекомендаций.</p>
+      <p v-else-if="!loading" class="muted hint-empty">
+        Пока нет рекомендаций. Добавьте несколько товаров в избранное и оформите хотя бы один заказ — система начнёт подсказывать.
+      </p>
 
-      <h3 class="section-title">Рекомендованные блюда (ML)</h3>
+      <h3 class="section-title">Подобранные блюда</h3>
       <div v-if="dishRecommendations.length" class="list">
         <article v-for="(r, idx) in dishRecommendations" :key="`${r.recipe_id}-${idx}`" class="item">
           <h3>{{ idx + 1 }}. {{ r.recipe_name }}</h3>
-          <p class="meta">ID: {{ r.recipe_id }} · score: {{ r.score.toFixed(4) }}</p>
-          <p v-if="r.kcal !== undefined" class="meta">
-            КБЖУ: {{ r.kcal?.toFixed(0) }} ккал · Б {{ r.protein_g?.toFixed(1) }} · Ж {{ r.fat_g?.toFixed(1) }} · У {{ r.carbs_g?.toFixed(1) }}
+          <p v-if="r.kcal !== undefined" class="kbju">
+            <strong>{{ r.kcal?.toFixed(0) }} ккал</strong>
+            <span class="kbju-sep">·</span> Б <strong>{{ r.protein_g?.toFixed(1) }}</strong>
+            <span class="kbju-sep">·</span> Ж <strong>{{ r.fat_g?.toFixed(1) }}</strong>
+            <span class="kbju-sep">·</span> У <strong>{{ r.carbs_g?.toFixed(1) }}</strong>
           </p>
         </article>
       </div>
-      <p v-else-if="!loading" class="muted">Пока нет рекомендаций блюд.</p>
+      <p v-else-if="!loading" class="muted hint-empty">
+        Пока не подобрали блюд. Добавьте больше товаров в корзину или избранное.
+      </p>
 
       <p v-if="error" class="error">{{ error }}</p>
     </div>
@@ -100,35 +104,57 @@ function toFixedSafe(value: number | undefined, digits = 3): string {
   return value.toFixed(digits)
 }
 
+function ingredientWord(n: number): string {
+  const mod10 = n % 10
+  const mod100 = n % 100
+  if (mod10 === 1 && mod100 !== 11) return 'ингредиента'
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'ингредиентов'
+  return 'ингредиентов'
+}
+
 async function loadRecommendations() {
   if (!currentUserId.value) return
   loading.value = true
   error.value = null
-  try {
-    const [productRes, finalRes] = await Promise.all([
-      api.get<ProductRecommendationItem[]>(
-        `/v1/users/${currentUserId.value}/recommendations/products`,
-        { params: { limit: limit.value } },
-      ),
-      api.get<FinalRecommendationsResponse>(
-        `/v1/users/${currentUserId.value}/recommendations/final`,
-        { params: { limit: limit.value } },
-      ),
-    ])
-    productRecommendations.value = Array.isArray(productRes.data) ? productRes.data : []
-    precision.value = Number(finalRes.data.precision_at_5 ?? 0)
-    dishRecommendations.value = Array.isArray(finalRes.data.recommendations) ? finalRes.data.recommendations : []
-  } catch (e) {
-    const err = e as AxiosError<{ error?: string }>
-    const serverMsg = err.response?.data?.error
-    error.value = typeof serverMsg === 'string' && serverMsg.trim()
-      ? `Не удалось получить рекомендации: ${serverMsg}`
-      : 'Не удалось получить рекомендации'
+
+  const [productRes, finalRes] = await Promise.allSettled([
+    api.get<ProductRecommendationItem[]>(
+      `/v1/users/${currentUserId.value}/recommendations/products`,
+      { params: { limit: limit.value } },
+    ),
+    api.get<FinalRecommendationsResponse>(
+      `/v1/users/${currentUserId.value}/recommendations/final`,
+      { params: { limit: limit.value } },
+    ),
+  ])
+
+  if (productRes.status === 'fulfilled') {
+    productRecommendations.value = Array.isArray(productRes.value.data) ? productRes.value.data : []
+  } else {
     productRecommendations.value = []
-    dishRecommendations.value = []
-  } finally {
-    loading.value = false
   }
+
+  if (finalRes.status === 'fulfilled') {
+    precision.value = Number(finalRes.value.data.precision_at_5 ?? 0)
+    dishRecommendations.value = Array.isArray(finalRes.value.data.recommendations)
+      ? finalRes.value.data.recommendations
+      : []
+  } else {
+    precision.value = null
+    dishRecommendations.value = []
+  }
+
+  // Никаких подробностей серверной ошибки наружу — только дружелюбный текст.
+  if (productRes.status === 'rejected' && finalRes.status === 'rejected') {
+    const status = ((productRes.reason as AxiosError)?.response?.status) ?? 0
+    if (status === 401) {
+      error.value = 'Сессия истекла. Пожалуйста, войдите заново.'
+    } else {
+      error.value = 'Сервис рекомендаций временно недоступен. Попробуйте обновить позже.'
+    }
+  }
+
+  loading.value = false
 }
 
 onMounted(() => {
@@ -207,19 +233,27 @@ h2 {
 .item {
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  padding: 10px 12px;
+  padding: 12px 14px;
   background: #fafafa;
+}
+
+.item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
 }
 
 h3 {
   margin: 0 0 4px;
-  font-size: 14px;
+  font-size: 15px;
 }
 
-.meta {
-  margin: 0;
-  font-size: 12px;
-  color: #4b5563;
+.price {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
 }
 
 .error {
@@ -228,20 +262,95 @@ h3 {
   font-size: 13px;
 }
 
-.hint {
-  margin-top: 6px;
+.hint-empty {
+  padding: 12px;
+  background: #f9fafb;
+  border: 1px dashed #d1d5db;
+  border-radius: 8px;
+  margin-top: 10px;
 }
 
 .section-title {
-  margin: 16px 0 8px;
-  font-size: 15px;
+  margin: 20px 0 10px;
+  font-size: 16px;
+  color: #111827;
 }
 
 .reason {
-  margin-top: 6px;
+  margin: 4px 0 8px;
+  font-size: 13px;
+  color: #374151;
+  font-style: italic;
+}
+
+.why-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0;
+}
+
+.why-chip {
+  display: inline-block;
+  padding: 3px 9px;
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.why-chip.neutral {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fcd34d;
 }
 
 .dish-links {
-  margin-top: 6px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed #e5e7eb;
+}
+
+.dish-links-title {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.dish-links ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.dish-links li {
+  margin: 3px 0;
+}
+
+.missing {
+  color: #b45309;
+}
+
+.ready {
+  color: #15803d;
+  font-weight: 500;
+}
+
+.kbju {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #374151;
+}
+
+.kbju strong {
+  color: #111827;
+}
+
+.kbju-sep {
+  color: #9ca3af;
+  margin: 0 4px;
 }
 </style>

@@ -4,7 +4,7 @@
       <div>
         <h2>Производители</h2>
         <p class="muted">
-          Справочник производителей товарных позиций.
+          Список производителей товаров.
         </p>
       </div>
       <div class="header-actions">
@@ -14,7 +14,7 @@
           @click="loadManufacturers"
           :disabled="loading"
         >
-          {{ loading ? 'Обновление...' : 'Обновить' }}
+          {{ loading ? 'Обновление…' : 'Обновить' }}
         </button>
         <button
           v-if="isAdmin"
@@ -29,7 +29,7 @@
 
     <div class="tiles-grid">
       <article v-for="m in manufacturers" :key="m.id" class="tile">
-        <p class="tile-meta">ID {{ m.id }}</p>
+        <p v-if="isAdmin" class="tile-meta">№{{ m.id }}</p>
         <input
           v-if="editingId === m.id"
           v-model="editName"
@@ -93,7 +93,7 @@
           />
         </label>
         <button type="submit" class="primary" :disabled="createLoading">
-          {{ createLoading ? 'Сохранение...' : 'Сохранить' }}
+          {{ createLoading ? 'Сохраняем…' : 'Сохранить' }}
         </button>
       </form>
     </section>

@@ -1,28 +1,32 @@
 <template>
   <section class="card">
     <h2>Избранное</h2>
-    <p class="muted">Ваши избранные товары.</p>
+    <p class="muted">Товары, которые вы отметили сердечком в каталоге.</p>
 
     <div class="actions">
       <button class="secondary" type="button" @click="loadFavourites" :disabled="loading || !currentUserId">
-        {{ loading ? 'Загрузка...' : 'Обновить' }}
+        {{ loading ? 'Загрузка…' : 'Обновить' }}
       </button>
     </div>
 
-    <div v-if="!currentUserId" class="muted">Войдите в аккаунт, чтобы видеть избранное.</div>
+    <div v-if="!currentUserId" class="muted hint-empty">Войдите в аккаунт, чтобы видеть избранное.</div>
 
     <div v-else-if="items.length" class="list">
       <article v-for="it in items" :key="it.id" class="item">
-        <div>
-          <strong>{{ it.product?.name || ('Товар #' + it.product_id) }}</strong>
-          <p class="muted small">ID товара: {{ it.product_id }}</p>
+        <div class="item-info">
+          <strong>{{ it.product?.name || ('Товар №' + it.product_id) }}</strong>
+          <p v-if="it.product?.default_price" class="muted small">
+            {{ Number(it.product.default_price).toFixed(2) }} ₽
+          </p>
         </div>
         <button class="danger" type="button" @click="removeFavourite(it.product_id)" :disabled="deletingProductId === it.product_id">
-          {{ deletingProductId === it.product_id ? 'Удаление...' : 'Убрать' }}
+          {{ deletingProductId === it.product_id ? 'Убираем…' : 'Убрать' }}
         </button>
       </article>
     </div>
-    <p v-else-if="!loading" class="muted">Пока нет избранных товаров.</p>
+    <p v-else-if="!loading" class="muted hint-empty">
+      Здесь будут появляться товары, которые вы отметите сердечком в каталоге.
+    </p>
 
     <p v-if="error" class="error">{{ error }}</p>
   </section>
@@ -54,13 +58,10 @@ async function loadFavourites() {
     items.value = data
   } catch (e: unknown) {
     const resp = (e as { response?: { status?: number; data?: { error?: string } } })?.response
-    const msg = resp?.data?.error
     if (resp?.status === 401) {
-      error.value = 'Сессия истекла. Войдите заново.'
-    } else if (resp?.status === 404) {
-      error.value = 'Маршрут избранного не найден. Перезапустите backend.'
+      error.value = 'Сессия истекла. Пожалуйста, войдите заново.'
     } else {
-      error.value = msg || 'Не удалось загрузить избранное'
+      error.value = 'Не удалось загрузить избранное. Попробуйте обновить страницу.'
     }
     items.value = []
   } finally {
@@ -75,8 +76,7 @@ async function removeFavourite(productId: number) {
     await api.delete(`/v1/favourites/product/${productId}`)
     items.value = items.value.filter((x) => x.product_id !== productId)
   } catch (e: unknown) {
-    const msg = (e as { response?: { data?: { error?: string } } })?.response?.data?.error
-    error.value = msg || 'Не удалось удалить из избранного'
+    error.value = 'Не удалось убрать товар из избранного. Попробуйте ещё раз.'
   } finally {
     deletingProductId.value = null
   }
@@ -159,5 +159,16 @@ h2 {
   margin-top: 10px;
   color: #b91c1c;
   font-size: 13px;
+}
+
+.item-info { display: flex; flex-direction: column; gap: 4px; }
+.item-info strong { font-size: 14px; color: #111827; }
+
+.hint-empty {
+  padding: 12px;
+  background: #f9fafb;
+  border: 1px dashed #d1d5db;
+  border-radius: 8px;
+  margin-top: 8px;
 }
 </style>

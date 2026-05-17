@@ -1,8 +1,8 @@
 <template>
   <section class="card">
     <div v-if="!isAdmin" class="guard">
-      <h2>Доступ только для администратора</h2>
-      <p class="muted">Просмотр пользователей и их данных доступен только роли admin.</p>
+      <h2>Раздел только для администратора</h2>
+      <p class="muted">Просмотр пользователей и их данных доступен только администратору.</p>
     </div>
 
     <div v-else>
@@ -10,59 +10,59 @@
         <div>
           <h2>Пользователи</h2>
           <p class="muted">
-            Полная информация по пользователям: профиль, заказы, позиции заказов и избранное.
+            Все зарегистрированные пользователи: профиль, заказы, состав заказов и избранное.
           </p>
         </div>
         <button class="primary" type="button" @click="loadUsers" :disabled="loading">
-          {{ loading ? 'Загрузка...' : 'Обновить' }}
+          {{ loading ? 'Загрузка…' : 'Обновить' }}
         </button>
       </header>
 
       <div class="users-grid">
         <article v-for="u in users" :key="u.id" class="user-tile">
-          <h3>#{{ u.id }} · {{ u.name }}</h3>
+          <h3>№{{ u.id }} — {{ u.name }}</h3>
           <p class="meta">
-            Роль: {{ u.role }} · Пол: {{ u.gender || 'не указан' }} · Создан: {{ formatDate(u.hired_at) }}
+            Роль: {{ humanRole(u.role) }} · Пол: {{ humanGender(u.gender) }} · Создан: {{ formatDate(u.hired_at) }}
           </p>
 
           <section class="block">
             <h4>Заказы ({{ u.orders?.length || 0 }})</h4>
             <div v-if="u.orders?.length" class="list">
               <div v-for="o in u.orders" :key="o.id" class="line">
-                <strong>#{{ o.id }}</strong> · {{ formatDate(o.created_at) }} · {{ toMoney(o.total_amount) }} ₽
+                <strong>Заказ №{{ o.id }}</strong> — {{ formatDate(o.created_at) }} — {{ toMoney(o.total_amount) }} ₽
                 <div v-if="o.items?.length" class="sublist">
                   <div v-for="it in o.items" :key="it.id">
-                    {{ it.product?.name || ('Товар #' + it.product_id) }} × {{ it.quantity }} · {{ toMoney(it.price_per_unit) }} ₽
+                    {{ it.product?.name || ('Товар №' + it.product_id) }} × {{ it.quantity }} — {{ toMoney(it.price_per_unit) }} ₽
                   </div>
                 </div>
               </div>
             </div>
-            <p v-else class="muted small">Нет заказов</p>
+            <p v-else class="muted small">Заказов нет</p>
           </section>
 
           <section class="block">
             <h4>Избранные товары ({{ u.favourite_products?.length || 0 }})</h4>
             <div v-if="u.favourite_products?.length" class="chips">
               <span v-for="fp in u.favourite_products" :key="fp.id" class="chip">
-                {{ fp.product?.name || ('Товар #' + fp.product_id) }}
+                {{ fp.product?.name || ('Товар №' + fp.product_id) }}
               </span>
             </div>
-            <p v-else class="muted small">Нет избранных товаров</p>
+            <p v-else class="muted small">Избранных товаров нет</p>
           </section>
 
           <section class="block">
             <h4>Избранные блюда ({{ u.favourite_dishes?.length || 0 }})</h4>
             <div v-if="u.favourite_dishes?.length" class="chips">
               <span v-for="fd in u.favourite_dishes" :key="fd.id" class="chip">
-                {{ fd.dish?.name || ('Блюдо #' + fd.dish_id) }}
+                {{ fd.dish?.name || ('Блюдо №' + fd.dish_id) }}
               </span>
             </div>
-            <p v-else class="muted small">Нет избранных блюд</p>
+            <p v-else class="muted small">Избранных блюд нет</p>
           </section>
         </article>
       </div>
 
-      <p v-if="!loading && !users.length" class="muted">Пользователи не найдены.</p>
+      <p v-if="!loading && !users.length" class="muted">В системе пока нет зарегистрированных пользователей.</p>
       <p v-if="error" class="error">{{ error }}</p>
     </div>
   </section>
@@ -118,6 +118,19 @@ const isAdmin = ref(false)
 const toMoney = (v: number) => Number(v || 0).toFixed(2)
 const formatDate = (s: string) => (s ? new Date(s).toLocaleString() : '—')
 
+function humanRole(role: string): string {
+  if (role === 'admin') return 'администратор'
+  if (role === 'cashier') return 'кассир'
+  if (role === 'user') return 'пользователь'
+  return role || 'пользователь'
+}
+
+function humanGender(g?: string): string {
+  if (g === 'male') return 'мужской'
+  if (g === 'female') return 'женский'
+  return 'не указан'
+}
+
 const loadUsers = async () => {
   loading.value = true
   error.value = null
@@ -125,8 +138,7 @@ const loadUsers = async () => {
     const { data } = await api.get<AdminUserView[]>('/v1/users/full')
     users.value = data
   } catch (e: unknown) {
-    const msg = (e as { response?: { data?: { error?: string } } })?.response?.data?.error
-    error.value = msg || 'Не удалось загрузить пользователей'
+    error.value = 'Не удалось загрузить список пользователей. Попробуйте обновить.'
   } finally {
     loading.value = false
   }

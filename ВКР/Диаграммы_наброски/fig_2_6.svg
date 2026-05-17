@@ -1,70 +1,101 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" font-family="Arial, sans-serif" font-size="13">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 760" font-family="Arial, sans-serif" font-size="12">
   <style>
-    .ttl { font-weight:bold; font-size:16px; }
-    .layer { fill:#fff; stroke:#2c5d8c; stroke-width:1.5; rx:8; ry:8; }
-    .name { font-weight:bold; font-size:14px; }
-    .lbl { fill:#111; }
-    .ar { stroke:#333; stroke-width:1.4; fill:none; }
+    .ttl { font-weight:bold; font-size:17px; }
+    .pkg { fill:#fafbfc; stroke:#2c5d8c; stroke-width:1.6; rx:6; ry:6; }
+    .pkgT { font-weight:bold; font-size:14px; fill:#2c5d8c; }
+    .comp { fill:#e7f3ff; stroke:#2c5d8c; stroke-width:1.3; rx:5; ry:5; }
+    .ext { fill:#fff5d1; stroke:#b08900; stroke-width:1.4; }
+    .py { fill:#dff1d5; stroke:#1f8a40; stroke-width:1.4; rx:5; ry:5; }
+    .iface { font-style:italic; fill:#7a4a00; }
     .sm { font-size:11px; fill:#555; }
-    .ext { fill:#fff5d1; stroke:#b08900; stroke-width:1.5; }
+    .tiny { font-size:10px; fill:#666; }
+    .ar { stroke:#444; stroke-width:1.3; fill:none; }
+    .uses { stroke:#666; stroke-width:1.2; fill:none; stroke-dasharray:5 3; }
+    .name { font-weight:600; font-size:12px; fill:#111; }
   </style>
   <defs>
-    <marker id="m" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
-    </marker>
+    <marker id="m" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#444"/></marker>
+    <marker id="md" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#666"/></marker>
   </defs>
 
-  <text x="450" y="22" text-anchor="middle" class="ttl">Компонентная диаграмма серверной части (6 слоёв)</text>
+  <text x="550" y="22" text-anchor="middle" class="ttl">Компонентная диаграмма серверной части (6 слоёв · Go 1.25)</text>
+  <text x="550" y="42" text-anchor="middle" font-style="italic" font-size="12" fill="#666">Каждый слой зависит только от слоёв ниже; обратные зависимости запрещены</text>
 
-  <rect class="layer" x="100" y="50" width="700" height="60" fill="#dde9f6"/>
-  <text class="name lbl" x="450" y="75" text-anchor="middle">API Layer (internal/api/v1/apies.go)</text>
-  <text class="sm" x="450" y="95" text-anchor="middle">Gin router, CORS, authMiddleware (JWT), adminOnly</text>
+  <rect class="pkg" x="40" y="60" width="1020" height="80"/>
+  <text class="pkgT" x="60" y="80">«API» — internal/api/v1/</text>
+  <rect class="comp" x="60" y="90" width="200" height="40"/><text class="name" x="160" y="106" text-anchor="middle">apies.go</text><text class="tiny" x="160" y="122" text-anchor="middle">регистрация маршрутов /v1/*</text>
+  <rect class="ext" x="280" y="90" width="160" height="40"/><text class="name" x="360" y="106" text-anchor="middle">enableCORS()</text><text class="tiny" x="360" y="122" text-anchor="middle">middleware</text>
+  <rect class="ext" x="460" y="90" width="160" height="40"/><text class="name" x="540" y="106" text-anchor="middle">authMiddleware()</text><text class="tiny" x="540" y="122" text-anchor="middle">проверка JWT</text>
+  <rect class="ext" x="640" y="90" width="160" height="40"/><text class="name" x="720" y="106" text-anchor="middle">adminOnly()</text><text class="tiny" x="720" y="122" text-anchor="middle">role == admin</text>
+  <rect class="comp" x="820" y="90" width="220" height="40"/><text class="name" x="930" y="106" text-anchor="middle">apies_test.go</text><text class="tiny" x="930" y="122" text-anchor="middle">smoke-тест маршрутов</text>
 
-  <rect class="layer" x="100" y="130" width="700" height="60" fill="#e8eef6"/>
-  <text class="name lbl" x="450" y="155" text-anchor="middle">Handlers Layer (internal/handlers/)</text>
-  <text class="sm" x="450" y="175" text-anchor="middle">auth.go, product.go, category.go, manufacturer.go, dishes.go, order.go, favourite.go, recommendation.go, admin_users.go, product_image.go</text>
+  <rect class="pkg" x="40" y="160" width="1020" height="80"/>
+  <text class="pkgT" x="60" y="180">«Handlers» — internal/handlers/</text>
+  <rect class="comp" x="60" y="190" width="150" height="40"/><text class="name" x="135" y="207" text-anchor="middle">auth.go</text><text class="tiny" x="135" y="222" text-anchor="middle">/login /register</text>
+  <rect class="comp" x="220" y="190" width="150" height="40"/><text class="name" x="295" y="207" text-anchor="middle">product.go</text><text class="tiny" x="295" y="222" text-anchor="middle">+ product_image.go</text>
+  <rect class="comp" x="380" y="190" width="150" height="40"/><text class="name" x="455" y="207" text-anchor="middle">order.go</text><text class="tiny" x="455" y="222" text-anchor="middle">+ order_access.go</text>
+  <rect class="comp" x="540" y="190" width="150" height="40"/><text class="name" x="615" y="207" text-anchor="middle">favourite.go</text><text class="tiny" x="615" y="222" text-anchor="middle">+ admin_users.go</text>
+  <rect class="comp" x="700" y="190" width="150" height="40"/><text class="name" x="775" y="207" text-anchor="middle">dishes.go</text><text class="tiny" x="775" y="222" text-anchor="middle">CRUD блюд</text>
+  <rect class="comp" x="860" y="190" width="180" height="40"/><text class="name" x="950" y="207" text-anchor="middle">recommendation.go</text><text class="tiny" x="950" y="222" text-anchor="middle">+ base.go (Generic CRUD)</text>
 
-  <rect class="layer" x="100" y="210" width="700" height="60" fill="#eaf5e6"/>
-  <text class="name lbl" x="450" y="235" text-anchor="middle">Services Layer (internal/services/)</text>
-  <text class="sm" x="450" y="255" text-anchor="middle">order_service.go, product_service.go, recommendation_service.go, meal_from_order.go, python_recommender_service.go</text>
+  <rect class="pkg" x="40" y="260" width="1020" height="90"/>
+  <text class="pkgT" x="60" y="280">«Services» — internal/services/</text>
+  <rect class="comp" x="60" y="290" width="190" height="50"/><text class="name" x="155" y="308" text-anchor="middle">order_service.go</text><text class="tiny" x="155" y="324" text-anchor="middle">бизнес-логика заказов</text>
+  <rect class="comp" x="260" y="290" width="190" height="50"/><text class="name" x="355" y="308" text-anchor="middle">product_service.go</text><text class="tiny" x="355" y="324" text-anchor="middle">валидация, расчёты</text>
+  <rect class="comp" x="460" y="290" width="190" height="50"/><text class="name" x="555" y="308" text-anchor="middle">meal_from_order.go</text><text class="tiny" x="555" y="324" text-anchor="middle">nutritionScore, MatchRatio</text>
+  <rect class="comp" x="660" y="290" width="190" height="50"/><text class="name" x="755" y="308" text-anchor="middle">recommendation_service.go</text><text class="tiny" x="755" y="324" text-anchor="middle">fallback CB-эвристика</text>
+  <rect class="comp" x="860" y="290" width="180" height="50"/><text class="name" x="950" y="308" text-anchor="middle">python_recommender_service.go</text><text class="tiny" x="950" y="324" text-anchor="middle">мост к Python</text>
 
-  <rect class="layer" x="100" y="290" width="320" height="60" fill="#f3e6f1"/>
-  <text class="name lbl" x="260" y="315" text-anchor="middle">Models Layer</text>
-  <text class="sm" x="260" y="335" text-anchor="middle">12 GORM-моделей</text>
+  <rect class="pkg" x="40" y="370" width="500" height="100"/>
+  <text class="pkgT" x="60" y="390">«Models» — internal/models/</text>
+  <text class="tiny" x="60" y="408">12 GORM-сущностей в третьей нормальной форме:</text>
+  <text class="tiny" x="60" y="424">User · Product · Category · Manufacturer · Country</text>
+  <text class="tiny" x="60" y="440">Order · OrderItem · Dish · DishProduct</text>
+  <text class="tiny" x="60" y="456">DishCategoryRequirement · FavouriteProduct · FavouriteDish</text>
 
-  <rect class="layer" x="480" y="290" width="320" height="60" fill="#f9efe0"/>
-  <text class="name lbl" x="640" y="315" text-anchor="middle">Repository Layer</text>
-  <text class="sm" x="640" y="335" text-anchor="middle">product_image.go (Mongo)</text>
+  <rect class="pkg" x="560" y="370" width="240" height="100"/>
+  <text class="pkgT" x="580" y="390">«Repository»</text>
+  <rect class="comp" x="580" y="400" width="200" height="60"/><text class="name" x="680" y="420" text-anchor="middle">product_image.go</text><text class="tiny" x="680" y="436" text-anchor="middle">SaveProductImage</text><text class="tiny" x="680" y="450" text-anchor="middle">GetProductImage / Delete</text>
 
-  <rect class="layer" x="100" y="370" width="700" height="60" fill="#fbe9e9"/>
-  <text class="name lbl" x="450" y="395" text-anchor="middle">Database Layer (internal/database/)</text>
-  <text class="sm" x="450" y="415" text-anchor="middle">postgres.go (GORM), mongo.go (mongo-go-driver)</text>
+  <rect class="pkg" x="820" y="370" width="220" height="100"/>
+  <text class="pkgT" x="840" y="390">«Database»</text>
+  <rect class="comp" x="840" y="400" width="180" height="60"/><text class="name" x="930" y="420" text-anchor="middle">postgres.go · mongo.go</text><text class="tiny" x="930" y="436" text-anchor="middle">Connect, LoadConfig</text><text class="tiny" x="930" y="450" text-anchor="middle">DbPostgres · DbMongo</text>
 
-  <ellipse class="ext" cx="220" cy="480" rx="140" ry="30"/>
-  <text class="name lbl" x="220" y="478" text-anchor="middle">PostgreSQL</text>
-  <text class="sm" x="220" y="496" text-anchor="middle">12 таблиц</text>
+  <rect class="pkg" x="40" y="490" width="1020" height="100"/>
+  <text class="pkgT" x="60" y="510">Внешние зависимости (go.mod)</text>
+  <rect class="ext" x="60" y="520" width="160" height="60"/><text class="name" x="140" y="540" text-anchor="middle">gin-gonic/gin</text><text class="tiny" x="140" y="556" text-anchor="middle">HTTP router</text><text class="tiny" x="140" y="570" text-anchor="middle">v1.10</text>
+  <rect class="ext" x="230" y="520" width="160" height="60"/><text class="name" x="310" y="540" text-anchor="middle">gorm.io/gorm</text><text class="tiny" x="310" y="556" text-anchor="middle">+ driver/postgres</text><text class="tiny" x="310" y="570" text-anchor="middle">v1.31</text>
+  <rect class="ext" x="400" y="520" width="180" height="60"/><text class="name" x="490" y="540" text-anchor="middle">mongo-go-driver</text><text class="tiny" x="490" y="556" text-anchor="middle">+ bson, options</text><text class="tiny" x="490" y="570" text-anchor="middle">v1.17</text>
+  <rect class="ext" x="590" y="520" width="160" height="60"/><text class="name" x="670" y="540" text-anchor="middle">golang-jwt/v5</text><text class="tiny" x="670" y="556" text-anchor="middle">+ x/crypto/bcrypt</text><text class="tiny" x="670" y="570" text-anchor="middle">аутентификация</text>
+  <rect class="ext" x="760" y="520" width="160" height="60"/><text class="name" x="840" y="540" text-anchor="middle">sirupsen/logrus</text><text class="tiny" x="840" y="556" text-anchor="middle">структурный лог</text><text class="tiny" x="840" y="570" text-anchor="middle">+ joho/godotenv</text>
+  <rect class="ext" x="930" y="520" width="120" height="60"/><text class="name" x="990" y="540" text-anchor="middle">standard lib</text><text class="tiny" x="990" y="556" text-anchor="middle">net/http · testing</text><text class="tiny" x="990" y="570" text-anchor="middle">os/exec</text>
 
-  <ellipse class="ext" cx="450" cy="480" rx="120" ry="30"/>
-  <text class="name lbl" x="450" y="478" text-anchor="middle">MongoDB</text>
-  <text class="sm" x="450" y="496" text-anchor="middle">products (изобр.)</text>
+  <g>
+    <ellipse fill="#fef3c7" stroke="#92400e" stroke-width="1.5" cx="180" cy="660" rx="120" ry="40"/>
+    <text class="name" x="180" y="657" text-anchor="middle">PostgreSQL</text>
+    <text class="tiny" x="180" y="673" text-anchor="middle">12 таблиц + индексы</text>
+  </g>
+  <g>
+    <ellipse fill="#fef3c7" stroke="#92400e" stroke-width="1.5" cx="450" cy="660" rx="120" ry="40"/>
+    <text class="name" x="450" y="657" text-anchor="middle">MongoDB</text>
+    <text class="tiny" x="450" y="673" text-anchor="middle">products (изобр.)</text>
+  </g>
+  <g>
+    <rect fill="#dff1d5" stroke="#1f8a40" stroke-width="1.5" x="600" y="630" width="430" height="60" rx="6" ry="6"/>
+    <text class="name" x="815" y="650" text-anchor="middle">Python ML (subprocess через exec.Command)</text>
+    <text class="tiny" x="815" y="666" text-anchor="middle">recommender.py · food_recommender.py · dish_recommender.py</text>
+    <text class="tiny" x="815" y="680" text-anchor="middle">scikit-learn · pandas · SQLAlchemy</text>
+  </g>
 
-  <ellipse class="ext" cx="680" cy="480" rx="140" ry="30"/>
-  <text class="name lbl" x="680" y="478" text-anchor="middle">Python ML (CLI)</text>
-  <text class="sm" x="680" y="496" text-anchor="middle">exec.Command</text>
+  <path class="ar" d="M540,140 L540,160" marker-end="url(#m)"/>
+  <path class="ar" d="M540,240 L540,260" marker-end="url(#m)"/>
+  <path class="ar" d="M350,350 L320,370" marker-end="url(#m)"/>
+  <path class="ar" d="M680,350 L680,400" marker-end="url(#m)"/>
+  <path class="ar" d="M930,350 L930,400" marker-end="url(#m)"/>
 
-  <path class="ar" d="M450,110 L450,130" marker-end="url(#m)"/>
-  <path class="ar" d="M450,190 L450,210" marker-end="url(#m)"/>
-  <path class="ar" d="M260,270 L260,290" marker-end="url(#m)"/>
-  <path class="ar" d="M640,270 L640,290" marker-end="url(#m)"/>
-  <path class="ar" d="M260,350 L260,370" marker-end="url(#m)"/>
-  <path class="ar" d="M640,350 L640,370" marker-end="url(#m)"/>
+  <path class="uses" d="M930,460 L180,630" marker-end="url(#md)"/>
+  <path class="uses" d="M680,460 L450,630" marker-end="url(#md)"/>
+  <path class="uses" d="M950,340 L815,630" marker-end="url(#md)" stroke="#1f8a40"/>
 
-  <path class="ar" d="M260,430 L220,450" marker-end="url(#m)"/>
-  <path class="ar" d="M640,430 L450,450" marker-end="url(#m)"/>
-  <path class="ar" d="M450,270 L680,450" marker-end="url(#m)" stroke-dasharray="6 4" stroke="#1f8a40"/>
-  <text x="730" y="380" font-size="11" fill="#1f8a40">Services →</text>
-  <text x="730" y="395" font-size="11" fill="#1f8a40">CLI запуск Python</text>
-
-  <rect x="100" y="525" width="700" height="22" fill="#f6f9fb" stroke="#bcd"/>
-  <text x="450" y="541" text-anchor="middle" font-style="italic">Зависимости направлены сверху вниз: верхние слои используют нижние, обратное запрещено.</text>
+  <text class="tiny" x="60" y="725" font-style="italic">Сплошные стрелки — отношение «реализует / содержит»; пунктирные — «использует»</text>
 </svg>

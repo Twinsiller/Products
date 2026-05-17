@@ -1,92 +1,179 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 480" font-family="Arial, sans-serif" font-size="13">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 660" font-family="Arial, sans-serif" font-size="12">
   <style>
+    .ttl { font-weight:bold; font-size:17px; }
     .lane { fill:#f6f9fb; stroke:#7a99b1; stroke-width:1.2; }
     .laneT { fill:#fff; stroke:#7a99b1; stroke-width:1.2; }
-    .ttl { font-weight:bold; font-size:16px; }
+    .laneTtl { font-weight:bold; font-size:13px; fill:#2c5d8c; }
     .task { fill:#fff; stroke:#2c5d8c; stroke-width:1.5; rx:18; ry:18; }
-    .gw { fill:#fff5d1; stroke:#b08900; stroke-width:1.5; }
+    .new { fill:#e7f3ff; stroke:#2c5d8c; stroke-width:1.8; rx:18; ry:18; }
+    .auto { fill:#dff1d5; stroke:#1f8a40; stroke-width:1.8; rx:18; ry:18; }
+    .gw { fill:#fff5d1; stroke:#b08900; stroke-width:1.6; }
     .se { fill:#9bd1a4; stroke:#1f8a40; stroke-width:2; }
     .ee { fill:#f5b7b1; stroke:#c0392b; stroke-width:2; }
-    .new { fill:#e7f3ff; stroke:#2c5d8c; stroke-width:1.8; rx:18; ry:18; }
-    .ar { stroke:#333; stroke-width:1.5; fill:none; }
+    .data { fill:#fff; stroke:#666; stroke-width:1.2; }
+    .ar { stroke:#444; stroke-width:1.4; fill:none; }
+    .msg { stroke:#1f8a40; stroke-width:1.4; fill:none; stroke-dasharray:6 4; }
     .lbl { fill:#111; }
+    .tiny { font-size:10px; fill:#555; }
+    .name { font-weight:600; font-size:12px; }
   </style>
   <defs>
-    <marker id="m" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L8,3 z" fill="#333"/>
-    </marker>
+    <marker id="m" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#444"/></marker>
+    <marker id="mg" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#1f8a40"/></marker>
   </defs>
 
-  <text x="550" y="22" text-anchor="middle" class="ttl">BPMN «To-Be»: целевой процесс с интеллектуальным подбором рациона</text>
+  <text x="650" y="22" text-anchor="middle" class="ttl">BPMN «To-Be»: целевой процесс с интеллектуальным подбором рациона</text>
 
-  <rect class="laneT" x="20" y="50"  width="160" height="120"/>
-  <rect class="lane"  x="180" y="50" width="900" height="120"/>
-  <text x="100" y="115" text-anchor="middle" font-weight="bold">Пользователь</text>
+  <rect class="laneT" x="20" y="50" width="170" height="160"/>
+  <rect class="lane" x="190" y="50" width="1080" height="160"/>
+  <text class="laneTtl" x="105" y="125" text-anchor="middle">Пользователь</text>
 
-  <rect class="laneT" x="20" y="170" width="160" height="180"/>
-  <rect class="lane"  x="180" y="170" width="900" height="180"/>
-  <text x="100" y="265" text-anchor="middle" font-weight="bold">Серверный модуль</text>
+  <rect class="laneT" x="20" y="210" width="170" height="260"/>
+  <rect class="lane" x="190" y="210" width="1080" height="260"/>
+  <text class="laneTtl" x="105" y="335" text-anchor="middle">Информационная</text>
+  <text class="laneTtl" x="105" y="350" text-anchor="middle">система</text>
 
-  <circle class="se" cx="220" cy="110" r="16"/>
-  <text class="lbl" x="220" y="145" text-anchor="middle" font-size="11">Открыть сервис</text>
+  <rect class="laneT" x="20" y="470" width="170" height="140"/>
+  <rect class="lane" x="190" y="470" width="1080" height="140"/>
+  <text class="laneTtl" x="105" y="535" text-anchor="middle">Данные</text>
+  <text class="tiny" x="105" y="552" text-anchor="middle">PostgreSQL / MongoDB</text>
 
-  <rect class="task" x="280" y="80" width="100" height="60"/>
-  <text class="lbl" x="330" y="115" text-anchor="middle">Положить товар</text>
+  <circle class="se" cx="230" cy="120" r="16"/>
+  <text class="tiny" x="230" y="153" text-anchor="middle">Открыть</text>
+  <text class="tiny" x="230" y="165" text-anchor="middle">сервис</text>
 
-  <rect class="task" x="640" y="80" width="120" height="60"/>
-  <text class="lbl" x="700" y="105" text-anchor="middle">Принять</text>
-  <text class="lbl" x="700" y="123" text-anchor="middle">подсказки</text>
+  <rect class="task" x="280" y="95" width="110" height="50"/>
+  <text class="name" x="335" y="120" text-anchor="middle">Положить</text>
+  <text class="name" x="335" y="135" text-anchor="middle">товар в корзину</text>
 
-  <rect class="task" x="800" y="80" width="120" height="60"/>
-  <text class="lbl" x="860" y="105" text-anchor="middle">Оформить</text>
-  <text class="lbl" x="860" y="123" text-anchor="middle">заказ</text>
+  <polygon class="gw" points="420,120 450,95 480,120 450,145"/>
+  <text class="tiny" x="450" y="123" text-anchor="middle">Корзина</text>
+  <text class="tiny" x="450" y="85" text-anchor="middle">пуста?</text>
 
-  <circle class="ee" cx="980" cy="110" r="16"/>
-  <text class="lbl" x="980" y="145" text-anchor="middle" font-size="11">Конец</text>
+  <rect class="task" x="690" y="95" width="120" height="50"/>
+  <text class="name" x="750" y="120" text-anchor="middle">Принять</text>
+  <text class="name" x="750" y="135" text-anchor="middle">подсказки</text>
 
-  <path class="ar" d="M236,110 L280,110" marker-end="url(#m)"/>
-  <path class="ar" d="M380,110 L420,110" marker-end="url(#m)"/>
-  <path class="ar" d="M580,110 L640,110" marker-end="url(#m)"/>
-  <path class="ar" d="M760,110 L800,110" marker-end="url(#m)"/>
-  <path class="ar" d="M920,110 L964,110" marker-end="url(#m)"/>
+  <rect class="task" x="850" y="95" width="120" height="50"/>
+  <text class="name" x="910" y="120" text-anchor="middle">Сделать</text>
+  <text class="name" x="910" y="135" text-anchor="middle">правки в корзине</text>
 
-  <polygon class="gw" points="420,110 450,90 480,110 450,130"/>
-  <text class="lbl" x="450" y="115" text-anchor="middle" font-size="11">Корзина</text>
-  <text class="lbl" x="450" y="80" text-anchor="middle" font-size="11">пуста?</text>
+  <polygon class="gw" points="1010,120 1040,95 1070,120 1040,145"/>
+  <text class="tiny" x="1040" y="123" text-anchor="middle">Готов</text>
+  <text class="tiny" x="1040" y="85" text-anchor="middle">к заказу?</text>
 
-  <rect class="new" x="500" y="80" width="80" height="60"/>
-  <text class="lbl" x="540" y="115" text-anchor="middle">да</text>
-  <path class="ar" d="M540,140 Q540,180 540,220" marker-end="url(#m)"/>
+  <rect class="task" x="1110" y="95" width="120" height="50"/>
+  <text class="name" x="1170" y="120" text-anchor="middle">Оформить</text>
+  <text class="name" x="1170" y="135" text-anchor="middle">заказ</text>
 
-  <rect class="new" x="220" y="190" width="160" height="60"/>
-  <text class="lbl" x="300" y="215" text-anchor="middle">Рассчитать</text>
-  <text class="lbl" x="300" y="233" text-anchor="middle">КБЖУ корзины</text>
+  <circle class="ee" cx="1255" cy="120" r="16"/>
+  <text class="tiny" x="1255" y="153" text-anchor="middle">Заказ</text>
+  <text class="tiny" x="1255" y="165" text-anchor="middle">оформлен</text>
 
-  <rect class="new" x="420" y="190" width="180" height="60"/>
-  <text class="lbl" x="510" y="215" text-anchor="middle">Подобрать блюда</text>
-  <text class="lbl" x="510" y="233" text-anchor="middle">по составу корзины</text>
+  <path class="ar" d="M246,120 L280,120" marker-end="url(#m)"/>
+  <path class="ar" d="M390,120 L420,120" marker-end="url(#m)"/>
+  <path class="ar" d="M810,120 L850,120" marker-end="url(#m)"/>
+  <path class="ar" d="M970,120 L1010,120" marker-end="url(#m)"/>
+  <path class="ar" d="M1070,120 L1110,120" marker-end="url(#m)"/>
+  <text class="tiny" x="1090" y="115">да</text>
+  <path class="ar" d="M1230,120 L1239,120" marker-end="url(#m)"/>
 
-  <rect class="new" x="640" y="190" width="200" height="60"/>
-  <text class="lbl" x="740" y="215" text-anchor="middle">Сформировать список</text>
-  <text class="lbl" x="740" y="233" text-anchor="middle">недостающих ингредиентов</text>
+  <rect class="auto" x="240" y="245" width="150" height="50"/>
+  <text class="name" x="315" y="270" text-anchor="middle">Рассчитать</text>
+  <text class="name" x="315" y="285" text-anchor="middle">КБЖУ корзины</text>
 
-  <rect class="new" x="870" y="190" width="180" height="60"/>
-  <text class="lbl" x="960" y="215" text-anchor="middle">Вернуть подсказки</text>
-  <text class="lbl" x="960" y="233" text-anchor="middle">пользователю</text>
+  <rect class="auto" x="410" y="245" width="180" height="50"/>
+  <text class="name" x="500" y="270" text-anchor="middle">Подобрать блюда</text>
+  <text class="name" x="500" y="285" text-anchor="middle">из состава корзины</text>
 
-  <path class="ar" d="M380,220 L420,220" marker-end="url(#m)"/>
-  <path class="ar" d="M600,220 L640,220" marker-end="url(#m)"/>
-  <path class="ar" d="M840,220 L870,220" marker-end="url(#m)"/>
+  <rect class="auto" x="610" y="245" width="200" height="50"/>
+  <text class="name" x="710" y="270" text-anchor="middle">Сформировать список</text>
+  <text class="name" x="710" y="285" text-anchor="middle">недостающих ингредиентов</text>
 
-  <path class="ar" d="M330,140 Q330,170 300,190" marker-end="url(#m)"/>
-  <path class="ar" d="M960,190 Q960,160 700,140" marker-end="url(#m)"/>
+  <rect class="auto" x="830" y="245" width="180" height="50"/>
+  <text class="name" x="920" y="270" text-anchor="middle">Гибридный скоринг</text>
+  <text class="name" x="920" y="285" text-anchor="middle">персональных товаров</text>
 
-  <rect class="new" x="420" y="280" width="380" height="50"/>
-  <text class="lbl" x="610" y="312" text-anchor="middle">Гибридный скоринг (Go-эвристика + Python ML, см. п. 3.4)</text>
+  <rect class="auto" x="1030" y="245" width="200" height="50"/>
+  <text class="name" x="1130" y="270" text-anchor="middle">Вернуть рекомендации</text>
+  <text class="name" x="1130" y="285" text-anchor="middle">и подсказки</text>
 
-  <rect x="20" y="370" width="1060" height="100" rx="6" fill="#fff7e0" stroke="#1f8a40"/>
-  <text x="40" y="395" font-weight="bold" fill="#1f5a23">Что добавлено к As-Is:</text>
-  <text x="40" y="415">• автоматический расчёт КБЖУ корзины при каждом изменении;</text>
-  <text x="40" y="433">• автоматический подбор блюд из текущей корзины с указанием недостающих ингредиентов;</text>
-  <text x="40" y="451">• формирование персональных рекомендаций товаров через гибридный модуль (Go + Python).</text>
+  <rect class="task" x="240" y="335" width="150" height="50"/>
+  <text class="name" x="315" y="358" text-anchor="middle">Загрузить</text>
+  <text class="name" x="315" y="373" text-anchor="middle">состав блюд</text>
+  <text class="tiny" x="315" y="395" text-anchor="middle">scoreDishByCategories</text>
+
+  <rect class="task" x="410" y="335" width="180" height="50"/>
+  <text class="name" x="500" y="358" text-anchor="middle">Нормализация</text>
+  <text class="name" x="500" y="373" text-anchor="middle">имён ингредиентов</text>
+  <text class="tiny" x="500" y="395" text-anchor="middle">normalizeIngredientKey</text>
+
+  <rect class="task" x="610" y="335" width="200" height="50"/>
+  <text class="name" x="710" y="358" text-anchor="middle">nutritionScore =</text>
+  <text class="name" x="710" y="373" text-anchor="middle">50·balance + 50·calFit</text>
+
+  <rect class="task" x="830" y="335" width="180" height="50"/>
+  <text class="name" x="920" y="358" text-anchor="middle">TruncatedSVD</text>
+  <text class="name" x="920" y="373" text-anchor="middle">через Python (CLI)</text>
+
+  <rect class="task" x="1030" y="335" width="200" height="50"/>
+  <text class="name" x="1130" y="358" text-anchor="middle">Сортировка по</text>
+  <text class="name" x="1130" y="373" text-anchor="middle">MatchRatio → score</text>
+
+  <path class="ar" d="M315,295 L315,335" marker-end="url(#m)"/>
+  <path class="ar" d="M500,295 L500,335" marker-end="url(#m)"/>
+  <path class="ar" d="M710,295 L710,335" marker-end="url(#m)"/>
+  <path class="ar" d="M920,295 L920,335" marker-end="url(#m)"/>
+  <path class="ar" d="M1130,295 L1130,335" marker-end="url(#m)"/>
+
+  <path class="msg" d="M450,145 L450,180 L315,245" marker-end="url(#mg)"/>
+  <text class="tiny" x="350" y="200" fill="#1f8a40">да (есть товары)</text>
+
+  <path class="msg" d="M390,270 L410,270" marker-end="url(#mg)"/>
+  <path class="msg" d="M590,270 L610,270" marker-end="url(#mg)"/>
+  <path class="msg" d="M810,270 L830,270" marker-end="url(#mg)"/>
+  <path class="msg" d="M1010,270 L1030,270" marker-end="url(#mg)"/>
+  <path class="msg" d="M1130,295 L1130,180 L750,145" marker-end="url(#mg)"/>
+  <text class="tiny" x="1100" y="220" fill="#1f8a40">JSON: блюда + товары</text>
+
+  <g>
+    <path class="data" d="M280 540 L370 540 A30 18 0 0 1 370 580 L280 580 A30 18 0 0 1 280 540 Z"/>
+    <text class="name" x="325" y="558" text-anchor="middle">Корзина</text>
+    <text class="tiny" x="325" y="572" text-anchor="middle">cartItems · localStorage</text>
+  </g>
+  <g>
+    <path class="data" d="M450 540 L560 540 A30 18 0 0 1 560 580 L450 580 A30 18 0 0 1 450 540 Z"/>
+    <text class="name" x="505" y="558" text-anchor="middle">Каталог блюд</text>
+    <text class="tiny" x="505" y="572" text-anchor="middle">Dish + DishProduct</text>
+  </g>
+  <g>
+    <path class="data" d="M620 540 L730 540 A30 18 0 0 1 730 580 L620 580 A30 18 0 0 1 620 540 Z"/>
+    <text class="name" x="675" y="558" text-anchor="middle">Каталог товаров</text>
+    <text class="tiny" x="675" y="572" text-anchor="middle">Product (КБЖУ)</text>
+  </g>
+  <g>
+    <path class="data" d="M790 540 L900 540 A30 18 0 0 1 900 580 L790 580 A30 18 0 0 1 790 540 Z"/>
+    <text class="name" x="845" y="558" text-anchor="middle">История</text>
+    <text class="tiny" x="845" y="572" text-anchor="middle">orders, order_items</text>
+  </g>
+  <g>
+    <path class="data" d="M950 540 L1060 540 A30 18 0 0 1 1060 580 L950 580 A30 18 0 0 1 950 540 Z"/>
+    <text class="name" x="1005" y="558" text-anchor="middle">Избранное</text>
+    <text class="tiny" x="1005" y="572" text-anchor="middle">favourite_products</text>
+  </g>
+  <g>
+    <path class="data" d="M1110 540 L1240 540 A30 18 0 0 1 1240 580 L1110 580 A30 18 0 0 1 1110 540 Z"/>
+    <text class="name" x="1175" y="558" text-anchor="middle">Целевые нормы</text>
+    <text class="tiny" x="1175" y="572" text-anchor="middle">КБЖУ: 25/30/45 %</text>
+  </g>
+
+  <path class="ar" d="M325,540 L325,385" stroke-dasharray="3 3"/>
+  <path class="ar" d="M505,540 L500,385" stroke-dasharray="3 3"/>
+  <path class="ar" d="M675,540 L675,385" stroke-dasharray="3 3"/>
+  <path class="ar" d="M845,540 L920,385" stroke-dasharray="3 3"/>
+  <path class="ar" d="M1005,540 L1130,385" stroke-dasharray="3 3"/>
+
+  <rect x="20" y="615" width="1250" height="40" fill="#fff7e0" stroke="#1f8a40" rx="4"/>
+  <text x="35" y="635" font-weight="bold" fill="#1f5a23" font-size="12">Что нового в To-Be (зелёные блоки):</text>
+  <text x="35" y="650" font-size="11">автоматический расчёт КБЖУ при каждом изменении · подбор блюд по составу корзины · персональные рекомендации через гибридный модуль (Go + Python).</text>
 </svg>

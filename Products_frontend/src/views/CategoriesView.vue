@@ -4,12 +4,12 @@
       <div>
         <h2>Категории</h2>
         <p class="muted">
-          Справочник категорий товарных позиций.
+          Категории товаров — для удобной фильтрации каталога.
         </p>
       </div>
       <div class="header-actions">
         <button class="secondary" type="button" @click="loadCategories" :disabled="loading">
-          {{ loading ? 'Обновление...' : 'Обновить' }}
+          {{ loading ? 'Обновление…' : 'Обновить' }}
         </button>
         <button
           v-if="isAdmin"
@@ -24,7 +24,7 @@
 
     <div class="tiles-grid">
       <article v-for="c in categories" :key="c.id" class="tile">
-        <p class="tile-meta">ID {{ c.id }}</p>
+        <p v-if="isAdmin" class="tile-meta">№{{ c.id }}</p>
         <input
           v-if="editingId === c.id"
           v-model="editName"
@@ -84,7 +84,7 @@
           />
         </label>
         <button type="submit" class="primary" :disabled="createLoading">
-          {{ createLoading ? 'Сохранение...' : 'Сохранить' }}
+          {{ createLoading ? 'Сохраняем…' : 'Сохранить' }}
         </button>
       </form>
     </section>

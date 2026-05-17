@@ -2,21 +2,21 @@
   <div class="app-root">
     <header class="app-header">
       <div>
-        <h1 class="app-title">Персонализированный подбор товаров</h1>
+        <h1 class="app-title">Подбор продуктов и блюд по вашему вкусу</h1>
         <p class="app-subtitle">
-          Информационная система для работы с товарами, заказами и рекомендациями
+          Каталог товаров, корзина и персональные рекомендации с учётом КБЖУ
         </p>
       </div>
       <div class="header-right">
         <nav class="app-nav">
-          <RouterLink to="/" class="nav-link">Вход</RouterLink>
-          <RouterLink to="/register" class="nav-link">Регистрация</RouterLink>
-          <RouterLink to="/recommendations" class="nav-link">Рекомендации</RouterLink>
+          <RouterLink v-if="!currentUser" to="/" class="nav-link">Вход</RouterLink>
+          <RouterLink v-if="!currentUser" to="/register" class="nav-link">Регистрация</RouterLink>
           <RouterLink to="/products" class="nav-link">Товары</RouterLink>
-          <RouterLink to="/favourites" class="nav-link">Избранное</RouterLink>
+          <RouterLink v-if="currentUser" to="/recommendations" class="nav-link">Рекомендации</RouterLink>
+          <RouterLink v-if="currentUser" to="/favourites" class="nav-link">Избранное</RouterLink>
           <RouterLink to="/orders" class="nav-link">Заказы</RouterLink>
-          <RouterLink to="/categories" class="nav-link">Категории</RouterLink>
-          <RouterLink to="/manufacturers" class="nav-link">Производители</RouterLink>
+          <RouterLink v-if="isAdmin" to="/categories" class="nav-link">Категории</RouterLink>
+          <RouterLink v-if="isAdmin" to="/manufacturers" class="nav-link">Производители</RouterLink>
           <RouterLink v-if="isAdmin" to="/dishes" class="nav-link">Блюда</RouterLink>
           <RouterLink v-if="isAdmin" to="/users" class="nav-link">Пользователи</RouterLink>
         </nav>

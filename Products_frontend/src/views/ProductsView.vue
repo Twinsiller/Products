@@ -4,12 +4,12 @@
       <div>
         <h2>Товары</h2>
         <p class="muted">
-          Справочник товарных позиций, доступных для заказов и рекомендаций.
+          Каталог продуктов: добавляйте в корзину или в избранное.
         </p>
       </div>
       <div class="header-actions">
         <button class="secondary" type="button" @click="loadProducts" :disabled="loading">
-          {{ loading ? 'Обновление...' : 'Обновить список' }}
+          {{ loading ? 'Обновление…' : 'Обновить' }}
         </button>
         <button
           v-if="isAdmin"
@@ -27,13 +27,13 @@
         v-model="search"
         type="text"
         class="search"
-        placeholder="Поиск по названию или штрихкоду..."
+        placeholder="Поиск по названию или штрихкоду…"
       />
       <select v-model="selectedSort" class="sort-select">
-        <option value="name_asc">Сортировка: название А-Я</option>
-        <option value="name_desc">Сортировка: название Я-А</option>
-        <option value="price_asc">Сортировка: цена по возрастанию</option>
-        <option value="price_desc">Сортировка: цена по убыванию</option>
+        <option value="name_asc">По названию: А → Я</option>
+        <option value="name_desc">По названию: Я → А</option>
+        <option value="price_asc">По цене: дешевле сначала</option>
+        <option value="price_desc">По цене: дороже сначала</option>
       </select>
     </div>
 
@@ -65,10 +65,11 @@
           type="button"
           class="fav-btn"
           :class="{ active: isFavourite(p.id) }"
+          :title="isFavourite(p.id) ? 'Убрать из избранного' : 'В избранное'"
           @click="toggleFavourite(p)"
         >
           <span class="heart">♥</span>
-          <span>Selected</span>
+          <span>{{ isFavourite(p.id) ? 'В избранном' : 'В избранное' }}</span>
         </button>
         <div class="product-photo tile-photo">
           <img
@@ -79,16 +80,16 @@
           />
           <span v-else class="photo-placeholder">нет фото</span>
         </div>
-        <p class="tile-meta">ID {{ p.id }} · {{ p.barcode || 'без штрихкода' }}</p>
+        <p v-if="isAdmin" class="tile-meta">№{{ p.id }} · {{ p.barcode || 'без штрихкода' }}</p>
         <h3 class="tile-title">{{ p.name }}</h3>
-        <p class="tile-sub">
-          Цена: {{ p.default_price.toFixed(2) }} ₽
+        <p class="tile-sub price-line">
+          {{ p.default_price.toFixed(2) }} ₽
         </p>
-        <p class="tile-sub">
-          Категория: {{ categoryName(p.category_id) }}
+        <p class="tile-sub muted-sub">
+          {{ categoryName(p.category_id) }}
         </p>
         <p class="tile-sub kbzh-cell">
-          КБЖУ: {{ formatKbzh(p) }}
+          {{ formatKbzh(p) }}
         </p>
         <div v-if="currentUserId" class="cart-actions">
           <input
@@ -133,7 +134,7 @@
       </article>
 
       <p v-if="!loading && !filteredProducts.length" class="empty">
-        Нет товаров по заданным условиям.
+        По вашему запросу ничего не нашлось. Попробуйте изменить поиск или сбросить фильтр категории.
       </p>
     </div>
 
@@ -400,16 +401,17 @@ function addPhotoError(id: number) {
 }
 
 function formatKbzh(p: Product) {
-  const k = p.calories_kcal ?? 0
-  const pr = p.protein_g ?? 0
-  const f = p.fat_g ?? 0
-  const c = p.carbs_g ?? 0
-  return `${Number(k).toFixed(1)} / ${Number(pr).toFixed(1)} / ${Number(f).toFixed(1)} / ${Number(c).toFixed(1)}`
+  const k = Number(p.calories_kcal ?? 0)
+  const pr = Number(p.protein_g ?? 0)
+  const f = Number(p.fat_g ?? 0)
+  const c = Number(p.carbs_g ?? 0)
+  if (k === 0 && pr === 0 && f === 0 && c === 0) return 'КБЖУ не указано'
+  return `${k.toFixed(0)} ккал · Б ${pr.toFixed(1)} · Ж ${f.toFixed(1)} · У ${c.toFixed(1)}`
 }
 
 function categoryName(categoryId?: number | null): string {
-  if (!categoryId) return 'не указана'
-  return categories.value.find((c) => c.id === categoryId)?.name || `#${categoryId}`
+  if (!categoryId) return 'без категории'
+  return categories.value.find((c) => c.id === categoryId)?.name || 'без категории'
 }
 
 function normalizeQty(v: number | undefined): number {

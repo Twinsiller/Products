@@ -1,69 +1,98 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" font-family="Arial, sans-serif" font-size="13">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" font-family="Arial, sans-serif" font-size="12">
   <style>
-    .ttl { font-weight:bold; font-size:16px; }
-    .layer { fill:#fff; stroke:#7a99b1; stroke-width:1.5; rx:6; ry:6; }
-    .comp  { fill:#e7f3ff; stroke:#2c5d8c; stroke-width:1.5; rx:6; ry:6; }
-    .db    { fill:#fff5d1; stroke:#b08900; stroke-width:1.5; }
-    .py    { fill:#dff1d5; stroke:#1f8a40; stroke-width:1.5; rx:6; ry:6; }
-    .ar    { stroke:#333; stroke-width:1.5; fill:none; }
-    .pyar  { stroke:#1f8a40; stroke-width:1.5; stroke-dasharray:6 4; fill:none; }
-    .lbl   { fill:#111; }
-    .h     { font-weight:bold; }
-    .sm    { font-size:11px; fill:#555; }
+    .ttl { font-weight:bold; font-size:17px; }
+    .layer { fill:#fafbfc; stroke:#7a99b1; stroke-width:1.5; rx:8; ry:8; }
+    .layerTtl { font-weight:bold; font-size:13px; fill:#2c5d8c; }
+    .comp { fill:#e7f3ff; stroke:#2c5d8c; stroke-width:1.4; rx:5; ry:5; }
+    .ctrl { fill:#fff7e0; stroke:#b08900; stroke-width:1.4; rx:5; ry:5; }
+    .db { fill:#fef3c7; stroke:#92400e; stroke-width:1.5; }
+    .py { fill:#dff1d5; stroke:#1f8a40; stroke-width:1.5; rx:6; ry:6; }
+    .ext { fill:#f5f5f5; stroke:#999; stroke-width:1.2; stroke-dasharray:5 4; rx:6; ry:6; }
+    .ar { stroke:#444; stroke-width:1.4; fill:none; }
+    .pyar { stroke:#1f8a40; stroke-width:1.6; fill:none; stroke-dasharray:6 4; }
+    .dbar { stroke:#92400e; stroke-width:1.4; fill:none; }
+    .lbl { fill:#222; }
+    .sm { font-size:11px; fill:#555; }
+    .tiny { font-size:10px; fill:#666; }
+    .name { font-weight:600; font-size:12px; fill:#111; }
   </style>
   <defs>
-    <marker id="m" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L8,3 z" fill="#333"/>
-    </marker>
-    <marker id="mg" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L8,3 z" fill="#1f8a40"/>
-    </marker>
+    <marker id="m" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#444"/></marker>
+    <marker id="mg" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#1f8a40"/></marker>
+    <marker id="mb" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#92400e"/></marker>
   </defs>
 
-  <text x="500" y="28" text-anchor="middle" class="ttl">Общая архитектурная схема информационной системы</text>
+  <text x="600" y="22" text-anchor="middle" class="ttl">Общая архитектурная схема информационной системы</text>
 
-  <rect class="layer" x="40" y="60" width="920" height="100"/>
-  <text class="h" x="60" y="85">Клиентская часть (Vue 3 SPA, Vite, TypeScript)</text>
-  <rect class="comp" x="80" y="100" width="160" height="50"/><text class="lbl" x="160" y="130" text-anchor="middle">ProductsView</text>
-  <rect class="comp" x="260" y="100" width="160" height="50"/><text class="lbl" x="340" y="130" text-anchor="middle">OrdersView</text>
-  <rect class="comp" x="440" y="100" width="190" height="50"/><text class="lbl" x="535" y="130" text-anchor="middle">RecommendationsView</text>
-  <rect class="comp" x="650" y="100" width="160" height="50"/><text class="lbl" x="730" y="130" text-anchor="middle">FavouritesView</text>
-  <rect class="comp" x="830" y="100" width="120" height="50"/><text class="lbl" x="890" y="130" text-anchor="middle">+ ещё 6</text>
+  <rect class="ext" x="40" y="50" width="240" height="60"/>
+  <text class="name" x="160" y="74" text-anchor="middle">Пользователь</text>
+  <text class="sm" x="160" y="93" text-anchor="middle">браузер (Chrome / Safari / Firefox)</text>
 
-  <rect class="layer" x="40" y="190" width="920" height="170"/>
-  <text class="h" x="60" y="215">Серверная часть (Go 1.25, Gin, GORM, multi-layer)</text>
-  <rect class="comp" x="80" y="230" width="180" height="40"/><text class="lbl" x="170" y="255" text-anchor="middle">API (api/v1/apies.go)</text>
-  <rect class="comp" x="280" y="230" width="180" height="40"/><text class="lbl" x="370" y="255" text-anchor="middle">Handlers</text>
-  <rect class="comp" x="480" y="230" width="180" height="40"/><text class="lbl" x="570" y="255" text-anchor="middle">Services</text>
-  <rect class="comp" x="680" y="230" width="180" height="40"/><text class="lbl" x="770" y="255" text-anchor="middle">Repository</text>
-  <rect class="comp" x="80"  y="290" width="180" height="40"/><text class="lbl" x="170" y="315" text-anchor="middle">Models (GORM)</text>
-  <rect class="comp" x="280" y="290" width="180" height="40"/><text class="lbl" x="370" y="315" text-anchor="middle">Database</text>
-  <rect class="comp" x="480" y="290" width="180" height="40"/><text class="lbl" x="570" y="315" text-anchor="middle">JWT / bcrypt / logrus</text>
-  <rect class="comp" x="680" y="290" width="180" height="40"/><text class="lbl" x="770" y="315" text-anchor="middle">CORS middleware</text>
+  <rect class="layer" x="40" y="135" width="1120" height="115"/>
+  <text class="layerTtl" x="58" y="155">Клиентская часть — Vue 3 SPA · Vite · TypeScript</text>
+  <rect class="comp" x="60" y="170" width="140" height="60"/><text class="name" x="130" y="194" text-anchor="middle">LoginView</text><text class="tiny" x="130" y="210" text-anchor="middle">/  /register</text>
+  <rect class="comp" x="210" y="170" width="140" height="60"/><text class="name" x="280" y="194" text-anchor="middle">ProductsView</text><text class="tiny" x="280" y="210" text-anchor="middle">каталог + КБЖУ</text>
+  <rect class="comp" x="360" y="170" width="140" height="60"/><text class="name" x="430" y="194" text-anchor="middle">OrdersView</text><text class="tiny" x="430" y="210" text-anchor="middle">корзина · localStorage</text>
+  <rect class="comp" x="510" y="170" width="170" height="60"/><text class="name" x="595" y="194" text-anchor="middle">RecommendationsView</text><text class="tiny" x="595" y="210" text-anchor="middle">персональная выдача</text>
+  <rect class="comp" x="690" y="170" width="140" height="60"/><text class="name" x="760" y="194" text-anchor="middle">FavouritesView</text><text class="tiny" x="760" y="210" text-anchor="middle">избранное</text>
+  <rect class="ctrl" x="840" y="170" width="180" height="60"/><text class="name" x="930" y="190" text-anchor="middle">src/api/http.ts</text><text class="tiny" x="930" y="206" text-anchor="middle">axios · X-User-Id</text><text class="tiny" x="930" y="220" text-anchor="middle">Authorization: Bearer JWT</text>
+  <rect class="comp" x="1030" y="170" width="110" height="60"/><text class="name" x="1085" y="190" text-anchor="middle">vue-router</text><text class="tiny" x="1085" y="206" text-anchor="middle">+ событие</text><text class="tiny" x="1085" y="220" text-anchor="middle">cart-changed</text>
 
-  <rect class="layer" x="40" y="390" width="920" height="110"/>
-  <text class="h" x="60" y="415">Слой хранения и аналитики</text>
-  <ellipse class="db" cx="180" cy="455" rx="120" ry="28"/>
-  <text class="lbl" x="180" y="450" text-anchor="middle" font-weight="bold">PostgreSQL</text>
-  <text class="lbl sm" x="180" y="468" text-anchor="middle">12 сущностей GORM</text>
+  <path class="ar" d="M160,110 L160,135" marker-end="url(#m)"/>
+  <text class="tiny" x="172" y="125" fill="#444">HTTPS</text>
 
-  <ellipse class="db" cx="430" cy="455" rx="110" ry="28"/>
-  <text class="lbl" x="430" y="450" text-anchor="middle" font-weight="bold">MongoDB</text>
-  <text class="lbl sm" x="430" y="468" text-anchor="middle">products (изобр.)</text>
+  <rect class="layer" x="40" y="275" width="1120" height="200"/>
+  <text class="layerTtl" x="58" y="295">Серверная часть — Go 1.25 · Gin · GORM · многослойная архитектура</text>
+  <rect class="ctrl" x="60" y="310" width="240" height="45"/><text class="name" x="180" y="328" text-anchor="middle">API layer · api/v1/apies.go</text><text class="tiny" x="180" y="345" text-anchor="middle">Gin router · CORS · auth middleware · adminOnly</text>
+  <rect class="comp" x="320" y="310" width="200" height="45"/><text class="name" x="420" y="328" text-anchor="middle">Handlers</text><text class="tiny" x="420" y="345" text-anchor="middle">10 файлов (auth, product, …)</text>
+  <rect class="comp" x="540" y="310" width="200" height="45"/><text class="name" x="640" y="328" text-anchor="middle">Services</text><text class="tiny" x="640" y="345" text-anchor="middle">бизнес-логика, скоринг</text>
+  <rect class="comp" x="760" y="310" width="180" height="45"/><text class="name" x="850" y="328" text-anchor="middle">Repository</text><text class="tiny" x="850" y="345" text-anchor="middle">product_image.go (Mongo)</text>
+  <rect class="comp" x="960" y="310" width="180" height="45"/><text class="name" x="1050" y="328" text-anchor="middle">Models (GORM, 12 шт.)</text><text class="tiny" x="1050" y="345" text-anchor="middle">User, Product, Order …</text>
 
-  <rect class="py" x="640" y="425" width="280" height="60"/>
-  <text class="lbl" x="780" y="450" text-anchor="middle" font-weight="bold">Python ML (CLI)</text>
-  <text class="lbl sm" x="780" y="468" text-anchor="middle">recommender.py / food_recommender.py / dish_recommender.py</text>
+  <rect class="comp" x="60" y="370" width="240" height="45"/><text class="name" x="180" y="388" text-anchor="middle">JWT (golang-jwt/v5)</text><text class="tiny" x="180" y="405" text-anchor="middle">claims: user_id, role, exp</text>
+  <rect class="comp" x="320" y="370" width="200" height="45"/><text class="name" x="420" y="388" text-anchor="middle">bcrypt</text><text class="tiny" x="420" y="405" text-anchor="middle">пароли</text>
+  <rect class="comp" x="540" y="370" width="200" height="45"/><text class="name" x="640" y="388" text-anchor="middle">logrus</text><text class="tiny" x="640" y="405" text-anchor="middle">структурный лог</text>
+  <rect class="comp" x="760" y="370" width="180" height="45"/><text class="name" x="850" y="388" text-anchor="middle">Database</text><text class="tiny" x="850" y="405" text-anchor="middle">пул соединений</text>
+  <rect class="ctrl" x="960" y="370" width="180" height="45"/><text class="name" x="1050" y="388" text-anchor="middle">cmd/run.go</text><text class="tiny" x="1050" y="405" text-anchor="middle">graceful shutdown</text>
 
-  <path class="ar" d="M500,160 L500,190" marker-end="url(#m)"/>
-  <text class="sm" x="510" y="180">HTTPS, JSON, JWT</text>
+  <text class="sm" x="600" y="445" text-anchor="middle" font-style="italic">Поток запроса: API → Handlers → Services → (Models / Repository) → Database / Python</text>
 
-  <path class="ar" d="M180,330 L180,427" marker-end="url(#m)"/>
-  <text class="sm" x="190" y="378">GORM</text>
+  <path class="ar" d="M595,230 L595,310" marker-end="url(#m)"/>
+  <text class="tiny" x="610" y="260">JSON, HTTP</text>
 
-  <path class="ar" d="M770,330 L430,427" marker-end="url(#m)"/>
-  <text class="sm" x="600" y="370">mongo-go-driver</text>
+  <rect class="layer" x="40" y="495" width="1120" height="195"/>
+  <text class="layerTtl" x="58" y="515">Слой хранения и аналитики</text>
+  <g>
+    <ellipse class="db" cx="180" cy="600" rx="130" ry="55"/>
+    <text class="name" x="180" y="572" text-anchor="middle">PostgreSQL 16</text>
+    <text class="tiny" x="180" y="592" text-anchor="middle">12 GORM-сущностей · 3НФ</text>
+    <text class="tiny" x="180" y="608" text-anchor="middle">ACID, индексы, jsonb</text>
+    <text class="tiny" x="180" y="624" text-anchor="middle">авто-миграция при старте</text>
+  </g>
+  <g>
+    <ellipse class="db" cx="470" cy="600" rx="130" ry="55"/>
+    <text class="name" x="470" y="572" text-anchor="middle">MongoDB 6</text>
+    <text class="tiny" x="470" y="592" text-anchor="middle">коллекция products</text>
+    <text class="tiny" x="470" y="608" text-anchor="middle">{product_id, content_type,</text>
+    <text class="tiny" x="470" y="624" text-anchor="middle">data} — изображения</text>
+  </g>
+  <g>
+    <rect class="py" x="650" y="540" width="490" height="130"/>
+    <text class="name" x="895" y="562" text-anchor="middle">Python ML (CLI · scikit-learn · pandas · SQLAlchemy)</text>
+    <rect class="ctrl" x="670" y="580" width="150" height="40"/><text class="tiny" x="745" y="600" text-anchor="middle">recommender.py</text><text class="tiny" x="745" y="612" text-anchor="middle">TruncatedSVD (n=24)</text>
+    <rect class="ctrl" x="830" y="580" width="150" height="40"/><text class="tiny" x="905" y="600" text-anchor="middle">food_recommender.py</text><text class="tiny" x="905" y="612" text-anchor="middle">CB+CF+meal+recency</text>
+    <rect class="ctrl" x="990" y="580" width="140" height="40"/><text class="tiny" x="1060" y="600" text-anchor="middle">dish_recommender.py</text><text class="tiny" x="1060" y="612" text-anchor="middle">блюда + фавориты</text>
+    <text class="tiny" x="895" y="650" text-anchor="middle" font-style="italic">stdin: --user-id, --k, --db-url   →   stdout: JSON</text>
+  </g>
 
-  <path class="pyar" d="M570,330 L780,425" marker-end="url(#mg)"/>
-  <text class="sm" x="700" y="380" fill="#1f8a40">exec.Command, JSON stdout</text>
+  <path class="dbar" d="M1050,415 L180,545" marker-end="url(#mb)"/>
+  <text class="tiny" x="350" y="490" fill="#92400e">GORM (pgx)</text>
+
+  <path class="dbar" d="M850,415 L470,545" marker-end="url(#mb)"/>
+  <text class="tiny" x="690" y="475" fill="#92400e">mongo-go-driver</text>
+
+  <path class="pyar" d="M640,415 L895,540" marker-end="url(#mg)"/>
+  <text class="tiny" x="775" y="475" fill="#1f8a40">exec.Command · JSON via stdout · fallback на CB-эвристику</text>
+
+  <rect x="40" y="700" width="1120" height="0" fill="none"/>
 </svg>

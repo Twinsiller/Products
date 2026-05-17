@@ -2,12 +2,12 @@
   <section class="card">
     <h2>Вход</h2>
     <p class="muted">
-      Войдите в систему покупателя по имени и паролю.
+      Введите имя и пароль, чтобы пользоваться корзиной, избранным и рекомендациями.
     </p>
 
     <form class="form" @submit.prevent="login">
       <label class="field">
-        <span>Имя покупателя</span>
+        <span>Имя</span>
         <input
           v-model="name"
           type="text"
@@ -28,7 +28,7 @@
 
       <div class="actions">
         <button type="submit" class="primary" :disabled="loading">
-          {{ loading ? 'Проверка...' : 'Войти' }}
+          {{ loading ? 'Проверяем…' : 'Войти' }}
         </button>
         <RouterLink to="/register" class="link">
           Зарегистрироваться
@@ -37,11 +37,12 @@
     </form>
 
     <div v-if="currentUser" class="current">
-      <h4>Текущий пользователь</h4>
+      <h4>Вы вошли как</h4>
       <p>
-        <strong>ID:</strong> {{ currentUser.id }}
-        <span v-if="currentUser.name">· <strong>Имя:</strong> {{ currentUser.name }}</span>
-        <span v-if="currentUser.role">· <strong>Роль:</strong> {{ currentUser.role }}</span>
+        <strong>{{ currentUser.name || 'пользователь' }}</strong>
+        <span v-if="currentUser.role && currentUser.role !== 'user'" class="role-badge">
+          {{ currentUser.role === 'admin' ? 'администратор' : currentUser.role }}
+        </span>
       </p>
     </div>
 
@@ -158,6 +159,17 @@ h2 {
   flex-direction: column;
   gap: 4px;
   font-size: 13px;
+}
+
+.role-badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  background: #dbeafe;
+  color: #1e3a8a;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 input {

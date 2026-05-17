@@ -1,84 +1,149 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 540" font-family="Arial, sans-serif" font-size="13">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" font-family="Arial, sans-serif" font-size="12">
   <style>
-    .ttl { font-weight:bold; font-size:16px; }
+    .ttl { font-weight:bold; font-size:17px; }
     .root { fill:#dde9f6; stroke:#2c5d8c; stroke-width:1.6; rx:8; ry:8; }
     .view { fill:#fff; stroke:#2c5d8c; stroke-width:1.4; rx:6; ry:6; }
     .api { fill:#fff5d1; stroke:#b08900; stroke-width:1.4; rx:6; ry:6; }
     .ev  { fill:#eaf5e6; stroke:#1f8a40; stroke-width:1.4; rx:18; ry:18; }
-    .ar  { stroke:#333; stroke-width:1.3; fill:none; }
+    .stor { fill:#f3e6f1; stroke:#6c3a87; stroke-width:1.4; rx:8; ry:8; }
+    .ar  { stroke:#444; stroke-width:1.2; fill:none; }
     .ev_ar { stroke:#1f8a40; stroke-width:1.4; fill:none; stroke-dasharray:6 4; }
     .name { font-weight:bold; }
     .sm { font-size:11px; fill:#555; }
+    .tiny { font-size:10px; fill:#666; }
   </style>
   <defs>
-    <marker id="m" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
-    </marker>
-    <marker id="mg" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L9,3 z" fill="#1f8a40"/>
-    </marker>
+    <marker id="m" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#444"/></marker>
+    <marker id="mg" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#1f8a40"/></marker>
   </defs>
 
-  <text x="500" y="22" text-anchor="middle" class="ttl">Vue 3 SPA: схема компонентов и канал событий cart-changed</text>
+  <text x="600" y="22" text-anchor="middle" class="ttl">Структура клиентского приложения (Vue 3 SPA · Vite · TypeScript)</text>
 
-  <rect class="root" x="380" y="50" width="240" height="60"/>
-  <text class="name" x="500" y="78" text-anchor="middle">App.vue + Router</text>
-  <text class="sm" x="500" y="98" text-anchor="middle">vue-router, src/router/index.ts</text>
+  <rect class="root" x="420" y="50" width="360" height="70"/>
+  <text class="name" x="600" y="78" text-anchor="middle">main.ts + App.vue</text>
+  <text class="tiny" x="600" y="96" text-anchor="middle">createApp(App).use(router).mount('#app')</text>
+  <text class="tiny" x="600" y="110" text-anchor="middle">шапка, навигация, выход</text>
 
-  <rect class="view" x="40"  y="160" width="170" height="60"/>
-  <text class="name" x="125" y="190" text-anchor="middle">LoginView</text>
-  <text class="sm" x="125" y="208" text-anchor="middle">/, /register</text>
+  <rect class="root" x="40" y="160" width="280" height="60" fill="#f0f4fa"/>
+  <text class="name" x="180" y="186" text-anchor="middle">src/router/index.ts</text>
+  <text class="tiny" x="180" y="204" text-anchor="middle">10 маршрутов: createWebHistory()</text>
 
-  <rect class="view" x="230" y="160" width="170" height="60"/>
-  <text class="name" x="315" y="190" text-anchor="middle">ProductsView</text>
-  <text class="sm" x="315" y="208" text-anchor="middle">/products</text>
+  <rect class="root" x="880" y="160" width="280" height="60" fill="#f0f4fa"/>
+  <text class="name" x="1020" y="186" text-anchor="middle">src/env.d.ts + style.css</text>
+  <text class="tiny" x="1020" y="204" text-anchor="middle">типы Vite · базовые стили</text>
 
-  <rect class="view" x="420" y="160" width="170" height="60"/>
-  <text class="name" x="505" y="190" text-anchor="middle">OrdersView</text>
-  <text class="sm" x="505" y="208" text-anchor="middle">/orders (корзина)</text>
+  <rect class="view" x="40" y="260" width="170" height="65"/>
+  <text class="name" x="125" y="282" text-anchor="middle">LoginView</text>
+  <text class="tiny" x="125" y="298" text-anchor="middle">/   POST /login</text>
+  <text class="tiny" x="125" y="312" text-anchor="middle">сохраняет authToken</text>
 
-  <rect class="view" x="610" y="160" width="170" height="60"/>
-  <text class="name" x="695" y="190" text-anchor="middle">RecommendationsView</text>
-  <text class="sm" x="695" y="208" text-anchor="middle">/recommendations</text>
+  <rect class="view" x="230" y="260" width="170" height="65"/>
+  <text class="name" x="315" y="282" text-anchor="middle">RegisterView</text>
+  <text class="tiny" x="315" y="298" text-anchor="middle">/register · POST /register</text>
+  <text class="tiny" x="315" y="312" text-anchor="middle">name + password + gender</text>
 
-  <rect class="view" x="800" y="160" width="170" height="60"/>
-  <text class="name" x="885" y="190" text-anchor="middle">FavouritesView</text>
-  <text class="sm" x="885" y="208" text-anchor="middle">/favourites</text>
+  <rect class="view" x="420" y="260" width="170" height="65"/>
+  <text class="name" x="505" y="282" text-anchor="middle">ProductsView</text>
+  <text class="tiny" x="505" y="298" text-anchor="middle">/products</text>
+  <text class="tiny" x="505" y="312" text-anchor="middle">каталог, КБЖУ, фильтры</text>
 
-  <rect class="view" x="40"  y="240" width="170" height="60"/>
-  <text class="name" x="125" y="270" text-anchor="middle">CategoriesView</text>
-  <rect class="view" x="230" y="240" width="170" height="60"/>
-  <text class="name" x="315" y="270" text-anchor="middle">ManufacturersView</text>
-  <rect class="view" x="420" y="240" width="170" height="60"/>
-  <text class="name" x="505" y="270" text-anchor="middle">DishesView</text>
-  <rect class="view" x="610" y="240" width="170" height="60"/>
-  <text class="name" x="695" y="270" text-anchor="middle">UsersView</text>
+  <rect class="view" x="610" y="260" width="170" height="65"/>
+  <text class="name" x="695" y="282" text-anchor="middle">OrdersView</text>
+  <text class="tiny" x="695" y="298" text-anchor="middle">/orders</text>
+  <text class="tiny" x="695" y="312" text-anchor="middle">корзина + история</text>
 
-  <path class="ar" d="M500,110 L125,160" marker-end="url(#m)"/>
-  <path class="ar" d="M500,110 L315,160" marker-end="url(#m)"/>
-  <path class="ar" d="M500,110 L505,160" marker-end="url(#m)"/>
-  <path class="ar" d="M500,110 L695,160" marker-end="url(#m)"/>
-  <path class="ar" d="M500,110 L885,160" marker-end="url(#m)"/>
-  <path class="ar" d="M500,110 L125,240" marker-end="url(#m)"/>
-  <path class="ar" d="M500,110 L315,240" marker-end="url(#m)"/>
-  <path class="ar" d="M500,110 L505,240" marker-end="url(#m)"/>
-  <path class="ar" d="M500,110 L695,240" marker-end="url(#m)"/>
+  <rect class="view" x="800" y="260" width="190" height="65"/>
+  <text class="name" x="895" y="282" text-anchor="middle">RecommendationsView</text>
+  <text class="tiny" x="895" y="298" text-anchor="middle">/recommendations</text>
+  <text class="tiny" x="895" y="312" text-anchor="middle">персональные подсказки</text>
 
-  <rect class="api" x="280" y="360" width="440" height="60"/>
-  <text class="name" x="500" y="385" text-anchor="middle">src/api/http.ts</text>
-  <text class="sm" x="500" y="403" text-anchor="middle">axios + интерцептор: X-User-Id, Authorization: Bearer JWT</text>
+  <rect class="view" x="1010" y="260" width="170" height="65"/>
+  <text class="name" x="1095" y="282" text-anchor="middle">FavouritesView</text>
+  <text class="tiny" x="1095" y="298" text-anchor="middle">/favourites</text>
+  <text class="tiny" x="1095" y="312" text-anchor="middle">избранные товары</text>
 
-  <rect class="ev" x="280" y="450" width="440" height="60"/>
-  <text class="name" x="500" y="475" text-anchor="middle">localStorage + window event «cart-changed»</text>
-  <text class="sm" x="500" y="495" text-anchor="middle">cartItems, currentUserId, authToken, currentUserGender</text>
+  <rect class="view" x="40" y="345" width="190" height="65"/>
+  <text class="name" x="135" y="367" text-anchor="middle">CategoriesView</text>
+  <text class="tiny" x="135" y="383" text-anchor="middle">/categories</text>
+  <text class="tiny" x="135" y="397" text-anchor="middle">только admin</text>
 
-  <path class="ar" d="M315,300 L400,360" marker-end="url(#m)"/>
-  <path class="ar" d="M505,300 L500,360" marker-end="url(#m)"/>
-  <path class="ar" d="M695,300 L600,360" marker-end="url(#m)"/>
-  <path class="ar" d="M885,220 L720,360" marker-end="url(#m)"/>
+  <rect class="view" x="250" y="345" width="190" height="65"/>
+  <text class="name" x="345" y="367" text-anchor="middle">ManufacturersView</text>
+  <text class="tiny" x="345" y="383" text-anchor="middle">/manufacturers</text>
+  <text class="tiny" x="345" y="397" text-anchor="middle">только admin</text>
 
-  <path class="ev_ar" d="M505,220 L500,450" marker-end="url(#mg)"/>
-  <path class="ev_ar" d="M315,300 Q200,440 280,470" marker-end="url(#mg)"/>
-  <path class="ev_ar" d="M695,220 Q800,440 720,470" marker-end="url(#mg)"/>
-  <text x="60" y="445" class="sm" fill="#1f8a40">Зелёные стрелки — публикация и подписка на событие cart-changed</text>
+  <rect class="view" x="460" y="345" width="190" height="65"/>
+  <text class="name" x="555" y="367" text-anchor="middle">DishesView</text>
+  <text class="tiny" x="555" y="383" text-anchor="middle">/dishes</text>
+  <text class="tiny" x="555" y="397" text-anchor="middle">состав блюд, admin</text>
+
+  <rect class="view" x="670" y="345" width="190" height="65"/>
+  <text class="name" x="765" y="367" text-anchor="middle">UsersView</text>
+  <text class="tiny" x="765" y="383" text-anchor="middle">/users · /users/full</text>
+  <text class="tiny" x="765" y="397" text-anchor="middle">админ-просмотр</text>
+
+  <path class="ar" d="M600,120 L180,160" marker-end="url(#m)"/>
+  <path class="ar" d="M600,120 L1020,160" marker-end="url(#m)"/>
+  <path class="ar" d="M180,220 L125,260" marker-end="url(#m)"/>
+  <path class="ar" d="M180,220 L315,260" marker-end="url(#m)"/>
+  <path class="ar" d="M180,220 L505,260" marker-end="url(#m)"/>
+  <path class="ar" d="M180,220 L695,260" marker-end="url(#m)"/>
+  <path class="ar" d="M180,220 L895,260" marker-end="url(#m)"/>
+  <path class="ar" d="M180,220 L1095,260" marker-end="url(#m)"/>
+  <path class="ar" d="M180,220 L135,345" marker-end="url(#m)"/>
+  <path class="ar" d="M180,220 L345,345" marker-end="url(#m)"/>
+  <path class="ar" d="M180,220 L555,345" marker-end="url(#m)"/>
+  <path class="ar" d="M180,220 L765,345" marker-end="url(#m)"/>
+
+  <rect class="api" x="280" y="450" width="640" height="80"/>
+  <text class="name" x="600" y="476" text-anchor="middle">src/api/http.ts — axios instance</text>
+  <text class="tiny" x="600" y="494" text-anchor="middle">baseURL: http://localhost:8080</text>
+  <text class="tiny" x="600" y="508" text-anchor="middle">request interceptor: X-User-Id, Authorization: Bearer JWT</text>
+  <text class="tiny" x="600" y="522" text-anchor="middle">DTO-типы: User, Product, Category, Order, FinalRecommendation, …</text>
+
+  <path class="ar" d="M315,325 L450,450" marker-end="url(#m)"/>
+  <path class="ar" d="M505,325 L500,450" marker-end="url(#m)"/>
+  <path class="ar" d="M695,325 L600,450" marker-end="url(#m)"/>
+  <path class="ar" d="M895,325 L700,450" marker-end="url(#m)"/>
+  <path class="ar" d="M1095,325 L800,450" marker-end="url(#m)"/>
+  <path class="ar" d="M135,410 L350,450" marker-end="url(#m)"/>
+  <path class="ar" d="M345,410 L450,450" marker-end="url(#m)"/>
+  <path class="ar" d="M555,410 L600,450" marker-end="url(#m)"/>
+  <path class="ar" d="M765,410 L800,450" marker-end="url(#m)"/>
+
+  <rect class="stor" x="40" y="560" width="270" height="80"/>
+  <text class="name" x="175" y="584" text-anchor="middle">localStorage (браузер)</text>
+  <text class="tiny" x="175" y="602" text-anchor="middle">currentUserId, currentUserName,</text>
+  <text class="tiny" x="175" y="615" text-anchor="middle">currentUserRole, currentUserGender,</text>
+  <text class="tiny" x="175" y="628" text-anchor="middle">authToken, cartItems[]</text>
+
+  <rect class="ev" x="340" y="560" width="280" height="80"/>
+  <text class="name" x="480" y="584" text-anchor="middle">window event: cart-changed</text>
+  <text class="tiny" x="480" y="604" text-anchor="middle">dispatchEvent при изменении корзины</text>
+  <text class="tiny" x="480" y="620" text-anchor="middle">все подписчики автоматически</text>
+  <text class="tiny" x="480" y="634" text-anchor="middle">пересчитывают сводку КБЖУ</text>
+
+  <rect class="ev" x="650" y="560" width="240" height="80"/>
+  <text class="name" x="770" y="584" text-anchor="middle">window event: auth-changed</text>
+  <text class="tiny" x="770" y="604" text-anchor="middle">шапка обновляет навигацию</text>
+  <text class="tiny" x="770" y="620" text-anchor="middle">при логине / логауте</text>
+
+  <rect class="stor" x="920" y="560" width="260" height="80"/>
+  <text class="name" x="1050" y="584" text-anchor="middle">Внешний backend</text>
+  <text class="tiny" x="1050" y="604" text-anchor="middle">http://localhost:8080/v1/*</text>
+  <text class="tiny" x="1050" y="620" text-anchor="middle">Go (Gin) + PostgreSQL/MongoDB</text>
+  <text class="tiny" x="1050" y="634" text-anchor="middle">+ Python ML (CLI)</text>
+
+  <path class="ar" d="M450,530 L175,560" marker-end="url(#m)"/>
+  <path class="ar" d="M600,530 L1050,560" marker-end="url(#m)"/>
+
+  <path class="ev_ar" d="M695,325 L480,560" marker-end="url(#mg)"/>
+  <path class="ev_ar" d="M505,325 L420,560" marker-end="url(#mg)"/>
+  <path class="ev_ar" d="M895,325 L500,560" marker-end="url(#mg)"/>
+
+  <path class="ev_ar" d="M125,325 L770,560" marker-end="url(#mg)"/>
+  <path class="ev_ar" d="M600,120 L770,560" marker-end="url(#mg)"/>
+
+  <rect x="40" y="660" width="1140" height="32" fill="#f6f9fb" stroke="#bcd" rx="4"/>
+  <text x="50" y="678" font-size="11"><tspan font-weight="bold">Принципы:</tspan> управление состоянием — без Pinia/Vuex, через localStorage + нативные события. Pinia не подключен (зависимостей меньше, загрузка быстрее).</text>
 </svg>

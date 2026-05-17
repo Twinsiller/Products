@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"Products_backend/internal/services"
+	"Products_backend/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -43,7 +44,9 @@ func (h *RecommendationHandler) GetProductRecommendations(c *gin.Context) {
 
 	recs, err := h.Service.RecommendProducts(userID, limit)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		// В лог — техническая причина, наружу — пустой список (UI покажет «пока нет рекомендаций»).
+		utils.Logger.Warnf("recommendations/products unavailable for user %d: %v", userID, err)
+		c.JSON(http.StatusOK, []interface{}{})
 		return
 	}
 
@@ -70,7 +73,8 @@ func (h *RecommendationHandler) GetDishRecommendations(c *gin.Context) {
 
 	recs, err := h.Service.RecommendDishes(userID, limit)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		utils.Logger.Warnf("recommendations/dishes unavailable for user %d: %v", userID, err)
+		c.JSON(http.StatusOK, []interface{}{})
 		return
 	}
 
@@ -121,7 +125,8 @@ func (h *RecommendationHandler) GetMealsFromOrder(c *gin.Context) {
 			c.JSON(http.StatusForbidden, gin.H{"error": "order not found or access denied"})
 			return
 		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		utils.Logger.Errorf("meals/from-order failed for user %d order %d: %v", userID, orderID, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось подобрать блюда по заказу"})
 		return
 	}
 
@@ -176,7 +181,8 @@ func (h *RecommendationHandler) GetMealsFromCart(c *gin.Context) {
 
 	recs, err := h.Service.DishesFromCart(userID, avail, limit)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		utils.Logger.Errorf("meals/from-cart failed for user %d: %v", userID, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось подобрать блюда по корзине"})
 		return
 	}
 
@@ -217,8 +223,22 @@ func (h *RecommendationHandler) GetFinalRecommendations(c *gin.Context) {
 
 	out, err := h.Service.RunFinalRecipeRecommender(userID, limit)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		// Полную причину отправляем в логи, пользователю отдаём пустой,
+		// корректно сформированный ответ — UI покажет «пока нет рекомендаций».
+		utils.Logger.Warnf("recommendations/final unavailable for user %d: %v", userID, err)
+		c.JSON(http.StatusOK, gin.H{
+			"recommendations": []interface{}{},
+			"precision_at_5":  0,
+			"available":       false,
+		})
 		return
 	}
+	if out == nil {
+		out = map[string]interface{}{}
+	}
+	if _, ok := out["recommendations"]; !ok {
+		out["recommendations"] = []interface{}{}
+	}
+	out["available"] = true
 	c.JSON(http.StatusOK, out)
 }

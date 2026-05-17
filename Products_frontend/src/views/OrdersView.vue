@@ -1,9 +1,9 @@
 <template>
   <section class="card">
     <div v-if="!currentUser" class="guard">
-      <h2>Раздел заказов доступен только после входа</h2>
+      <h2>Войдите, чтобы пользоваться корзиной и заказами</h2>
       <p class="muted">
-        Авторизуйтесь, чтобы просматривать историю заказов и оформлять новые.
+        После входа вы сможете собирать корзину, оформлять заказы и видеть их историю.
       </p>
       <div class="guard-actions">
         <RouterLink to="/" class="primary-link">Войти</RouterLink>
@@ -16,7 +16,7 @@
         <header class="header cart-header">
           <div>
             <h2>Корзина</h2>
-            <p class="muted">Добавляйте товары на странице "Товары", затем оформляйте заказ здесь.</p>
+            <p class="muted">Добавляйте товары на странице «Товары», а здесь оформляйте заказ.</p>
           </div>
           <div class="cart-actions">
             <button class="secondary" type="button" @click="clearCart" :disabled="!cartItems.length">
@@ -48,14 +48,16 @@
           </article>
           <p class="cart-total">Итого: <strong>{{ cartTotal.toFixed(2) }} ₽</strong></p>
         </div>
-        <p v-else class="muted">Корзина пуста.</p>
+        <p v-else class="muted empty-cart">
+          Корзина пока пуста. Перейдите в раздел «Товары» и добавьте, что захотите.
+        </p>
       </section>
 
       <header class="header">
         <div>
-          <h2>Заказы</h2>
+          <h2>Мои заказы</h2>
           <p class="muted">
-            История покупок: товары, количество, цены и итог по каждой позиции.
+            История заказов: товары, количество, цены и итог.
           </p>
         </div>
         <button
@@ -78,21 +80,21 @@
             <div class="order-total">{{ o.total_amount.toFixed(2) }} ₽</div>
           </header>
 
-          <div v-if="itemsLoadingByOrder[o.id]" class="muted small">Загрузка позиций...</div>
+          <div v-if="itemsLoadingByOrder[o.id]" class="muted small">Загружаем состав заказа…</div>
           <div v-else-if="orderItemsByOrder[o.id]?.length" class="items-list">
             <div v-for="it in orderItemsByOrder[o.id]" :key="it.id" class="item-line">
-              <div class="item-name">{{ it.product?.name || ('Товар #' + it.product_id) }}</div>
+              <div class="item-name">{{ it.product?.name || ('Товар №' + it.product_id) }}</div>
               <div class="item-meta">
-                <span>x {{ it.quantity }}</span>
+                <span>× {{ it.quantity }} шт.</span>
                 <span>{{ it.price_per_unit.toFixed(2) }} ₽</span>
                 <strong>{{ lineTotal(it).toFixed(2) }} ₽</strong>
               </div>
             </div>
           </div>
-          <span v-else class="muted small">Позиции не найдены</span>
+          <span v-else class="muted small">В этом заказе нет позиций</span>
         </article>
       </div>
-      <p v-else-if="!loading" class="empty">Заказов пока нет.</p>
+      <p v-else-if="!loading" class="empty">У вас ещё нет оформленных заказов.</p>
 
       <p v-if="error" class="error">
         {{ error }}
@@ -196,7 +198,7 @@ const loadOrders = async () => {
       }
     }))
   } catch (e) {
-    error.value = 'Ошибка загрузки заказов'
+    error.value = 'Не удалось загрузить заказы. Попробуйте обновить страницу.'
   } finally {
     loading.value = false
   }
@@ -239,7 +241,7 @@ const createOrderFromCart = async () => {
     clearCart()
     await loadOrders()
   } catch (e) {
-    error.value = 'Не удалось оформить заказ из корзины'
+    error.value = 'Не удалось оформить заказ. Проверьте, что вы вошли в аккаунт, и попробуйте ещё раз.'
   } finally {
     creatingOrder.value = false
   }
