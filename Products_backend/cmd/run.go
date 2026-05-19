@@ -51,7 +51,6 @@ func Run() error {
 		&models.OrderItem{},
 		&models.Manufacturer{},
 		&models.Category{},
-		&models.Country{},
 		&models.Dish{},
 		&models.DishProduct{},
 		&models.DishCategoryRequirement{},

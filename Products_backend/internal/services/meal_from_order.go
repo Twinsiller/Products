@@ -69,7 +69,7 @@ func (s *RecommendationService) DishesFromOrder(userID, orderID int64, limit int
 	if err := s.DB.First(&order, orderID).Error; err != nil {
 		return nil, err
 	}
-	if order.CashierID != userID {
+	if order.UserID != userID {
 		return nil, ErrOrderAccess
 	}
 

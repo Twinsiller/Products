@@ -35,8 +35,8 @@ func TestOrderService_CreateOrder(t *testing.T) {
 	svc := NewOrderService(db)
 
 	order := &models.Order{
-		CashierID:  1,
-		CreatedAt:  time.Now(),
+		UserID:      1,
+		CreatedAt:   time.Now(),
 		TotalAmount: 0,
 	}
 	items := []models.OrderItem{
@@ -75,7 +75,7 @@ func TestOrderService_CreateOrder_empty_items(t *testing.T) {
 	db := orderTestDB(t)
 	svc := NewOrderService(db)
 
-	order := &models.Order{CashierID: 1, CreatedAt: time.Now(), TotalAmount: 0}
+	order := &models.Order{UserID: 1, CreatedAt: time.Now(), TotalAmount: 0}
 	items := []models.OrderItem{}
 
 	err := svc.CreateOrder(order, items)

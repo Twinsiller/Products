@@ -88,7 +88,7 @@ func GetOrderByID(c *gin.Context) {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
 			return
 		}
-		if order.CashierID != uid {
+		if order.UserID != uid {
 			c.JSON(http.StatusForbidden, gin.H{"error": "access denied"})
 			return
 		}
@@ -117,7 +117,7 @@ func ListOrderItemsByOrder(c *gin.Context) {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
 			return
 		}
-		if order.CashierID != uid {
+		if order.UserID != uid {
 			c.JSON(http.StatusForbidden, gin.H{"error": "access denied"})
 			return
 		}
@@ -162,11 +162,11 @@ func CreateOrder(c *gin.Context) {
 	}
 
 	if isAdminRequest(c) {
-		if req.CashierID == 0 {
-			req.CashierID = uid
+		if req.UserID == 0 {
+			req.UserID = uid
 		}
 	} else {
-		req.CashierID = uid
+		req.UserID = uid
 	}
 
 	if err := database.DbPostgres.Create(&req).Error; err != nil {
@@ -196,7 +196,7 @@ func UpdateOrder(c *gin.Context) {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
 			return
 		}
-		if order.CashierID != uid {
+		if order.UserID != uid {
 			c.JSON(http.StatusForbidden, gin.H{"error": "access denied"})
 			return
 		}
@@ -238,7 +238,7 @@ func DeleteOrder(c *gin.Context) {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
 			return
 		}
-		if order.CashierID != uid {
+		if order.UserID != uid {
 			c.JSON(http.StatusForbidden, gin.H{"error": "access denied"})
 			return
 		}
