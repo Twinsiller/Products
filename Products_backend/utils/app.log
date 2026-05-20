@@ -149,5 +149,38 @@
 {"level":"info","msg":"Успешная миграция моделей","time":"2026-05-14T02:43:38+03:00"}
 {"level":"warning","msg":"Shutting down server...","time":"2026-05-14T02:47:36+03:00"}
 {"level":"info","msg":"Server exiting","time":"2026-05-14T02:47:36+03:00"}
-{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-05-19T23:32:14+03:00"}
-{"level":"fatal","msg":"Failed to migrate models: invalid field found for struct Products_backend/internal/models.User's field Orders: define a valid foreign key for relations or implement the Valuer/Scanner interface","time":"2026-05-19T23:32:14+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-05-20T02:27:46+03:00"}
+{"level":"fatal","msg":"Failed to migrate models: invalid field found for struct Products_backend/internal/models.User's field Orders: define a valid foreign key for relations or implement the Valuer/Scanner interface","time":"2026-05-20T02:27:46+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-05-20T02:30:22+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-05-20T02:30:22+03:00"}
+{"level":"info","msg":"Демо-данные готовы: в каталоге 30 продуктов","time":"2026-05-20T02:30:22+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-05-20T02:42:03+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-05-20T02:42:03+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-05-20T02:55:22+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-05-20T02:55:22+03:00"}
+{"level":"info","msg":"Демо-данные готовы: в каталоге 30 продуктов","time":"2026-05-20T02:55:22+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-05-20T02:57:36+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-05-20T02:57:36+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-05-20T03:01:41+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-05-20T03:01:41+03:00"}
+{"level":"info","msg":"Демо-данные готовы: в каталоге 30 продуктов","time":"2026-05-20T03:01:41+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-05-20T03:04:30+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-05-20T03:04:30+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-05-20T03:10:27+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-05-20T03:10:27+03:00"}
+{"level":"info","msg":"Демо-данные готовы: в каталоге 30 продуктов","time":"2026-05-20T03:10:27+03:00"}
+{"level":"error","msg":"CreateOrder failed (user_id=4, total=907.00): ERROR: null value in column \"cashier_id\" of relation \"orders\" violates not-null constraint (SQLSTATE 23502)","time":"2026-05-20T03:10:32+03:00"}
+{"level":"error","msg":"CreateOrder failed (user_id=4, total=907.00): ERROR: null value in column \"cashier_id\" of relation \"orders\" violates not-null constraint (SQLSTATE 23502)","time":"2026-05-20T03:10:33+03:00"}
+{"level":"error","msg":"CreateOrder failed (user_id=4, total=907.00): ERROR: null value in column \"cashier_id\" of relation \"orders\" violates not-null constraint (SQLSTATE 23502)","time":"2026-05-20T03:10:37+03:00"}
+{"level":"error","msg":"CreateOrder failed (user_id=4, total=907.00): ERROR: null value in column \"cashier_id\" of relation \"orders\" violates not-null constraint (SQLSTATE 23502)","time":"2026-05-20T03:11:04+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-05-20T03:12:57+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-05-20T03:12:57+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-05-20T03:13:01+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-05-20T03:13:01+03:00"}
+{"level":"info","msg":"Удалён устаревший столбец orders.cashier_id","time":"2026-05-20T03:13:01+03:00"}
+{"level":"info","msg":"Демо-данные готовы: в каталоге 30 продуктов","time":"2026-05-20T03:13:01+03:00"}
+{"level":"warning","msg":"Shutting down server...","time":"2026-05-20T03:14:41+03:00"}
+{"level":"info","msg":"Server exiting","time":"2026-05-20T03:14:41+03:00"}
+{"level":"info","msg":"Миграция моделей в базу данных","time":"2026-05-20T03:14:45+03:00"}
+{"level":"info","msg":"Успешная миграция моделей","time":"2026-05-20T03:14:45+03:00"}
+{"level":"info","msg":"Демо-данные готовы: в каталоге 30 продуктов","time":"2026-05-20T03:14:45+03:00"}

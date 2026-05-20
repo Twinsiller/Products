@@ -103,7 +103,8 @@ func (s *RecommendationService) RecommendProducts(userID int64, limit int) ([]Pr
 			result = append(result, ProductRecommendation{
 				Product: c,
 				Score:   float64(score),
-				Reason:  "Рекомендация по совпадению с вашими избранными товарами (категория и производитель).",
+				// Reason скрыт в UI — оставлен пустым, чтобы не показывать пользователю шаблонные строки.
+				Reason: "",
 			})
 		}
 	}

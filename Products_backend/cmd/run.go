@@ -62,6 +62,20 @@ func Run() error {
 	}
 	utils.Logger.Info("Успешная миграция моделей")
 
+	// Чистим устаревшие столбцы, оставшиеся от прежних версий моделей.
+	// GORM AutoMigrate никогда не удаляет колонки сам — приходится вручную.
+	dropLegacyColumns()
+
+	// Если каталог пуст — заполняем демо-данными (продукты, блюда, пользователи).
+	// При повторных запусках seed автоматически не сработает: проверка по products.
+	if err := database.SeedIfEmpty(database.DbPostgres); err != nil {
+		utils.Logger.Errorf("Ошибка заполнения демо-данными: %v", err)
+	} else {
+		var pcount int64
+		_ = database.DbPostgres.Model(&models.Product{}).Count(&pcount).Error
+		utils.Logger.Infof("Демо-данные готовы: в каталоге %d продуктов", pcount)
+	}
+
 	// Создание встроенного администратора, если заданы переменные окружения
 	adminName := os.Getenv("ADMIN_NAME")
 	adminPassword := os.Getenv("ADMIN_PASSWORD")
@@ -92,4 +106,42 @@ func Run() error {
 	v1.Apies()
 
 	return nil
+}
+
+// dropLegacyColumns удаляет устаревшие столбцы, оставшиеся в таблицах после
+// переименования полей в моделях (GORM AutoMigrate не удаляет колонки сам).
+func dropLegacyColumns() {
+	type legacyCol struct {
+		Table  string
+		Column string
+	}
+	legacy := []legacyCol{
+		{"orders", "cashier_id"}, // переименовано в user_id
+	}
+	for _, c := range legacy {
+		if database.DbPostgres.Migrator().HasColumn(&models.Order{}, c.Column) ||
+			hasRawColumn(c.Table, c.Column) {
+			if err := database.DbPostgres.Exec(
+				"ALTER TABLE " + c.Table + " DROP COLUMN IF EXISTS " + c.Column,
+			).Error; err != nil {
+				utils.Logger.Warnf("Не удалось удалить устаревший столбец %s.%s: %v", c.Table, c.Column, err)
+			} else {
+				utils.Logger.Infof("Удалён устаревший столбец %s.%s", c.Table, c.Column)
+			}
+		}
+	}
+}
+
+// hasRawColumn — низкоуровневая проверка наличия колонки в Postgres,
+// на случай если Migrator() не видит колонку, отсутствующую в модели.
+func hasRawColumn(table, column string) bool {
+	var count int64
+	err := database.DbPostgres.Raw(
+		"SELECT COUNT(*) FROM information_schema.columns WHERE table_name = ? AND column_name = ?",
+		table, column,
+	).Scan(&count).Error
+	if err != nil {
+		return false
+	}
+	return count > 0
 }

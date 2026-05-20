@@ -175,7 +175,7 @@
               <option v-for="m in manufacturers" :key="m.id" :value="m.id">{{ m.name }}</option>
             </select>
           </label>
-          <p class="field-hint">КБЖУ на 1 единицу товара (для расчёта блюд)</p>
+          <p class="field-hint">Пищевая ценность на одну единицу товара</p>
           <label class="field">
             <span>Ккал</span>
             <input v-model.number="editProduct.calories_kcal" type="number" step="0.01" min="0" />
@@ -233,7 +233,7 @@
             placeholder="Например: 4601234567890"
           />
         </label>
-        <p class="field-hint">КБЖУ на 1 единицу товара (опционально)</p>
+        <p class="field-hint">Пищевая ценность на одну единицу товара</p>
         <label class="field">
           <span>Ккал</span>
           <input v-model="newCaloriesKcal" type="number" step="0.01" min="0" placeholder="0" />

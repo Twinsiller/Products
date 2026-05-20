@@ -140,7 +140,7 @@ export interface OrderMealRecommendation {
 
 export interface Order {
   id: number
-  cashier_id: number
+  user_id: number
   created_at: string
   total_amount: number
 }

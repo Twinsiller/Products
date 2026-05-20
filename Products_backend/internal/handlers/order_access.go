@@ -6,6 +6,7 @@ import (
 
 	"Products_backend/internal/database"
 	"Products_backend/internal/models"
+	"Products_backend/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -50,7 +51,7 @@ func ListOrders(c *gin.Context) {
 				c.JSON(http.StatusBadRequest, gin.H{"error": "invalid user_id"})
 				return
 			}
-			q = q.Where("cashier_id = ?", userID)
+			q = q.Where("user_id = ?", userID)
 		}
 	} else {
 		uid, ok := currentUserID(c)
@@ -58,11 +59,12 @@ func ListOrders(c *gin.Context) {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
 			return
 		}
-		q = q.Where("cashier_id = ?", uid)
+		q = q.Where("user_id = ?", uid)
 	}
 
 	if err := q.Order("created_at DESC").Find(&orders).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		utils.Logger.Errorf("ListOrders failed: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось загрузить заказы"})
 		return
 	}
 	c.JSON(http.StatusOK, orders)
@@ -147,17 +149,18 @@ func ListOrderItemsByOrder(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-// CreateOrder: user can create only for self, admin can specify cashier_id.
+// CreateOrder: user can create only for self, admin can specify user_id.
 func CreateOrder(c *gin.Context) {
 	var req models.Order
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request"})
+		utils.Logger.Warnf("CreateOrder: invalid JSON: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Не удалось разобрать данные заказа"})
 		return
 	}
 
 	uid, ok := currentUserID(c)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Сессия истекла, войдите заново"})
 		return
 	}
 
@@ -169,8 +172,12 @@ func CreateOrder(c *gin.Context) {
 		req.UserID = uid
 	}
 
+	// Гарантируем, что Items не утекут в Create через GORM auto-create.
+	req.Items = nil
+
 	if err := database.DbPostgres.Create(&req).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		utils.Logger.Errorf("CreateOrder failed (user_id=%d, total=%.2f): %v", req.UserID, req.TotalAmount, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось сохранить заказ"})
 		return
 	}
 	c.JSON(http.StatusCreated, req)
