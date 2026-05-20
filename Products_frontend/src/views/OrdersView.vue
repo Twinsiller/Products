@@ -216,27 +216,54 @@ const createOrderFromCart = async () => {
   creatingOrder.value = true
   error.value = null
   try {
-    const total = cartTotal.value
-    const { data: order } = await api.post<Order>('/v1/orders', {
-      cashier_id: currentUser.value.id,
-      total_amount: total,
-    })
-
-    for (const item of cartItems.value) {
-      await api.post('/v1/order-items', {
-        order_id: order.id,
-        product_id: item.product_id,
-        quantity: item.quantity,
-        price_per_unit: item.price_per_unit,
-        discount: 0,
-      })
+    // Перед оформлением заказа проверим, что все товары из корзины
+    // ещё существуют в каталоге (могли быть удалены, или БД пересоздана).
+    let availableIds = new Set<number>()
+    try {
+      const { data: products } = await api.get<Array<{ id: number }>>('/v1/products')
+      availableIds = new Set(products.map((p) => p.id))
+    } catch {
+      // Если каталог не отдаётся — продолжаем без фильтра, серверная сторона сама отсечёт.
     }
 
-    await api.put(`/v1/orders/${order.id}`, {
-      id: order.id,
-      cashier_id: currentUser.value.id,
+    const validItems = availableIds.size
+      ? cartItems.value.filter((it) => availableIds.has(it.product_id))
+      : cartItems.value
+
+    if (!validItems.length) {
+      error.value = 'В корзине не осталось доступных товаров. Очистите её и подберите заново.'
+      creatingOrder.value = false
+      return
+    }
+
+    const total = validItems.reduce((acc, x) => acc + x.price_per_unit * x.quantity, 0)
+
+    // Создаём заказ: user_id подставит сам сервер из JWT, total_amount передаём сразу.
+    const { data: order } = await api.post<Order>('/v1/orders', {
       total_amount: total,
     })
+
+    // Добавляем позиции заказа.
+    const failedItems: number[] = []
+    for (const item of validItems) {
+      try {
+        await api.post('/v1/order-items', {
+          order_id: order.id,
+          product_id: item.product_id,
+          quantity: item.quantity,
+          price_per_unit: item.price_per_unit,
+          discount: 0,
+        })
+      } catch {
+        failedItems.push(item.product_id)
+      }
+    }
+
+    if (failedItems.length === validItems.length) {
+      // Все позиции не добавились — заказ останется пустым, лучше показать ошибку.
+      error.value = 'Не удалось добавить товары в заказ. Попробуйте оформить заказ заново.'
+      return
+    }
 
     clearCart()
     await loadOrders()

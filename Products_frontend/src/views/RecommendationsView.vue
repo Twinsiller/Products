@@ -33,26 +33,12 @@
             <h3>{{ idx + 1 }}. {{ r.product.name }}</h3>
             <span class="price">{{ Number(r.product.default_price || 0).toFixed(2) }} ₽</span>
           </div>
-          <p v-if="r.reason" class="reason">{{ r.reason }}</p>
 
           <div class="why-row">
-            <span class="why-chip" v-if="r.cb_score > 0">подходит по КБЖУ</span>
-            <span class="why-chip" v-if="r.cf_score > 0">похоже на ваши прошлые покупки</span>
-            <span class="why-chip" v-if="r.meal_score > 0">пригодится для блюд</span>
-            <span class="why-chip neutral" v-if="r.recency_score < 0">недавно уже покупали</span>
-          </div>
-
-          <div v-if="r.linked_dishes?.length" class="dish-links">
-            <p class="dish-links-title">Из этого товара можно приготовить:</p>
-            <ul>
-              <li v-for="d in r.linked_dishes" :key="`${r.product.id}-${d.dish_id}`">
-                {{ d.dish_name }}
-                <span class="missing" v-if="d.missing_ingredients_estimate > 0">
-                  — не хватает ещё {{ d.missing_ingredients_estimate }} {{ ingredientWord(d.missing_ingredients_estimate) }}
-                </span>
-                <span class="ready" v-else>— все ингредиенты есть</span>
-              </li>
-            </ul>
+            <span class="why-chip" v-if="(r.cb_score ?? 0) > 0">подходит по КБЖУ</span>
+            <span class="why-chip" v-if="(r.cf_score ?? 0) > 0 && hasOrderHistory">похоже на ваши прошлые покупки</span>
+            <span class="why-chip" v-if="(r.meal_score ?? 0) > 0">пригодится для блюд</span>
+            <span class="why-chip neutral" v-if="(r.recency_score ?? 0) < 0">недавно уже покупали</span>
           </div>
         </article>
       </div>
@@ -60,20 +46,29 @@
         Пока нет рекомендаций. Добавьте несколько товаров в избранное и оформите хотя бы один заказ — система начнёт подсказывать.
       </p>
 
-      <h3 class="section-title">Подобранные блюда</h3>
-      <div v-if="dishRecommendations.length" class="list">
-        <article v-for="(r, idx) in dishRecommendations" :key="`${r.recipe_id}-${idx}`" class="item">
-          <h3>{{ idx + 1 }}. {{ r.recipe_name }}</h3>
-          <p v-if="r.kcal !== undefined" class="kbju">
-            <strong>{{ r.kcal?.toFixed(0) }} ккал</strong>
-            <span class="kbju-sep">·</span> Б <strong>{{ r.protein_g?.toFixed(1) }}</strong>
-            <span class="kbju-sep">·</span> Ж <strong>{{ r.fat_g?.toFixed(1) }}</strong>
-            <span class="kbju-sep">·</span> У <strong>{{ r.carbs_g?.toFixed(1) }}</strong>
+      <h3 class="section-title">Блюда, которые можно приготовить из подсказок</h3>
+      <p v-if="derivedDishRecommendations.length" class="section-hint">
+        Подобраны из тех же товаров, что и в списке выше.
+      </p>
+      <div v-if="derivedDishRecommendations.length" class="list">
+        <article v-for="(d, idx) in derivedDishRecommendations" :key="`${d.dish_id}-${idx}`" class="item">
+          <div class="item-head">
+            <h3>{{ idx + 1 }}. {{ d.dish_name }}</h3>
+            <span class="dish-count-chip">{{ d.usedCount }} {{ productWord(d.usedCount) }} из рекомендуемых</span>
+          </div>
+          <p class="dish-ingredients" v-if="d.usedProductNames.length">
+            Использует: <strong>{{ d.usedProductNames.join(', ') }}</strong>
+          </p>
+          <p class="missing-hint" v-if="d.minMissing > 0">
+            Не хватает ещё {{ d.minMissing }} {{ ingredientWord(d.minMissing) }} — посмотрите в каталоге.
+          </p>
+          <p class="ready-hint" v-else>
+            Все ингредиенты есть в подсказках выше.
           </p>
         </article>
       </div>
       <p v-else-if="!loading" class="muted hint-empty">
-        Пока не подобрали блюд. Добавьте больше товаров в корзину или избранное.
+        Пока не удалось подобрать блюда. Добавьте больше товаров в избранное — каталог подскажет, что приготовить.
       </p>
 
       <p v-if="error" class="error">{{ error }}</p>
@@ -82,27 +77,59 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import type { AxiosError } from 'axios'
 import {
   api,
-  type FinalRecommendationItem,
-  type FinalRecommendationsResponse,
   type ProductRecommendationItem,
+  type Order,
 } from '../api/http'
 
 const currentUserId = ref<number | null>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
-const precision = ref<number | null>(null)
-const dishRecommendations = ref<FinalRecommendationItem[]>([])
 const productRecommendations = ref<ProductRecommendationItem[]>([])
+const hasOrderHistory = ref(false)
 const limit = ref(5)
 
-function toFixedSafe(value: number | undefined, digits = 3): string {
-  if (typeof value !== 'number' || Number.isNaN(value)) return '0.000'
-  return value.toFixed(digits)
+type DerivedDish = {
+  dish_id: number
+  dish_name: string
+  usedCount: number
+  usedProductNames: string[]
+  minMissing: number
 }
+
+// Блюда выводятся напрямую из рекомендованных товаров:
+// агрегируем linked_dishes по всем товарам и считаем, сколько раз каждое блюдо встретилось.
+const derivedDishRecommendations = computed<DerivedDish[]>(() => {
+  const acc = new Map<number, DerivedDish>()
+  for (const r of productRecommendations.value) {
+    if (!r.linked_dishes?.length) continue
+    for (const ld of r.linked_dishes) {
+      const existing = acc.get(ld.dish_id)
+      if (existing) {
+        existing.usedCount += 1
+        existing.usedProductNames.push(r.product.name)
+        existing.minMissing = Math.min(existing.minMissing, ld.missing_ingredients_estimate)
+      } else {
+        acc.set(ld.dish_id, {
+          dish_id: ld.dish_id,
+          dish_name: ld.dish_name,
+          usedCount: 1,
+          usedProductNames: [r.product.name],
+          minMissing: ld.missing_ingredients_estimate,
+        })
+      }
+    }
+  }
+  return Array.from(acc.values())
+    .sort((a, b) => {
+      if (b.usedCount !== a.usedCount) return b.usedCount - a.usedCount
+      return a.minMissing - b.minMissing
+    })
+    .slice(0, limit.value)
+})
 
 function ingredientWord(n: number): string {
   const mod10 = n % 10
@@ -112,20 +139,25 @@ function ingredientWord(n: number): string {
   return 'ингредиентов'
 }
 
+function productWord(n: number): string {
+  const mod10 = n % 10
+  const mod100 = n % 100
+  if (mod10 === 1 && mod100 !== 11) return 'товар'
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'товара'
+  return 'товаров'
+}
+
 async function loadRecommendations() {
   if (!currentUserId.value) return
   loading.value = true
   error.value = null
 
-  const [productRes, finalRes] = await Promise.allSettled([
+  const [productRes, ordersRes] = await Promise.allSettled([
     api.get<ProductRecommendationItem[]>(
       `/v1/users/${currentUserId.value}/recommendations/products`,
       { params: { limit: limit.value } },
     ),
-    api.get<FinalRecommendationsResponse>(
-      `/v1/users/${currentUserId.value}/recommendations/final`,
-      { params: { limit: limit.value } },
-    ),
+    api.get<Order[]>('/v1/orders'),
   ])
 
   if (productRes.status === 'fulfilled') {
@@ -134,18 +166,14 @@ async function loadRecommendations() {
     productRecommendations.value = []
   }
 
-  if (finalRes.status === 'fulfilled') {
-    precision.value = Number(finalRes.value.data.precision_at_5 ?? 0)
-    dishRecommendations.value = Array.isArray(finalRes.value.data.recommendations)
-      ? finalRes.value.data.recommendations
-      : []
+  if (ordersRes.status === 'fulfilled') {
+    hasOrderHistory.value = Array.isArray(ordersRes.value.data) && ordersRes.value.data.length > 0
   } else {
-    precision.value = null
-    dishRecommendations.value = []
+    hasOrderHistory.value = false
   }
 
   // Никаких подробностей серверной ошибки наружу — только дружелюбный текст.
-  if (productRes.status === 'rejected' && finalRes.status === 'rejected') {
+  if (productRes.status === 'rejected') {
     const status = ((productRes.reason as AxiosError)?.response?.status) ?? 0
     if (status === 401) {
       error.value = 'Сессия истекла. Пожалуйста, войдите заново.'
@@ -271,15 +299,15 @@ h3 {
 }
 
 .section-title {
-  margin: 20px 0 10px;
+  margin: 20px 0 6px;
   font-size: 16px;
   color: #111827;
 }
 
-.reason {
-  margin: 4px 0 8px;
-  font-size: 13px;
-  color: #374151;
+.section-hint {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: #6b7280;
   font-style: italic;
 }
 
@@ -306,51 +334,38 @@ h3 {
   border-color: #fcd34d;
 }
 
-.dish-links {
-  margin-top: 10px;
-  padding-top: 8px;
-  border-top: 1px dashed #e5e7eb;
+.dish-count-chip {
+  display: inline-block;
+  padding: 3px 9px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  font-size: 12px;
+  white-space: nowrap;
 }
 
-.dish-links-title {
-  margin: 0 0 4px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #111827;
-}
-
-.dish-links ul {
-  margin: 0;
-  padding-left: 18px;
-  font-size: 13px;
-  color: #4b5563;
-}
-
-.dish-links li {
-  margin: 3px 0;
-}
-
-.missing {
-  color: #b45309;
-}
-
-.ready {
-  color: #15803d;
-  font-weight: 500;
-}
-
-.kbju {
-  margin: 4px 0 0;
+.dish-ingredients {
+  margin: 6px 0 0;
   font-size: 13px;
   color: #374151;
 }
 
-.kbju strong {
+.dish-ingredients strong {
   color: #111827;
+  font-weight: 600;
 }
 
-.kbju-sep {
-  color: #9ca3af;
-  margin: 0 4px;
+.missing-hint {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #b45309;
+}
+
+.ready-hint {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #15803d;
+  font-weight: 500;
 }
 </style>

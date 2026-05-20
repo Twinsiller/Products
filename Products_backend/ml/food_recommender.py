@@ -249,11 +249,15 @@ def top_n_recommendations(user_id: int, products: list[Product], orders: list[Or
         meal = float(meal_scores.get(pid, 0.0))
         rec = float(recency_scores.get(pid, 0.0))
         linked = dishes_for_product(pid)
-        reason = (
-            f"Товар рекомендован из-за баланса КБЖУ (cb={cb:.2f}), истории покупок (cf={cf:.2f}) "
-            f"и связи с подходящими блюдами (meal={meal:.2f}). "
-            f"Штраф за недавние покупки: {rec:.2f}."
-        )
+        # Короткое человекочитаемое объяснение — без отладочных чисел в скобках.
+        reason_parts = []
+        if cb > 0:
+            reason_parts.append("подходит по балансу КБЖУ")
+        if cf > 0:
+            reason_parts.append("похоже на прошлые покупки")
+        if meal > 0:
+            reason_parts.append("сочетается с подходящими блюдами")
+        reason = "Подходит: " + ", ".join(reason_parts) + "." if reason_parts else ""
         out.append(
             {
                 "product_id": pid,

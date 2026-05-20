@@ -22,7 +22,7 @@ type User struct {
 	// Дата найма
 
 	// Связи
-	Orders            []Order            `gorm:"foreignKey:CashierID" json:"orders,omitempty"`
+	Orders            []Order            `gorm:"foreignKey:UserID" json:"orders,omitempty"`
 	FavouriteProducts []FavouriteProduct `gorm:"foreignKey:UserID" json:"favourite_products,omitempty"`
 	FavouriteDishes   []FavouriteDish    `gorm:"foreignKey:UserID" json:"favourite_dishes,omitempty"`
 }
