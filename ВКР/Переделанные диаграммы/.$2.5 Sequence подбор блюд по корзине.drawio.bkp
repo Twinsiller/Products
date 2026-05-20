@@ -1,0 +1,215 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
+  <diagram name="Страница — 1" id="mC_S0Ym24lmM2mFfpNog">
+    <mxGraphModel dx="990" dy="1484" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="XLLOI3Swdtvozl0vI23t-3" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Service: DishesFromCart&lt;/b&gt;&lt;/font&gt;&lt;br&gt;meat_from_order.go" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="362" y="361" width="194" height="811" as="geometry" />
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-17" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="XLLOI3Swdtvozl0vI23t-3">
+          <mxGeometry x="92" y="141" width="10" height="577" as="geometry" />
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-4" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;scoreDishByCategoies&lt;/b&gt;&lt;/font&gt;&lt;br&gt;для каждого блюда" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="700" y="361" width="165" height="721" as="geometry" />
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-33" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="XLLOI3Swdtvozl0vI23t-4">
+          <mxGeometry x="77.5" y="456" width="10" height="173" as="geometry" />
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-5" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;PostgreSQL&lt;/b&gt;&lt;/span&gt;&lt;br&gt;User, Dish, Product" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="565" y="361" width="125" height="702" as="geometry" />
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-20" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="XLLOI3Swdtvozl0vI23t-5">
+          <mxGeometry x="58" y="168" width="10" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-27" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="XLLOI3Swdtvozl0vI23t-5">
+          <mxGeometry x="58" y="358" width="10" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-28" value="Рекомедованные продукты" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=5;" edge="1" parent="XLLOI3Swdtvozl0vI23t-5" target="XLLOI3Swdtvozl0vI23t-27">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-107" y="363" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-29" value="КБЖУ продуктов" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=-5;" edge="1" parent="XLLOI3Swdtvozl0vI23t-5" source="XLLOI3Swdtvozl0vI23t-27">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-107" y="398" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-6" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;nutritionScore&lt;/b&gt;&lt;/span&gt;&lt;br&gt;формула" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="875" y="361" width="105" height="719" as="geometry" />
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-31" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="XLLOI3Swdtvozl0vI23t-6">
+          <mxGeometry x="47.5" y="516" width="10" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-32" value="Финальный&lt;br&gt;подсчёт" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="XLLOI3Swdtvozl0vI23t-6">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="52" y="538" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="69" y="538" />
+              <mxPoint x="69" y="568" />
+            </Array>
+            <mxPoint x="57.5" y="568.0000000000002" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-7" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;GO: Handler&lt;/b&gt;&lt;/font&gt;&lt;br&gt;GetMealsFromCart" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="157" y="361" width="194" height="816" as="geometry" />
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-10" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="XLLOI3Swdtvozl0vI23t-7">
+          <mxGeometry x="92" y="54" width="10" height="736" as="geometry" />
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-8" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Vue 3&lt;/b&gt;&lt;/font&gt;&lt;br&gt;OrdersView.vue" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="19" y="361" width="125" height="818" as="geometry" />
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-9" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="XLLOI3Swdtvozl0vI23t-8">
+          <mxGeometry x="57.5" y="54" width="10" height="734" as="geometry" />
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-13" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="XLLOI3Swdtvozl0vI23t-8" target="XLLOI3Swdtvozl0vI23t-10">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="282" y="630" as="sourcePoint" />
+            <mxPoint x="221" y="580" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="143" y="441" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-14" value="POST /meals/from-cart" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="XLLOI3Swdtvozl0vI23t-13">
+          <mxGeometry x="-0.0439" relative="1" as="geometry">
+            <mxPoint x="1" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-16" value="Проверка&lt;br&gt;claims.id" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="254" y="452" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="284" y="482" />
+            </Array>
+            <mxPoint x="259" y="482" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-18" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="XLLOI3Swdtvozl0vI23t-10" target="XLLOI3Swdtvozl0vI23t-17">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="223" y="536" as="sourcePoint" />
+            <mxPoint x="439" y="536" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="354" y="514" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-19" value="Вызов&amp;nbsp;DishesFromCart" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="XLLOI3Swdtvozl0vI23t-18">
+          <mxGeometry x="-0.0439" relative="1" as="geometry">
+            <mxPoint x="1" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-21" value="id user" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=5;" edge="1" target="XLLOI3Swdtvozl0vI23t-20" parent="1" source="XLLOI3Swdtvozl0vI23t-3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="553" y="534" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-22" value="User (сущность)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=-5;" edge="1" source="XLLOI3Swdtvozl0vI23t-20" parent="1" target="XLLOI3Swdtvozl0vI23t-3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="557" y="569" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-26" value="Проверка&lt;br&gt;Ккал" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="458" y="599" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="488" y="629" />
+            </Array>
+            <mxPoint x="463" y="629" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-23" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="623" y="658" width="10" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-24" value="Рекомедованные блюда" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=5;" edge="1" parent="1" target="XLLOI3Swdtvozl0vI23t-23">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="458" y="663" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-25" value="Составы блюд" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=-5;" edge="1" parent="1" source="XLLOI3Swdtvozl0vI23t-23">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="458" y="698" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-30" value="loop (для каждого блюда)" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=158;height=24;" vertex="1" parent="1">
+          <mxGeometry x="382" y="773" width="627" height="225" as="geometry" />
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-34" value="Сопоставление&lt;br&gt;ингридиентов" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry y="3" relative="1" as="geometry">
+            <mxPoint x="781" y="833" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="798" y="833" />
+              <mxPoint x="798" y="863" />
+            </Array>
+            <mxPoint x="787" y="863" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-35" value="Ингридиенты" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="464" y="825" as="sourcePoint" />
+            <mxPoint x="777.5" y="825" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-37" value="Нутриентный результат" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1" source="XLLOI3Swdtvozl0vI23t-33">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="633" y="884" as="sourcePoint" />
+            <mxPoint x="922.5" y="884" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-40" value="Оценка блюда" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1" source="XLLOI3Swdtvozl0vI23t-33">
+          <mxGeometry x="-0.0314" y="-3" relative="1" as="geometry">
+            <mxPoint x="464" y="966" as="targetPoint" />
+            <mxPoint as="offset" />
+            <mxPoint x="623" y="966" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="596" y="966" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-42" value="Оценка блюда" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1" source="XLLOI3Swdtvozl0vI23t-31" target="XLLOI3Swdtvozl0vI23t-33">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="826" y="815" as="targetPoint" />
+            <mxPoint x="991" y="815" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="852" y="946" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-43" value="Сортировка&lt;br&gt;блюд" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry y="3" relative="1" as="geometry">
+            <mxPoint x="458" y="1021.96" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="475" y="1021.96" />
+              <mxPoint x="475" y="1051.96" />
+            </Array>
+            <mxPoint x="464" y="1051.96" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-45" value="Массив рекомендованных блюд&amp;nbsp;" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1" source="XLLOI3Swdtvozl0vI23t-17" target="XLLOI3Swdtvozl0vI23t-10">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="278" y="1063" as="targetPoint" />
+            <mxPoint x="442" y="1063" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="354" y="1070" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XLLOI3Swdtvozl0vI23t-46" value="200 ОК + блюда и &lt;br&gt;пропущенные ингридиенты" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1" source="XLLOI3Swdtvozl0vI23t-10" target="XLLOI3Swdtvozl0vI23t-9">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="87" y="1132" as="targetPoint" />
+            <mxPoint x="249.4999999999999" y="1132" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="145.5" y="1132" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
