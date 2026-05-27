@@ -1,0 +1,163 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
+  <diagram name="Страница — 1" id="4RSCKxWI_eOaAhOXysOW">
+    <mxGraphModel dx="1584" dy="657" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-2" value="&lt;font face=&quot;Times New Roman&quot; style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;&quot;API&quot;&amp;nbsp;&lt;span style=&quot;line-height: 150%;&quot;&gt;— internal/api/v1/&amp;nbsp;&lt;/span&gt;&lt;/b&gt;&lt;/font&gt;" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=190;height=29;" vertex="1" parent="1">
+          <mxGeometry x="-51" y="429" width="993" height="99" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-3" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;apies.go&lt;/b&gt;&lt;br&gt;регистрация маршрутов&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-26" y="465" width="177" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-5" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;enableCORS()&lt;/b&gt;&lt;br&gt;middleware&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="167" y="465" width="177" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-6" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;authMiddleware()&lt;/b&gt;&lt;br&gt;проверка JWT&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="465" width="177" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-7" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;adminOnly()&lt;/b&gt;&lt;br&gt;role == admin&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="553" y="465" width="177" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-8" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;apies_test.go&lt;/b&gt;&lt;br&gt;smoke-тест маршрутов&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="745" y="465" width="177" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-21" value="&lt;font face=&quot;Times New Roman&quot; style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;&quot;Handlers&quot;&amp;nbsp;&lt;span style=&quot;line-height: 150%;&quot;&gt;— internal/handlers/&amp;nbsp;&lt;/span&gt;&lt;/b&gt;&lt;/font&gt;" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=248;height=29;" vertex="1" parent="1">
+          <mxGeometry x="-51" y="550" width="993" height="99" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-22" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;auth.go&lt;/b&gt;&lt;br&gt;/login /register&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-26" y="586" width="118" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-23" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;product.go&lt;/b&gt;&lt;br&gt;+ product_image.go&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="117" y="586" width="141" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-24" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;order.go&lt;/b&gt;&lt;br&gt;+ order_access.go&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="283" y="586" width="129" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-25" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;favourite.go&lt;/b&gt;&lt;br&gt;+ admin_users,go&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="439" y="586" width="136" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-26" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;dishes.go&lt;/b&gt;&lt;br&gt;CRUD блюд&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="599" y="586" width="122" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-27" value="&lt;font face=&quot;Times New Roman&quot; style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;&quot;Services&quot;&amp;nbsp;&lt;span style=&quot;line-height: 150%;&quot;&gt;— internal/services/&amp;nbsp;&lt;/span&gt;&lt;/b&gt;&lt;/font&gt;" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=248;height=29;" vertex="1" parent="1">
+          <mxGeometry x="-51" y="673" width="993" height="99" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-28" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;order_services.go&lt;/b&gt;&lt;br&gt;бизнес логика заказов&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-26" y="709" width="150" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-29" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;product_service.go&lt;/b&gt;&lt;br&gt;валидация, расчёты&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="138" y="709" width="137" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-30" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;meal_from_order.go&lt;/b&gt;&lt;br&gt;nutreonScore, MatchRatio&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="745" y="709" width="177" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-31" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;recommendation_service.go&lt;/b&gt;&lt;br&gt;fallback CB-эвристика&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="537" y="709" width="193" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-32" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;python_recommender_service.go&lt;/b&gt;&lt;br&gt;мост к Python&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="289" y="709" width="232" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-33" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;recommendation.go&lt;/b&gt;&lt;br&gt;+ base,go (Generic CRUD)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="745" y="586" width="177" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-34" value="" style="endArrow=none;html=1;rounded=0;entryX=0.501;entryY=1.005;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.501;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;strokeWidth=2;" edge="1" parent="1" source="QcEv3GRZNpihx7j9WUVm-21" target="QcEv3GRZNpihx7j9WUVm-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="362" y="652" as="sourcePoint" />
+            <mxPoint x="412" y="602" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-35" value="" style="endArrow=none;html=1;rounded=0;entryX=0.501;entryY=0.997;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.501;exitY=0.001;exitDx=0;exitDy=0;exitPerimeter=0;strokeWidth=2;" edge="1" parent="1" source="QcEv3GRZNpihx7j9WUVm-27" target="QcEv3GRZNpihx7j9WUVm-21">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="456" y="560" as="sourcePoint" />
+            <mxPoint x="456" y="538" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-36" value="&lt;font face=&quot;Times New Roman&quot; style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;&quot;Models&quot;&amp;nbsp;&lt;span style=&quot;line-height: 150%;&quot;&gt;— internal/models/&amp;nbsp;&lt;/span&gt;&lt;/b&gt;&lt;/font&gt;" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=248;height=29;" vertex="1" parent="1">
+          <mxGeometry x="-51" y="797" width="368" height="111" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-37" value="11 GORM-сущностей:&lt;br&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;User, Product, Category, Manufacturer&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Order, OrderItem, Dish, DishProduct&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;DishCategory, FavouriteProduct, FavouriteDish&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="6" y="827" width="269" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-39" value="&lt;font face=&quot;Times New Roman&quot; style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;&quot;Repository&quot;&lt;span style=&quot;line-height: 150%;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;/b&gt;&lt;/font&gt;" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=112;height=26;" vertex="1" parent="1">
+          <mxGeometry x="337" y="797" width="295" height="111" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-41" value="&lt;font face=&quot;Times New Roman&quot; style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;&quot;Database&quot;&lt;span style=&quot;line-height: 150%;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;/b&gt;&lt;/font&gt;" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=104;height=25;" vertex="1" parent="1">
+          <mxGeometry x="646" y="797" width="295" height="111" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-42" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;product_image.go&lt;/b&gt;&lt;br&gt;SaveProductImage&lt;br&gt;GetProductImage / Delete&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="392" y="829.75" width="199" height="64.5" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-43" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;postgres.go, mongo.go&lt;/b&gt;&lt;br&gt;Connect, LoadConfig&lt;br&gt;DBPostgres, DBMongo&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="694" y="829.75" width="199" height="64.5" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-44" value="&lt;font face=&quot;Times New Roman&quot;&gt;&lt;span style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;Внешние зависимости (go.mod)&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=248;height=29;" vertex="1" parent="1">
+          <mxGeometry x="-52" y="1021" width="993" height="99" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-45" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;gin-gonic/gin&lt;/b&gt;&lt;br&gt;HTTP router&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-27" y="1057" width="118" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-46" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;gorm.io/gorm&lt;/b&gt;&lt;br&gt;+ driver/postgres&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="116" y="1057" width="141" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-47" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;mongo-go-driver&lt;/b&gt;&lt;br&gt;+ bson, options&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="282" y="1057" width="129" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-48" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;golang-jwt/v5&lt;/b&gt;&lt;br&gt;аутентификация&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="438" y="1057" width="136" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-49" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;sirupsen/logrus&lt;/b&gt;&lt;br&gt;структурный лог&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="598" y="1057" width="122" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-50" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;standard lib&lt;/b&gt;&lt;br&gt;net/http, testing, os/exec&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="744" y="1057" width="177" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-51" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;PostgreSQL&lt;/b&gt;&lt;br&gt;11 таблиц + индексы&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="734" y="929" width="207" height="68" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-52" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;MongoDB&lt;/b&gt;&lt;br&gt;products (изображения)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="456" y="928" width="223" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-53" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;PythonML&lt;/b&gt;&lt;br&gt;recommender.py, food_&lt;/font&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;recommender.py, dish&lt;/span&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;_&lt;/font&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;recommender.py, scikit-learn&lt;/span&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;, pandas, SQLAlchemy&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-51" y="929" width="452" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-54" value="" style="endArrow=none;html=1;rounded=0;exitX=0.501;exitY=0.002;exitDx=0;exitDy=0;exitPerimeter=0;strokeWidth=2;entryX=0.186;entryY=0.993;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="QcEv3GRZNpihx7j9WUVm-36" target="QcEv3GRZNpihx7j9WUVm-27">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="233" y="743" as="sourcePoint" />
+            <mxPoint x="134" y="773" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-55" value="" style="endArrow=none;html=1;rounded=0;exitX=0.541;exitY=0.999;exitDx=0;exitDy=0;exitPerimeter=0;strokeWidth=2;entryX=0.505;entryY=0.002;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="QcEv3GRZNpihx7j9WUVm-27" target="QcEv3GRZNpihx7j9WUVm-39">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="143" y="807" as="sourcePoint" />
+            <mxPoint x="144" y="781" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-57" value="" style="endArrow=none;html=1;rounded=0;strokeWidth=2;entryX=0.5;entryY=-0.004;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.851;exitY=0.996;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="QcEv3GRZNpihx7j9WUVm-27" target="QcEv3GRZNpihx7j9WUVm-41">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="676" y="780" as="sourcePoint" />
+            <mxPoint x="671" y="786" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-59" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="QcEv3GRZNpihx7j9WUVm-51" target="QcEv3GRZNpihx7j9WUVm-41">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="378" y="1022" as="sourcePoint" />
+            <mxPoint x="428" y="972" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-60" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="QcEv3GRZNpihx7j9WUVm-52" target="QcEv3GRZNpihx7j9WUVm-39">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="348" y="941" as="sourcePoint" />
+            <mxPoint x="656" y="888" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QcEv3GRZNpihx7j9WUVm-61" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="QcEv3GRZNpihx7j9WUVm-53" target="QcEv3GRZNpihx7j9WUVm-32">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="578" y="938" as="sourcePoint" />
+            <mxPoint x="556" y="918" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
